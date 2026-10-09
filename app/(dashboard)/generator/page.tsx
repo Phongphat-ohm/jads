@@ -69,14 +69,6 @@ const PRESET_ROLES = [
   'ผู้คัดค้าน',
 ];
 
-// Sample Rayong Court Data for Instant Testing
-const SAMPLE_CSV = `ลำดับ,เลขดำ,เลขแดง,วันที่,เวลา,โจทก์,จำเลย,ประเภทคดี,นัดมาทำไม,ศาล
-1,ผบ121/2569,ผบ193/2569,05/10/2569,09.00,ธนาคารออมสิน,นาย วรพจน์ มีโชค,แพ่ง,พิจารณา,ศาลจังหวัดระยอง
-2,ผบ122/2569,,05/10/2569,09.30,บริษัท บริหารสินทรัพย์ กรุงเทพพาณิชย์ จำกัด,นาง สมศรี รักษ์ธรรม,แพ่ง,สืบพยานโจทก์,ศาลจังหวัดระยอง
-3,ผบ125/2569,ผบ199/2569,05/10/2569,10.00,นิติบุคคลอาคารชุด แสนสุข,นาย ประเสริฐ ยืนยง,แพ่ง,นัดไกล่เกลี่ย,ศาลจังหวัดระยอง
-4,อ150/2569,,06/10/2569,09.00,พนักงานอัยการจังหวัดระยอง,นาย สิทธิชัย ชัยชนะ,อาญา,ตรวจพยานหลักฐาน,ศาลจังหวัดระยอง
-5,ผบ130/2569,,06/10/2569,13.30,ธนาคารกรุงไทย จำกัด (มหาชน),นาย สมนึก ใจมั่น,แพ่ง,สืบพยานจำเลย,ศาลจังหวัดระยอง`;
-
 const DEFAULT_CASE_DATA: CaseFormData = {
   case_black_no: 'ผบ121/2569',
   case_red_no: 'ผบ193/2569',
@@ -331,14 +323,6 @@ function GeneratorContent() {
     } catch (err: any) {
       showError('ไม่สามารถดึงไฟล์ได้', err.response?.data?.message || err.message);
     }
-  };
-
-  // Load Sample Rayong Court Data
-  const handleLoadSampleData = async () => {
-    const blob = new Blob([SAMPLE_CSV], { type: 'text/csv;charset=utf-8;' });
-    const sampleFile = new File([blob], 'ตารางนัดพิจารณา_ตัวอย่าง.csv', { type: 'text/csv' });
-    await processAndLoadFile(sampleFile);
-    setActiveTab('table');
   };
 
   // Handle row selection from Table
@@ -798,20 +782,9 @@ function GeneratorContent() {
               <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
-                  className="px-5 py-2.5 bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 group-hover:bg-purple-800 transition-colors pointer-events-none"
+                  className="px-6 py-2.5 bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 group-hover:bg-purple-800 transition-colors pointer-events-none"
                 >
                   เลือกไฟล์จากเครื่อง
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleLoadSampleData();
-                  }}
-                  className="px-4 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold border border-purple-200 transition-colors relative z-20 flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>ทดลองโหลดข้อมูลตัวอย่าง</span>
                 </button>
               </div>
             </div>
@@ -970,7 +943,7 @@ function GeneratorContent() {
               <FileSpreadsheet className="w-12 h-12 text-purple-300 mx-auto" />
               <h3 className="text-base font-bold text-slate-800">ยังไม่มีข้อมูลตารางคดี</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                กรุณาอัปโหลดไฟล์ Excel หรือโหลดข้อมูลตัวอย่างในแท็บที่ 1 ก่อนเข้าสู่การเลือกข้อมูล
+                กรุณาอัปโหลดหรือเลือกไฟล์ Excel ในแท็บที่ 1 ก่อนเข้าสู่การเลือกข้อมูล
               </p>
               <button
                 type="button"

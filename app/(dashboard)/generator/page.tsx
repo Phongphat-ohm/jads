@@ -90,10 +90,7 @@ const DEFAULT_CASE_DATA: CaseFormData = {
   hearing_time: '09.00',
   hearing_purpose: 'นัดฟังคำวินิจฉัยประธานศาลอุทธรณ์',
   attendees_summary: 'ทนายโจทก์ โจทก์ ทนายจำเลย และจำเลย',
-  paragraphs: [
-    'คู่ความทั้งสองฝ่ายสามารถตกลงกันได้ ขอให้ศาลมีคำพิพากษาตามยอมตามสัญญาประนีประนอมยอมความที่เสนอต่อศาลวันนี้',
-    'ศาลพิเคราะห์สัญญาประนีประนอมยอมความระหว่างโจทก์กับจำเลยแล้ว เห็นว่าถูกต้องตามกฎหมายและสามารถตกลงกันได้ จึงพิพากษาให้คดีเสร็จเด็ดขาดตามสัญญาประนีประนอมยอมความและออกคำบังคับให้จำเลยทราบแล้วในวันนี้/อ่านแล้ว',
-  ],
+  paragraphs: [''],
   judge_1_name: 'นาย สมศักดิ์ ยุติธรรม',
   judge_2_name: 'นางสาว ดวงใจ ซื่อตรง',
   judge_๑_name: 'นาย สมศักดิ์ ยุติธรรม',
@@ -200,7 +197,7 @@ function GeneratorContent() {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (!Array.isArray(parsed.paragraphs) || parsed.paragraphs.length === 0) {
-          parsed.paragraphs = DEFAULT_CASE_DATA.paragraphs;
+          parsed.paragraphs = [''];
         }
         if (!parsed.court_name && user?.courtName) {
           parsed.court_name = user.courtName;

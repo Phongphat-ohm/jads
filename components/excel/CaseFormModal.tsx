@@ -60,10 +60,7 @@ export function CaseFormModal({
     hearing_time: '09.00',
     hearing_purpose: 'พิจารณา',
     attendees_summary: 'ทนายโจทก์ โจทก์ ทนายจำเลย และจำเลย',
-    paragraphs: [
-      'คู่ความทั้งสองฝ่ายสามารถตกลงกันได้ ขอให้ศาลมีคำพิพากษาตามยอมตามสัญญาประนีประนอมยอมความที่เสนอต่อศาลวันนี้',
-      'ศาลพิเคราะห์สัญญาประนีประนอมยอมความระหว่างโจทก์กับจำเลยแล้ว เห็นว่าถูกต้องตามกฎหมายและสามารถตกลงกันได้ จึงพิพากษาให้คดีเสร็จเด็ดขาดตามสัญญาประนีประนอมยอมความและออกคำบังคับให้จำเลยทราบแล้วในวันนี้/อ่านแล้ว'
-    ],
+    paragraphs: [''],
     judge_1_name: 'นาย สมศักดิ์ ยุติธรรม',
     judge_2_name: 'นางสาว ดวงใจ ซื่อตรง',
     judge_๑_name: 'นาย สมศักดิ์ ยุติธรรม',
@@ -525,12 +522,12 @@ export function CaseFormModal({
                     </span>
                     <span className="text-[10px] text-purple-600 font-mono font-semibold">1 ตำแหน่ง 1 ช่อง</span>
                   </div>
-                  <div className="bg-slate-50 rounded-lg p-2 max-h-24 overflow-y-auto space-y-1 font-mono text-[11px] text-slate-600 border border-slate-100">
+                  <div className="bg-slate-50 rounded-lg p-2.5 max-h-28 overflow-y-auto space-y-0.5 font-mono text-[11px] text-slate-600 border border-slate-100">
                     {Array.isArray(formData.signatories) && formData.signatories.length > 0 ? (
                       formData.signatories.map((sig, i) => (
-                        <div key={i} className="flex items-center justify-between">
-                          <span>........................................</span>
-                          <span className="font-semibold text-purple-900 bg-purple-100/80 px-2 py-0.5 rounded border border-purple-200">
+                        <div key={i} className="flex items-center justify-start leading-tight py-0.5">
+                          <span className="text-slate-400">........................................</span>
+                          <span className="font-semibold text-purple-900 bg-purple-100/80 px-2 py-0.2 rounded border border-purple-200 ml-2">
                             {sig.position}
                           </span>
                         </div>

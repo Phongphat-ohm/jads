@@ -134,35 +134,29 @@ export function A4DocumentPreview({ data, templateName }: A4DocumentPreviewProps
 
           {/* Body Paragraphs with Real First-line Indent */}
           <div className="my-4 space-y-3 text-sm md:text-base text-slate-900 text-justify">
-            {/* Standard Court Pre-defined Paragraphs */}
-            <p
-              className="text-justify leading-relaxed"
-              style={{ textIndent: '4rem', textAlignLast: 'left' }}
-            >
-              คู่ความทั้งสองฝ่ายสามารถตกลงกันได้ ขอให้ศาลมีคำพิพากษาตามยอมตามสัญญาประนีประนอมยอมความที่เสนอต่อศาลวันนี้
-            </p>
-            <p
-              className="text-justify leading-relaxed"
-              style={{ textIndent: '4rem', textAlignLast: 'left' }}
-            >
-              ศาลพิเคราะห์สัญญาประนีประนอมยอมความระหว่างโจทก์กับจำเลยแล้ว เห็นว่าถูกต้องตามกฎหมายและสามารถตกลงกันได้ จึงพิพากษาให้คดีเสร็จเด็ดขาดตามสัญญาประนีประนอมยอมความและออกคำบังคับให้จำเลยทราบแล้วในวันนี้/อ่านแล้ว
-            </p>
-
-            {/* Custom Paragraphs from Form */}
-            {paragraphs.map((p, idx) => (
-              <p
-                key={idx}
-                className="text-justify leading-relaxed text-purple-950"
-                style={{ textIndent: '4rem', textAlignLast: 'left' }}
-              >
-                {p}
+            {/* Paragraphs from Form */}
+            {paragraphs.filter((p) => Boolean(p && p.trim())).length === 0 ? (
+              <p className="text-slate-400 italic text-xs py-2 text-center">
+                (ยังไม่มีเนื้อหาย่อหน้า - เพิ่มย่อหน้าหรือเลือกจากเทมเพลตได้ในแบบฟอร์ม)
               </p>
-            ))}
+            ) : (
+              paragraphs
+                .filter((p) => Boolean(p && p.trim()))
+                .map((p, idx) => (
+                  <p
+                    key={idx}
+                    className="text-justify leading-relaxed text-slate-900"
+                    style={{ textIndent: '4rem', textAlignLast: 'left' }}
+                  >
+                    {p}
+                  </p>
+                ))
+            )}
           </div>
         </div>
 
         {/* Footer Section: Judges & Signatories */}
-        <div className="mt-8 pt-4 border-t border-slate-200 text-sm md:text-base space-y-5">
+        <div className="mt-8 pt-4 border-t border-slate-200 text-sm md:text-base space-y-4">
           {/* Judges Signature Line */}
           <div className="flex items-center justify-center gap-6 text-center text-slate-800">
             <p>
@@ -176,10 +170,10 @@ export function A4DocumentPreview({ data, templateName }: A4DocumentPreviewProps
             <p className="font-semibold text-slate-700">บันทึก/อ่าน</p>
           </div>
 
-          {/* Signatories Loop (1 ตำแหน่ง 1 ช่อง) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 pt-2">
+          {/* Signatories Loop: บรรทัดติดกัน ไม่เว้นบรรทัด */}
+          <div className="flex flex-col space-y-0.5 pt-1">
             {signatories.map((sig, idx) => (
-              <div key={idx} className="flex items-center justify-between font-mono text-xs md:text-sm text-slate-700">
+              <div key={idx} className="flex items-center justify-start font-mono text-xs md:text-sm text-slate-700 py-0.5 leading-none">
                 <span className="text-slate-400">....................................................</span>
                 <span className="font-semibold text-slate-900 ml-2">{sig.position}</span>
               </div>

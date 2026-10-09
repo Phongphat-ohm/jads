@@ -385,10 +385,7 @@ export function convertRowToFormData(
     hearing_time: formattedTime,
     hearing_purpose: rawPurpose ? String(rawPurpose).trim() : 'พิจารณา',
     attendees_summary: formatAttendeesSummary(defaultPositions),
-    paragraphs: [
-      'คู่ความทั้งสองฝ่ายสามารถตกลงกันได้ ขอให้ศาลมีคำพิพากษาตามยอมตามสัญญาประนีประนอมยอมความที่เสนอต่อศาลวันนี้',
-      'ศาลพิเคราะห์สัญญาประนีประนอมยอมความระหว่างโจทก์กับจำเลยแล้ว เห็นว่าถูกต้องตามกฎหมายและสามารถตกลงกันได้ จึงพิพากษาให้คดีเสร็จเด็ดขาดตามสัญญาประนีประนอมยอมความและออกคำบังคับให้จำเลยทราบแล้วในวันนี้/อ่านแล้ว'
-    ],
+    paragraphs: [''],
     judge_1_name: String(rawJudge).trim(),
     judge_2_name: 'นางสาว ดวงใจ ซื่อตรง',
     judge_๑_name: String(rawJudge).trim(),

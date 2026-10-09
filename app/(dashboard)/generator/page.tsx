@@ -54,6 +54,7 @@ import {
   FileCode,
   RotateCcw,
   Tag,
+  Lock,
 } from 'lucide-react';
 
 // Preset Attendee Roles
@@ -313,6 +314,7 @@ function GeneratorContent() {
     setFileName(resolvedName);
     setHeaders(extractedHeaders);
     setRows(extractedRows);
+    setSelectedRow(null);
 
     const autoMapping = guessColumnMapping(extractedHeaders);
     setMapping(autoMapping);
@@ -587,32 +589,81 @@ function GeneratorContent() {
     }
   };
 
+  // ----------------------------------------------------
+  // Strict Linear Step Progression Guards
+  // ----------------------------------------------------
+  const isStep1Done = rows.length > 0 && !!fileName;
+  const isStep2Done = isStep1Done && !!selectedRow;
+  const isStep3Done = isStep2Done && Boolean(formData.case_black_no && formData.case_black_no.trim().length > 0);
+
+  // Tab change handler strictly enforcing one step at a time
+  const handleTabClick = (targetTab: GeneratorTab) => {
+    if (targetTab === 'table' && !isStep1Done) {
+      showToast('กรุณาอัปโหลดหรือเลือกไฟล์ Excel ก่อนไปยังขั้นตอนที่ 2', 'warning');
+      return;
+    }
+    if (targetTab === 'review' && !isStep2Done) {
+      showToast('กรุณาเลือกข้อมูลคดีจากตารางก่อนไปยังขั้นตอนที่ 3', 'warning');
+      return;
+    }
+    if (targetTab === 'download' && !isStep3Done) {
+      showToast('กรุณาตรวจสอบและระบุหมายเลขคดีดำให้ถูกต้องก่อนไปยังขั้นตอนที่ 4', 'warning');
+      return;
+    }
+    setActiveTab(targetTab);
+  };
+
+  // Ensure activeTab never jumps ahead of completed steps
+  useEffect(() => {
+    if (activeTab === 'download' && !isStep3Done) {
+      if (isStep2Done) setActiveTab('review');
+      else if (isStep1Done) setActiveTab('table');
+      else setActiveTab('upload');
+    } else if (activeTab === 'review' && !isStep2Done) {
+      if (isStep1Done) setActiveTab('table');
+      else setActiveTab('upload');
+    } else if (activeTab === 'table' && !isStep1Done) {
+      setActiveTab('upload');
+    }
+  }, [activeTab, isStep1Done, isStep2Done, isStep3Done]);
+
   // Tabs Configuration
   const tabs = [
     {
-      id: 'upload',
+      id: 'upload' as GeneratorTab,
+      step: 1,
       title: '1. เลือกไฟล์ / อัปโหลด',
       desc: 'อัปโหลด Excel หรือเลือกจาก Cloud',
       icon: UploadCloud,
+      completed: isStep1Done,
+      disabled: false,
     },
     {
-      id: 'table',
+      id: 'table' as GeneratorTab,
+      step: 2,
       title: '2. เลือกข้อมูลในตาราง',
       desc: 'Filter, Sort, และเลือกคดี',
       icon: FileSpreadsheet,
-      disabled: rows.length === 0,
+      completed: isStep2Done,
+      disabled: !isStep1Done,
     },
     {
-      id: 'review',
+      id: 'review' as GeneratorTab,
+      step: 3,
       title: '3. ตรวจสอบและแก้ไขคดี',
       desc: 'ผู้มาศาล องค์คณะ และย่อหน้า',
       icon: Scale,
+      completed: isStep3Done,
+      disabled: !isStep2Done,
     },
     {
-      id: 'download',
+      id: 'download' as GeneratorTab,
+      step: 4,
       title: '4. ดาวน์โหลดเอกสาร',
       desc: 'ส่งออกไฟล์ .docx หรือ .pdf',
       icon: Download,
+      completed: false,
+      disabled: !isStep3Done,
     },
   ];
 
@@ -652,7 +703,7 @@ function GeneratorContent() {
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div className="bg-white rounded-3xl p-2 border border-purple-100 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="bg-white rounded-3xl p-2.5 border border-purple-100 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -662,26 +713,50 @@ function GeneratorContent() {
               key={tab.id}
               type="button"
               disabled={tab.disabled}
-              onClick={() => setActiveTab(tab.id as GeneratorTab)}
-              className={`flex items-center gap-3 p-3.5 rounded-2xl text-left transition-all ${
+              onClick={() => handleTabClick(tab.id)}
+              className={`flex items-center gap-3 p-3.5 rounded-2xl text-left transition-all relative ${
                 isActive
-                  ? 'bg-purple-700 text-white shadow-md shadow-purple-700/25'
+                  ? 'bg-purple-700 text-white shadow-lg shadow-purple-700/25 ring-2 ring-purple-600'
                   : tab.disabled
-                  ? 'opacity-40 cursor-not-allowed bg-slate-50 text-slate-400'
-                  : 'hover:bg-purple-50 text-slate-700'
+                  ? 'opacity-40 cursor-not-allowed bg-slate-50 text-slate-400 border border-transparent'
+                  : 'hover:bg-purple-50 text-slate-700 border border-slate-100 bg-white hover:border-purple-200'
               }`}
             >
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-700'
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                  isActive
+                    ? 'bg-white/20 text-white'
+                    : tab.disabled
+                    ? 'bg-slate-100 text-slate-400'
+                    : tab.completed
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-purple-100 text-purple-700'
                 }`}
               >
-                <Icon className="w-5 h-5" />
+                {tab.completed && !isActive ? (
+                  <Check className="w-5 h-5 text-emerald-600" />
+                ) : tab.disabled ? (
+                  <Lock className="w-4 h-4 text-slate-400" />
+                ) : (
+                  <Icon className="w-5 h-5" />
+                )}
               </div>
-              <div className="min-w-0">
-                <span className="text-xs font-bold block truncate">{tab.title}</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold block truncate">{tab.title}</span>
+                  {tab.completed && !isActive && (
+                    <span className="shrink-0 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.2 rounded-full font-bold">
+                      เสร็จแล้ว
+                    </span>
+                  )}
+                  {tab.disabled && (
+                    <span className="shrink-0 text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.2 rounded-full font-medium">
+                      ล็อก
+                    </span>
+                  )}
+                </div>
                 <span
-                  className={`text-[10px] block truncate ${
+                  className={`text-[10px] block truncate mt-0.5 ${
                     isActive ? 'text-purple-200' : 'text-slate-400'
                   }`}
                 >
@@ -865,8 +940,13 @@ function GeneratorContent() {
 
                 <button
                   type="button"
+                  disabled={!isStep1Done}
                   onClick={() => setActiveTab('table')}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 transition-all hover:scale-105"
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all ${
+                    isStep1Done
+                      ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-purple-700/20 hover:scale-105 cursor-pointer'
+                      : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                  }`}
                 >
                   <span>ถัดไป: เลือกข้อมูลในตาราง</span>
                   <ArrowRight className="w-4 h-4" />
@@ -915,7 +995,7 @@ function GeneratorContent() {
               />
 
               {/* Navigation Bar */}
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setActiveTab('upload')}
@@ -925,14 +1005,26 @@ function GeneratorContent() {
                   <span>ย้อนกลับ: ตัวเลือกไฟล์</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('review')}
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold shadow-md shadow-purple-700/20 transition-transform hover:scale-105"
-                >
-                  <span>ถัดไป: ตรวจสอบและแก้ไขข้อมูลคดี</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-3">
+                  {!isStep2Done && (
+                    <span className="text-xs text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 font-medium">
+                      ⚠️ กรุณาคลิกปุ่ม &quot;เลือกข้อมูลคดีนี้&quot; ในตารางก่อนเพื่อดำเนินการต่อ
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    disabled={!isStep2Done}
+                    onClick={() => setActiveTab('review')}
+                    className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                      isStep2Done
+                        ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
+                        : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                    }`}
+                  >
+                    <span>ถัดไป: ตรวจสอบและแก้ไขข้อมูลคดี</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -978,8 +1070,14 @@ function GeneratorContent() {
               </button>
               <button
                 type="button"
+                disabled={!isStep3Done}
                 onClick={() => setActiveTab('download')}
-                className="inline-flex items-center gap-1.5 px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 transition-all hover:scale-105"
+                className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  isStep3Done
+                    ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
+                    : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                }`}
+                title={!isStep3Done ? 'กรุณาระบุเลขคดีดำให้ถูกต้องก่อนดำเนินการต่อ' : ''}
               >
                 <span>ถัดไป: ดาวน์โหลดเอกสาร</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -1515,7 +1613,7 @@ function GeneratorContent() {
           </div>
 
           {/* Navigation Bar */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <button
               type="button"
               onClick={() => setActiveTab('table')}
@@ -1525,14 +1623,26 @@ function GeneratorContent() {
               <span>ย้อนกลับ: ตารางข้อมูลคดี</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('download')}
-              className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold shadow-md shadow-purple-700/20 transition-transform hover:scale-105"
-            >
-              <span>ถัดไป: สรุปและดาวน์โหลดเอกสาร</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-3">
+              {!isStep3Done && (
+                <span className="text-xs text-red-600 bg-red-50 px-3 py-1.5 rounded-xl border border-red-200 font-medium">
+                  ⚠️ กรุณากรอกหมายเลขคดีดำก่อนดาวน์โหลด
+                </span>
+              )}
+              <button
+                type="button"
+                disabled={!isStep3Done}
+                onClick={() => setActiveTab('download')}
+                className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  isStep3Done
+                    ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
+                    : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                }`}
+              >
+                <span>ถัดไป: สรุปและดาวน์โหลดเอกสาร</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(receivedUser);
 
       showToast(`ยินดีต้อนรับ ${receivedUser.fullName || receivedUser.username}`);
-      router.push('/');
+      router.push('/overview');
       return true;
     } catch (error: any) {
       showError('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', error.message);
@@ -117,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(receivedUser);
 
       showSuccess('สมัครสมาชิกสำเร็จ', 'เข้าสู่ระบบให้ท่านเรียบร้อยแล้ว');
-      router.push('/');
+      router.push('/overview');
       return true;
     } catch (error: any) {
       showError('เกิดข้อผิดพลาดในการเชื่อมต่อ', error.message);

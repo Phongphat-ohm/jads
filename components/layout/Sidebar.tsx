@@ -27,7 +27,7 @@ interface SidebarProps {
 const navItems = [
   {
     name: 'แผงควบคุม (Overview)',
-    href: '/',
+    href: '/overview',
     icon: LayoutDashboard,
   },
   {

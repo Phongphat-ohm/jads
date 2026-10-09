@@ -62,7 +62,7 @@ export default function RecentFilesPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Link href="/" className="text-purple-600 hover:text-purple-800 text-xs font-semibold flex items-center gap-1">
+            <Link href="/overview" className="text-purple-600 hover:text-purple-800 text-xs font-semibold flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>กลับสู่แดชบอร์ด</span>
             </Link>

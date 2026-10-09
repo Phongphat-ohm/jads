@@ -30,6 +30,7 @@ export default function JudgesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    document.title = 'จัดการคู่ผู้พิพากษา | JADS Court';
     fetchJudgePairs();
   }, []);
 

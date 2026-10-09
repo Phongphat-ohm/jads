@@ -16,7 +16,13 @@ import {
   FileText,
   FileCheck,
   User as UserIcon,
+  X,
 } from 'lucide-react';
+
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
 const navItems = [
   {
@@ -59,23 +65,48 @@ const navItems = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between shrink-0 h-screen overflow-y-auto">
-      {/* Brand Logo Header */}
-      <div>
-        <div className="p-6 border-b border-slate-800/80 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-700 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-900/40">
-            <Scale className="w-5 h-5" />
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={`fixed md:static inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between shrink-0 h-screen overflow-y-auto transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        {/* Brand Logo Header */}
+        <div>
+          <div className="p-6 border-b border-slate-800/80 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-700 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-900/40">
+                <Scale className="w-5 h-5" />
+              </div>
+              <div>
+                <h1 className="font-bold text-white text-base tracking-wide">JADS COURT</h1>
+                <p className="text-[11px] text-purple-400 font-medium tracking-wider">ระบบเอกสารคดีศาล</p>
+              </div>
+            </div>
+            {/* Close button on mobile */}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="ปิดเมนู"
+              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg md:hidden"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <div>
-            <h1 className="font-bold text-white text-base tracking-wide">JADS COURT</h1>
-            <p className="text-[11px] text-purple-400 font-medium tracking-wider">ระบบเอกสารคดีศาล</p>
-          </div>
-        </div>
 
         {/* Navigation Links */}
         <div className="px-3 py-6 space-y-1">
@@ -90,6 +121,7 @@ export function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onClose}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   isActive
                     ? 'bg-purple-700 text-white shadow-lg shadow-purple-900/50'
@@ -135,5 +167,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

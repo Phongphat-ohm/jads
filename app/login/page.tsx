@@ -10,6 +10,10 @@ export default function LoginPage() {
   const [isLoginTab, setIsLoginTab] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  React.useEffect(() => {
+    document.title = isLoginTab ? 'เข้าสู่ระบบ | JADS Court' : 'สมัครสมาชิกใหม่ | JADS Court';
+  }, [isLoginTab]);
+
   // Form states
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

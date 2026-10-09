@@ -180,6 +180,7 @@ function GeneratorContent() {
   const [generatingFormat, setGeneratingFormat] = useState<'docx' | 'pdf' | null>(null);
 
   useEffect(() => {
+    document.title = 'สร้างเอกสารคดีความ | JADS Court';
     fetchInitialData();
     fetchSavedFiles();
 
@@ -293,6 +294,12 @@ function GeneratorContent() {
     } finally {
       setIsProcessingUpload(false);
     }
+  };
+
+  const handleCancelUploadChoice = () => {
+    setIsUploadChoiceOpen(false);
+    setPendingFile(null);
+    showToast('ยกเลิกการโหลดไฟล์');
   };
 
   // Parse Excel and load into state
@@ -563,7 +570,28 @@ function GeneratorContent() {
         `เอกสาร ${format.toUpperCase()} "${filename}" พร้อมใช้งานเรียบร้อยแล้ว`
       );
     } catch (err: any) {
-      showError('เกิดข้อผิดพลาดในการสร้างเอกสาร', err.response?.data?.message || err.message);
+      let errorMsg = err.message || 'ไม่สามารถสร้างเอกสารได้';
+      if (err.response?.data) {
+        if (err.response.data instanceof Blob) {
+          try {
+            const text = await err.response.data.text();
+            const parsed = JSON.parse(text);
+            errorMsg = parsed.error || parsed.message || text;
+          } catch {
+            // keep default errorMsg
+          }
+        } else if (typeof err.response.data === 'string') {
+          try {
+            const parsed = JSON.parse(err.response.data);
+            errorMsg = parsed.error || parsed.message || err.response.data;
+          } catch {
+            errorMsg = err.response.data;
+          }
+        } else if (err.response.data.error || err.response.data.message) {
+          errorMsg = err.response.data.error || err.response.data.message;
+        }
+      }
+      showError('เกิดข้อผิดพลาดในการสร้างเอกสาร', errorMsg);
     } finally {
       setIsGenerating(false);
       setGeneratingFormat(null);
@@ -1338,7 +1366,7 @@ function GeneratorContent() {
                             </span>
 
                             {/* Arrow Up / Down and Delete buttons */}
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1.5">
                               <button
                                 type="button"
                                 disabled={idx === 0}
@@ -1346,11 +1374,11 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleMovePosition(idx, idx - 1);
                                 }}
-                                className="p-1 text-slate-400 hover:text-purple-700 hover:bg-purple-50 rounded-md disabled:opacity-20"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
                                 title="เลื่อนไปช่องก่อนหน้า"
                               >
-                                <ArrowLeft className="w-3 h-3 md:hidden" />
-                                <ArrowLeft className="w-3 h-3 hidden md:inline" />
+                                <ArrowLeft className="w-3.5 h-3.5 md:hidden" />
+                                <ArrowLeft className="w-3.5 h-3.5 hidden md:inline" />
                               </button>
                               <button
                                 type="button"
@@ -1359,10 +1387,10 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleMovePosition(idx, idx + 1);
                                 }}
-                                className="p-1 text-slate-400 hover:text-purple-700 hover:bg-purple-50 rounded-md disabled:opacity-20"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
                                 title="เลื่อนไปช่องถัดไป"
                               >
-                                <ArrowRight className="w-3 h-3" />
+                                <ArrowRight className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 type="button"
@@ -1370,10 +1398,10 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleRemovePosition(idx);
                                 }}
-                                className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md ml-0.5"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors ml-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                                 title="ลบออก"
                               >
-                                <X className="w-3 h-3" />
+                                <X className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </div>
@@ -1796,8 +1824,14 @@ function GeneratorContent() {
       {/* Upload Choice Modal (Cloud S3 vs Local Save) */}
       {/* ========================================================================= */}
       {isUploadChoiceOpen && pendingFile && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 border border-purple-100 shadow-2xl space-y-6">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={handleCancelUploadChoice}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 border border-purple-100 shadow-2xl space-y-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center">
@@ -1812,8 +1846,9 @@ function GeneratorContent() {
               </div>
               <button
                 type="button"
-                onClick={() => setIsUploadChoiceOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+                onClick={handleCancelUploadChoice}
+                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
+                aria-label="ปิดและยกเลิก"
               >
                 <X className="w-5 h-5" />
               </button>

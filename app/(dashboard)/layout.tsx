@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -37,9 +38,12 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
-      <Sidebar />
+      <Sidebar
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
+      />
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <Navbar />
+        <Navbar onToggleSidebar={() => setIsMobileSidebarOpen((prev) => !prev)} />
         <main className="flex-1 p-6 lg:p-8 overflow-y-auto max-w-7xl w-full mx-auto">
           {children}
         </main>

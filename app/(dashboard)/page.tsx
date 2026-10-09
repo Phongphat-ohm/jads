@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [isLoadingFiles, setIsLoadingFiles] = useState(true);
 
   useEffect(() => {
+    document.title = 'แผงควบคุมระบบ | JADS Court';
     loadRecentFiles();
   }, []);
 

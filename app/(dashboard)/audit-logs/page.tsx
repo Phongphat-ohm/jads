@@ -37,6 +37,7 @@ export default function AuditLogsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    document.title = 'บันทึกการใช้งาน (Audit Logs) | JADS Court';
     loadLogs(page);
   }, [page]);
 

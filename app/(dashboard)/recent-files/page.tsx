@@ -20,6 +20,7 @@ export default function RecentFilesPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    document.title = 'ประวัติไฟล์ล่าสุด | JADS Court';
     loadFiles();
   }, []);
 

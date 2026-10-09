@@ -15,6 +15,7 @@ export default function SettingsPage() {
 
   // Sync state when user object loads or updates
   React.useEffect(() => {
+    document.title = 'การตั้งค่าบัญชีและรหัสผ่าน | JADS Court';
     if (user) {
       setFullName(user.fullName || '');
       setCourtName(user.courtName || '');

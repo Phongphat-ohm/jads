@@ -27,6 +27,7 @@ export default function ParagraphTemplatesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    document.title = 'เทมเพลตย่อหน้าส่วนตัว | JADS Court';
     fetchTemplates();
   }, []);
 

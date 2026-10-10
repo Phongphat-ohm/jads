@@ -160,7 +160,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         <button
           type="button"
           onClick={logout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 border border-rose-900/30 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 border border-rose-900/30 transition-all cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>ออกจากระบบ</span>

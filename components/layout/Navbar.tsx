@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../lib/authContext';
-import { PlusCircle, ShieldCheck, User, Menu } from 'lucide-react';
+import { PlusCircle, ShieldCheck, User, Menu, LogOut } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 interface NavbarProps {
@@ -11,7 +11,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onToggleSidebar }: NavbarProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <header className="h-16 bg-white dark:bg-slate-900 border-b border-purple-100 dark:border-slate-800 px-4 md:px-6 flex items-center justify-between sticky top-0 z-20 shadow-sm shrink-0 transition-colors">
@@ -58,6 +58,16 @@ export function Navbar({ onToggleSidebar }: NavbarProps) {
               สิทธิ์ {user?.role === 'ADMIN' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้งานทั่วไป'}
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={logout}
+            title="ออกจากระบบ"
+            aria-label="ออกจากระบบ"
+            className="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all cursor-pointer shrink-0"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </header>

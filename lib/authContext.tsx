@@ -2,8 +2,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { fetchApi } from './api';
 import { showToast, showError, showSuccess } from './sweetalert';
+import { APP_CONFIG } from './config';
 
 export interface User {
   id: string;
@@ -365,15 +367,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      // 1. Call server logout endpoint to record audit log and invalidate session
       await fetchApi('/auth/logout', { method: 'POST' });
-    } catch {
-      // Ignore
+    } catch (err) {
+      console.warn('Server logout notice:', err);
     } finally {
-      localStorage.removeItem('jads_token');
+      // 2. Clear local storage tokens and React states
+      localStorage.removeItem(APP_CONFIG.TOKEN_KEY);
+      localStorage.removeItem(APP_CONFIG.USER_KEY);
+      sessionStorage.removeItem(APP_CONFIG.TOKEN_KEY);
+      sessionStorage.removeItem(APP_CONFIG.USER_KEY);
       setToken(null);
       setUser(null);
+
+      // 3. Clear NextAuth session cookies and state
+      try {
+        await signOut({ redirect: false });
+      } catch (err) {
+        console.warn('NextAuth signOut error:', err);
+      }
+
       showToast('ออกจากระบบเรียบร้อย', 'info');
-      router.push('/login');
+
+      // 4. Force full page navigation to /login to guarantee fresh browser state
+      window.location.href = '/login?logged_out=1';
     }
   };
 

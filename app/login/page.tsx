@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { Scale, Lock, User, FileText, CheckCircle2, ArrowRight, Sparkles, Landmark, Mail } from 'lucide-react';
 import { ThemeToggle } from '../../components/layout/ThemeToggle';
 import { showError } from '../../lib/sweetalert';
@@ -37,6 +37,14 @@ export default function LoginPage() {
 
   // Synchronize NextAuth session with JADS local backend
   React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('logged_out') === '1') {
+        // User explicitly logged out, skip auto-sync
+        return;
+      }
+    }
+
     if (status === 'authenticated' && session?.user && !user) {
       const provider = (session as any).provider || 'google';
       const providerAccountId = (session as any).providerAccountId || session.user.email || 'oauth_user';
@@ -56,10 +64,18 @@ export default function LoginPage() {
     document.title = isLoginTab ? 'เข้าสู่ระบบ | JADS Court' : 'สมัครสมาชิกใหม่ | JADS Court';
   }, [isLoginTab]);
 
-  // Check URL error params from NextAuth (e.g. /login?error=OAuthSignin)
+  // Check URL params from NextAuth (error or intentional logout)
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+
+      // Handle intentional logout cleanup
+      if (params.get('logged_out') === '1') {
+        signOut({ redirect: false });
+        window.history.replaceState({}, '', window.location.pathname);
+        return;
+      }
+
       const authError = params.get('error');
       if (authError) {
         if (authError === 'Configuration' || authError === 'OAuthSignin') {

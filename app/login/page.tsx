@@ -40,7 +40,7 @@ export default function LoginPage() {
       {/* Full Viewport Background Image */}
       <div className="fixed inset-0 z-0 w-full h-full pointer-events-none select-none overflow-hidden">
         <img
-          src="/images/courtroom-bg.jpg"
+          src="/images/courtroom-bg.webp"
           alt="Courtroom Background"
           className="w-full h-full object-cover object-center min-w-full min-h-full"
         />
@@ -72,7 +72,7 @@ export default function LoginPage() {
           <div className="my-6 flex justify-center items-center relative">
             <div className="w-full max-w-[350px] aspect-[4/3] relative drop-shadow-[0_20px_35px_rgba(109,40,217,0.35)] transition-transform duration-500 hover:scale-[1.02]">
               <img
-                src="/images/legal-worker.png"
+                src="/images/legal-worker.webp"
                 alt="เจ้าหน้าที่กำลังทำงานเอกสารคดี"
                 className="w-full h-full object-contain"
               />

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../lib/authContext';
+import { APP_CONFIG } from '../lib/config';
 import {
   Scale,
   Download,
@@ -22,9 +23,18 @@ import {
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const [latestVersion, setLatestVersion] = useState('1.0.0');
 
   useEffect(() => {
     document.title = 'JADS Court - ระบบสร้างและจัดการเอกสารคดีศาลอัตโนมัติ';
+    fetch(`${APP_CONFIG.API_BASE_URL}/downloads/info`)
+      .then((res) => res.json())
+      .then((resData) => {
+        if (resData?.success && resData?.data?.latestVersion) {
+          setLatestVersion(resData.data.latestVersion);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -40,7 +50,7 @@ export default function LandingPage() {
               <span className="font-bold text-white text-base tracking-wide flex items-center gap-1.5">
                 JADS COURT
                 <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.2 rounded font-semibold">
-                  v1.0
+                  v{latestVersion}
                 </span>
               </span>
               <p className="text-[11px] text-purple-400 font-medium">ระบบเอกสารคดีศาลยุติธรรม</p>
@@ -166,25 +176,27 @@ export default function LandingPage() {
 
               <div className="lg:col-span-4 flex flex-col items-center sm:items-start lg:items-end justify-center">
                 <a
-                  href="/downloads/JADS-Setup.exe"
+                  href={`${APP_CONFIG.API_BASE_URL}/downloads/latest?type=installer`}
                   download
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-purple-700 hover:bg-purple-600 text-white font-bold text-sm rounded-2xl shadow-xl shadow-purple-900/60 transition-all hover:scale-[1.03] group"
                 >
                   <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
                   <div className="text-left">
                     <div className="text-sm font-bold">ดาวน์โหลดตัวติดตั้ง JADS</div>
-                    <div className="text-[11px] font-normal text-purple-200">ไฟล์ JADS-Setup.exe (สำหรับ Windows)</div>
+                    <div className="text-[11px] font-normal text-purple-200">
+                      เวอร์ชัน v{latestVersion} (สำหรับ Windows 64-bit)
+                    </div>
                   </div>
                 </a>
                 <a
-                  href="/downloads/JADS-Portable.exe"
+                  href={`${APP_CONFIG.API_BASE_URL}/downloads/latest?type=portable`}
                   download
                   className="text-[11px] text-purple-400 hover:text-purple-300 underline mt-2 text-center lg:text-right"
                 >
-                  หรือดาวน์โหลดเวอร์ชันพกพาไม่ต้องติดตั้ง (JADS-Portable.exe)
+                  หรือดาวน์โหลดเวอร์ชันพกพาไม่ต้องติดตั้ง (JADS-Portable v{latestVersion})
                 </a>
                 <p className="text-[11px] text-slate-500 mt-1 text-center lg:text-right">
-                  ปลอดภัย ปราศจากมัลแวร์ • อัปเดตล่าสุด ตุลาคม 2569
+                  ดาวน์โหลดโดยตรงจากเซิร์ฟเวอร์ศาล • ปลอดภัย ไร้มัลแวร์
                 </p>
               </div>
             </div>

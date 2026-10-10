@@ -2,13 +2,21 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { Scale, Lock, User, FileText, CheckCircle2, ArrowRight, Sparkles, Landmark } from 'lucide-react';
 
 export default function LoginPage() {
-  const { login, register } = useAuth();
+  const { user, isLoading, login, register } = useAuth();
+  const router = useRouter();
   const [isLoginTab, setIsLoginTab] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  React.useEffect(() => {
+    if (!isLoading && user) {
+      router.push('/overview');
+    }
+  }, [user, isLoading, router]);
 
   React.useEffect(() => {
     document.title = isLoginTab ? 'เข้าสู่ระบบ | JADS Court' : 'สมัครสมาชิกใหม่ | JADS Court';

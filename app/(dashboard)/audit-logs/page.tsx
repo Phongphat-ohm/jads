@@ -77,23 +77,23 @@ export default function AuditLogsPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Link href="/overview" className="text-purple-600 hover:text-purple-800 text-xs font-semibold flex items-center gap-1">
+            <Link href="/overview" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 text-xs font-semibold flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>กลับสู่แดชบอร์ด</span>
             </Link>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <ShieldAlert className="w-6 h-6 text-purple-700" />
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <ShieldAlert className="w-6 h-6 text-purple-700 dark:text-purple-400" />
             <span>บันทึกประวัติการใช้งานระบบ (Audit Logs)</span>
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             บันทึกทุกกิจกรรมและคำสั่งการดำเนินงาน พร้อม IP Address และเวลาเพื่อความโปร่งใสและตรวจสอบได้ (ทั้งหมด {total} รายการ)
           </p>
         </div>
 
         <button
           onClick={() => loadLogs(page)}
-          className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
+          className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           <span>รีเฟรช</span>
@@ -101,20 +101,20 @@ export default function AuditLogsPage() {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-3xl border border-purple-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-purple-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
         {isLoading ? (
           <div className="p-12 text-center text-slate-400">
-            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600" />
+            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600 dark:text-purple-400" />
             <p className="text-xs">กำลังโหลดบันทึกการใช้งาน...</p>
           </div>
         ) : logs.length === 0 ? (
           <div className="p-12 text-center text-slate-400">
-            <p className="text-sm font-semibold text-slate-600">ยังไม่มีบันทึก Audit Log</p>
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">ยังไม่มีบันทึก Audit Log</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-100 font-semibold">
+              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800 font-semibold">
                 <tr>
                   <th className="py-3 px-6">กิจกรรม (Action)</th>
                   <th className="py-3 px-6">สถานะ</th>
@@ -123,9 +123,9 @@ export default function AuditLogsPage() {
                   <th className="py-3 px-6">วัน-เวลา</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-purple-50/20 transition-colors">
+                  <tr key={log.id} className="hover:bg-purple-50/20 dark:hover:bg-purple-950/20 transition-colors">
                     <td className="py-3.5 px-6 font-semibold">
                       <span className={`px-2.5 py-1 rounded-lg border font-mono text-[11px] ${getActionBadge(log.action)}`}>
                         {log.action}
@@ -133,24 +133,24 @@ export default function AuditLogsPage() {
                     </td>
                     <td className="py-3.5 px-6">
                       {log.status === 'SUCCESS' ? (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/50">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>สำเร็จ</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded-full border border-red-200 dark:border-red-800/50">
                           <AlertTriangle className="w-3 h-3" />
                           <span>ล้มเหลว</span>
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-6 text-slate-600 font-mono text-[11px] max-w-xs truncate">
+                    <td className="py-3.5 px-6 text-slate-600 dark:text-slate-400 font-mono text-[11px] max-w-xs truncate">
                       {log.details ? JSON.stringify(log.details) : '-'}
                     </td>
-                    <td className="py-3.5 px-6 text-slate-500 font-mono text-[11px]">
+                    <td className="py-3.5 px-6 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
                       {log.ipAddress || '127.0.0.1'}
                     </td>
-                    <td className="py-3.5 px-6 text-slate-500">
+                    <td className="py-3.5 px-6 text-slate-500 dark:text-slate-400">
                       {new Date(log.createdAt).toLocaleString('th-TH')}
                     </td>
                   </tr>
@@ -161,7 +161,7 @@ export default function AuditLogsPage() {
         )}
 
         {/* Pagination Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <div>
             หน้า {page} จากทั้งหมด {totalPages} หน้า (รวม {total} รายการ)
           </div>
@@ -170,16 +170,16 @@ export default function AuditLogsPage() {
               type="button"
               disabled={page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="font-semibold text-slate-700">{page}</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200">{page}</span>
             <button
               type="button"
               disabled={page >= totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

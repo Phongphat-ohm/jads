@@ -62,23 +62,23 @@ export default function RecentFilesPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Link href="/overview" className="text-purple-600 hover:text-purple-800 text-xs font-semibold flex items-center gap-1">
+            <Link href="/overview" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 text-xs font-semibold flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>กลับสู่แดชบอร์ด</span>
             </Link>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Clock className="w-6 h-6 text-purple-700" />
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <Clock className="w-6 h-6 text-purple-700 dark:text-purple-400" />
             <span>ประวัติไฟล์ล่าสุดทั้งหมด (Recent Files)</span>
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             แสดงรายการไฟล์ตารางคดีที่ท่านเคยเปิดใช้งานล่าสุด
           </p>
         </div>
 
         <button
           onClick={loadFiles}
-          className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
+          className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           <span>รีเฟรช</span>
@@ -86,20 +86,20 @@ export default function RecentFilesPage() {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-3xl border border-purple-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-purple-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
         {isLoading ? (
           <div className="p-12 text-center text-slate-400">
-            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600" />
+            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600 dark:text-purple-400" />
             <p className="text-xs">กำลังโหลดข้อมูล...</p>
           </div>
         ) : files.length === 0 ? (
           <div className="p-12 text-center text-slate-400">
-            <p className="text-sm font-semibold text-slate-600">ไม่มีประวัติไฟล์ในระบบ</p>
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">ไม่มีประวัติไฟล์ในระบบ</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-100 font-semibold">
+              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800 font-semibold">
                 <tr>
                   <th className="py-3 px-6">ชื่อไฟล์</th>
                   <th className="py-3 px-6">ตำแหน่งไฟล์ในเครื่อง (File Path)</th>
@@ -108,28 +108,28 @@ export default function RecentFilesPage() {
                   <th className="py-3 px-6 text-right">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {files.map((file) => (
-                  <tr key={file.id} className="hover:bg-purple-50/30 transition-colors">
-                    <td className="py-3.5 px-6 font-bold text-slate-800 flex items-center gap-2.5">
-                      <FileSpreadsheet className="w-4 h-4 text-purple-600 shrink-0" />
+                  <tr key={file.id} className="hover:bg-purple-50/30 dark:hover:bg-purple-950/20 transition-colors">
+                    <td className="py-3.5 px-6 font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2.5">
+                      <FileSpreadsheet className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span className="truncate max-w-xs">{file.fileName}</span>
                     </td>
-                    <td className="py-3.5 px-6 text-slate-600 font-mono text-[11px] max-w-md truncate">
+                    <td className="py-3.5 px-6 text-slate-600 dark:text-slate-400 font-mono text-[11px] max-w-md truncate">
                       {file.localPath}
                     </td>
                     <td className="py-3.5 px-6">
-                      <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 font-semibold text-[10px] uppercase border border-purple-100">
+                      <span className="px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-semibold text-[10px] uppercase border border-purple-100 dark:border-purple-800/50">
                         {file.fileType || 'xlsx'}
                       </span>
                     </td>
-                    <td className="py-3.5 px-6 text-slate-500">
+                    <td className="py-3.5 px-6 text-slate-500 dark:text-slate-400">
                       {new Date(file.lastOpenedAt).toLocaleString('th-TH')}
                     </td>
                     <td className="py-3.5 px-6 text-right">
                       <button
                         onClick={() => handleDelete(file.id, file.fileName)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                         title="ลบออกจากประวัติ"
                       >
                         <Trash2 className="w-4 h-4" />

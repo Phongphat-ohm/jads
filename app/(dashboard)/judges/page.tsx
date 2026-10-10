@@ -145,7 +145,7 @@ export default function JudgesPage() {
       </div>
 
       {/* Search and Stats */}
-      <div className="bg-white rounded-2xl p-4 border border-purple-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition-colors">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -153,33 +153,33 @@ export default function JudgesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ค้นหาชื่อผู้พิพากษา หรือชื่อศาล..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-purple-600 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 rounded-xl text-xs focus:ring-2 focus:ring-purple-600 focus:outline-none"
           />
         </div>
-        <span className="text-xs text-slate-500 font-semibold px-2">
-          ทั้งหมด <strong className="text-purple-700 font-bold">{judgePairs.length}</strong> คู่
+        <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold px-2">
+          ทั้งหมด <strong className="text-purple-700 dark:text-purple-400 font-bold">{judgePairs.length}</strong> คู่
         </span>
       </div>
 
       {/* Grid of Judge Pairs */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-purple-100 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-purple-100 dark:border-slate-800 shadow-sm">
           <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-xs text-slate-500">กำลังโหลดรายการคู่ผู้พิพากษา...</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">กำลังโหลดรายการคู่ผู้พิพากษา...</p>
         </div>
       ) : filteredPairs.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-purple-100 shadow-sm">
-          <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-purple-100 dark:border-slate-800 shadow-sm">
+          <div className="w-14 h-14 bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <Users className="w-7 h-7" />
           </div>
-          <h3 className="text-sm font-bold text-slate-800 mb-1">ยังไม่มีคู่ผู้พิพากษาในระบบ</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">ยังไม่มีคู่ผู้พิพากษาในระบบ</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
             ท่านสามารถเพิ่มคู่ผู้พิพากษาไว้ เพื่อให้ระบบช่วยเติมชื่อผู้พิพากษาคนที่ 2 อัตโนมัติเมื่อเลือกคนที่ 1
           </p>
           <button
             type="button"
             onClick={handleOpenAddModal}
-            className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-sm"
+            className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>เพิ่มคู่แรกตอนนี้</span>
@@ -190,41 +190,41 @@ export default function JudgesPage() {
           {filteredPairs.map((pair) => (
             <div
               key={pair.id}
-              className="bg-white rounded-2xl p-5 border border-purple-100/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-purple-100/90 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-                  <span className="text-[11px] font-bold bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                    <Scale className="w-3 h-3 text-purple-600" />
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
+                  <span className="text-[11px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <Scale className="w-3 h-3 text-purple-600 dark:text-purple-400" />
                     <span>องค์คณะร่วม</span>
                   </span>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500">
                     {pair.courtName || APP_CONFIG.DEFAULT_COURT}
                   </span>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-                    <p className="text-[10px] font-bold text-purple-700 uppercase tracking-wider mb-0.5">
+                  <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                    <p className="text-[10px] font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-0.5">
                       ผู้พิพากษาคนที่ 1 (หลัก)
                     </p>
-                    <p className="text-xs font-bold text-slate-900">{pair.judge1Name}</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{pair.judge1Name}</p>
                   </div>
 
-                  <div className="bg-purple-50/60 p-2.5 rounded-xl border border-purple-200/70">
-                    <p className="text-[10px] font-bold text-indigo-700 uppercase tracking-wider mb-0.5">
+                  <div className="bg-purple-50/60 dark:bg-purple-950/40 p-2.5 rounded-xl border border-purple-200/70 dark:border-purple-800/50">
+                    <p className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider mb-0.5">
                       ผู้พิพากษาคนที่ 2 (ร่วม)
                     </p>
-                    <p className="text-xs font-bold text-purple-950">{pair.judge2Name}</p>
+                    <p className="text-xs font-bold text-purple-950 dark:text-purple-200">{pair.judge2Name}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-4 mt-2 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2 pt-4 mt-2 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => handleOpenEditModal(pair)}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 text-xs font-semibold rounded-lg flex items-center gap-1 transition-colors"
+                  className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-300 text-xs font-semibold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                   <span>แก้ไข</span>
@@ -232,7 +232,7 @@ export default function JudgesPage() {
                 <button
                   type="button"
                   onClick={() => handleDeletePair(pair)}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-xs font-semibold rounded-lg flex items-center gap-1 transition-colors"
+                  className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs font-semibold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>ลบ</span>
@@ -245,21 +245,21 @@ export default function JudgesPage() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-purple-100 space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-purple-100 dark:border-slate-800 space-y-4 animate-in fade-in zoom-in-95 duration-150 transition-colors">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
                   <Users className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   {editingId ? 'แก้ไขคู่ผู้พิพากษา' : 'เพิ่มคู่ผู้พิพากษาใหม่'}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -267,7 +267,7 @@ export default function JudgesPage() {
 
             <form onSubmit={handleSavePair} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ชื่อผู้พิพากษาคนที่ 1 (หลัก)
                 </label>
                 <input
@@ -276,12 +276,12 @@ export default function JudgesPage() {
                   value={judge1Input}
                   onChange={(e) => setJudge1Input(e.target.value)}
                   placeholder="เช่น นาย สมศักดิ์ ยุติธรรม"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ชื่อผู้พิพากษาคนที่ 2 (ร่วม)
                 </label>
                 <input
@@ -290,33 +290,33 @@ export default function JudgesPage() {
                   value={judge2Input}
                   onChange={(e) => setJudge2Input(e.target.value)}
                   placeholder="เช่น นางสาว ดวงใจ ซื่อตรง"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">ศาล</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">ศาล</label>
                 <input
                   type="text"
                   value={courtInput}
                   onChange={(e) => setCourtInput(e.target.value)}
                   placeholder="เช่น ศาลจังหวัดระยอง"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
                 >
                   ยกเลิก
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl transition-all shadow-md disabled:opacity-60"
+                  className="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl transition-all shadow-md disabled:opacity-60 cursor-pointer"
                 >
                   {isSubmitting ? 'กำลังบันทึก...' : 'บันทึกคู่ผู้พิพากษา'}
                 </button>

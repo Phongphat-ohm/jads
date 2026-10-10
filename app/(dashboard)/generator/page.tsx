@@ -712,7 +712,7 @@ function GeneratorContent() {
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div className="bg-white rounded-3xl p-2.5 border border-purple-100 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-2.5 border border-purple-100 dark:border-slate-800 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2.5 transition-colors">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -727,8 +727,8 @@ function GeneratorContent() {
                 isActive
                   ? 'bg-purple-700 text-white shadow-lg shadow-purple-700/25 ring-2 ring-purple-600'
                   : tab.disabled
-                  ? 'opacity-40 cursor-not-allowed bg-slate-50 text-slate-400 border border-transparent'
-                  : 'hover:bg-purple-50 text-slate-700 border border-slate-100 bg-white hover:border-purple-200'
+                  ? 'opacity-40 cursor-not-allowed bg-slate-50 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 border border-transparent'
+                  : 'hover:bg-purple-50 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-purple-200 dark:hover:border-purple-800'
               }`}
             >
               <div
@@ -736,16 +736,16 @@ function GeneratorContent() {
                   isActive
                     ? 'bg-white/20 text-white'
                     : tab.disabled
-                    ? 'bg-slate-100 text-slate-400'
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
                     : tab.completed
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-purple-100 text-purple-700'
+                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400'
+                    : 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300'
                 }`}
               >
                 {tab.completed && !isActive ? (
-                  <Check className="w-5 h-5 text-emerald-600" />
+                  <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 ) : tab.disabled ? (
-                  <Lock className="w-4 h-4 text-slate-400" />
+                  <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                 ) : (
                   <Icon className="w-5 h-5" />
                 )}
@@ -754,19 +754,19 @@ function GeneratorContent() {
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold block truncate">{tab.title}</span>
                   {tab.completed && !isActive && (
-                    <span className="shrink-0 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.2 rounded-full font-bold">
+                    <span className="shrink-0 text-[10px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.2 rounded-full font-bold">
                       เสร็จแล้ว
                     </span>
                   )}
                   {tab.disabled && (
-                    <span className="shrink-0 text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.2 rounded-full font-medium">
+                    <span className="shrink-0 text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-1.5 py-0.2 rounded-full font-medium">
                       ล็อก
                     </span>
                   )}
                 </div>
                 <span
                   className={`text-[10px] block truncate mt-0.5 ${
-                    isActive ? 'text-purple-200' : 'text-slate-400'
+                    isActive ? 'text-purple-200' : 'text-slate-400 dark:text-slate-500'
                   }`}
                 >
                   {tab.desc}

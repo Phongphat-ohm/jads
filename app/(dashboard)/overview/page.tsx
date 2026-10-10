@@ -120,46 +120,46 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-purple-100 dark:border-slate-800 shadow-sm flex items-center justify-between transition-colors">
           <div>
-            <p className="text-xs font-semibold text-slate-500">ประวัติไฟล์ล่าสุดในระบบ</p>
-            <h3 className="text-2xl font-bold text-slate-900 mt-1">{recentFiles.length} ไฟล์</h3>
-            <p className="text-[11px] text-purple-600 mt-1">ประวัติการเปิดไฟล์ของฉัน</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">ประวัติไฟล์ล่าสุดในระบบ</p>
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">{recentFiles.length} ไฟล์</h3>
+            <p className="text-[11px] text-purple-600 dark:text-purple-400 mt-1">ประวัติการเปิดไฟล์ของฉัน</p>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
             <Clock className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-purple-100 dark:border-slate-800 shadow-sm flex items-center justify-between transition-colors">
           <div>
-            <p className="text-xs font-semibold text-slate-500">การปกป้องข้อมูลส่วนบุคคล</p>
-            <h3 className="text-2xl font-bold text-emerald-600 mt-1">ปลอดภัย</h3>
-            <p className="text-[11px] text-slate-400 mt-1">ระบบแยกข้อมูลเฉพาะบัญชีคุณ 100%</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">การปกป้องข้อมูลส่วนบุคคล</p>
+            <h3 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">ปลอดภัย</h3>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">ระบบแยกข้อมูลเฉพาะบัญชีคุณ 100%</p>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
             <ShieldCheck className="w-6 h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-purple-100 dark:border-slate-800 shadow-sm flex items-center justify-between transition-colors">
           <div>
-            <p className="text-xs font-semibold text-slate-500">แม่แบบรายงานคดี (.docx)</p>
-            <h3 className="text-2xl font-bold text-slate-900 mt-1">พร้อมใช้งาน</h3>
-            <p className="text-[11px] text-slate-400 mt-1">มาตรฐานแบบพิมพ์ศาล</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">แม่แบบรายงานคดี (.docx)</p>
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">พร้อมใช้งาน</h3>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">มาตรฐานแบบพิมพ์ศาล</p>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">
             <FileText className="w-6 h-6" />
           </div>
         </div>
       </div>
 
       {/* Recent Files Table Section */}
-      <div className="bg-white rounded-3xl border border-purple-100 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-purple-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-slate-800">ประวัติไฟล์ล่าสุด (Recent Files)</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">ประวัติไฟล์ล่าสุด (Recent Files)</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               ตำแหน่งไฟล์ในเครื่องของท่านถูกถอดรหัสแสดงผลเฉพาะผู้ใช้งานที่เป็นเจ้าของ
             </p>
           </div>
@@ -167,14 +167,14 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={loadRecentFiles}
-              className="p-2 text-slate-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
+              className="p-2 text-slate-500 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
               title="รีเฟรชข้อมูล"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
             <Link
               href="/recent-files"
-              className="text-xs font-semibold text-purple-700 hover:text-purple-900 flex items-center gap-1"
+              className="text-xs font-semibold text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300 flex items-center gap-1"
             >
               <span>ดูทั้งหมด</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -184,19 +184,19 @@ export default function DashboardPage() {
 
         {isLoadingFiles ? (
           <div className="p-12 text-center text-slate-400">
-            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600" />
+            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-purple-600 dark:text-purple-400" />
             <p className="text-xs">กำลังโหลดประวัติไฟล์ล่าสุด...</p>
           </div>
         ) : recentFiles.length === 0 ? (
           <div className="p-12 text-center text-slate-400">
-            <FolderOpen className="w-10 h-10 mx-auto mb-2 text-slate-300" />
-            <p className="text-sm font-semibold text-slate-600">ยังไม่มีประวัติไฟล์ในระบบ</p>
-            <p className="text-xs text-slate-400 mt-1">
+            <FolderOpen className="w-10 h-10 mx-auto mb-2 text-slate-300 dark:text-slate-600" />
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">ยังไม่มีประวัติไฟล์ในระบบ</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
               เริ่มต้นด้วยการอัปโหลดไฟล์ Excel ในหน้าระบบสร้างเอกสาร
             </p>
             <Link
               href="/generator"
-              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-purple-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-purple-600/20"
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-semibold shadow-md shadow-purple-600/20"
             >
               <span>ไปที่หน้าระบบสร้างเอกสาร</span>
             </Link>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 border-b border-slate-100 font-semibold">
+              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800 font-semibold">
                 <tr>
                   <th className="py-3 px-6">ชื่อไฟล์</th>
                   <th className="py-3 px-6">ตำแหน่งไฟล์ในเครื่อง (Decrypted Path)</th>
@@ -213,28 +213,28 @@ export default function DashboardPage() {
                   <th className="py-3 px-6 text-right">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {recentFiles.map((file) => (
-                  <tr key={file.id} className="hover:bg-purple-50/30 transition-colors">
-                    <td className="py-3.5 px-6 font-bold text-slate-800 flex items-center gap-2.5">
-                      <FileSpreadsheet className="w-4 h-4 text-purple-600 shrink-0" />
+                  <tr key={file.id} className="hover:bg-purple-50/30 dark:hover:bg-purple-950/20 transition-colors">
+                    <td className="py-3.5 px-6 font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2.5">
+                      <FileSpreadsheet className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span className="truncate max-w-xs">{file.fileName}</span>
                     </td>
-                    <td className="py-3.5 px-6 text-slate-500 font-mono text-[11px] truncate max-w-sm">
+                    <td className="py-3.5 px-6 text-slate-500 dark:text-slate-400 font-mono text-[11px] truncate max-w-sm">
                       {file.localPath}
                     </td>
                     <td className="py-3.5 px-6">
-                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold text-[10px] uppercase">
+                      <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-[10px] uppercase">
                         {file.fileType || 'xlsx'}
                       </span>
                     </td>
-                    <td className="py-3.5 px-6 text-slate-500">
+                    <td className="py-3.5 px-6 text-slate-500 dark:text-slate-400">
                       {new Date(file.lastOpenedAt).toLocaleString('th-TH')}
                     </td>
                     <td className="py-3.5 px-6 text-right">
                       <button
                         onClick={() => handleDeleteRecent(file.id, file.fileName)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                         title="ลบออกจากประวัติ"
                       >
                         <Trash2 className="w-4 h-4" />

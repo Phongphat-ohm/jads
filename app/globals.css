@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8fafc;
   --foreground: #1e1b4b;
@@ -7,6 +9,15 @@
   --deep-purple: #4c1d95;
   --accent-purple: #7c3aed;
   --light-purple: #f5f3ff;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --primary-purple: #9333ea;
+  --deep-purple: #7e22ce;
+  --accent-purple: #a855f7;
+  --light-purple: #1e1b4b;
 }
 
 body {
@@ -32,6 +43,16 @@ body {
   background: #8b5cf6;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #4c1d95;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
 /* Glassmorphism utility */
 .glass-panel {
   background: rgba(255, 255, 255, 0.88);
@@ -45,6 +66,23 @@ body {
   border: 1px solid rgba(139, 92, 246, 0.25);
 }
 
+/* SweetAlert2 Dark Mode Overrides */
+.dark .swal2-popup {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+}
+.dark .swal2-title {
+  color: #f1f5f9 !important;
+}
+.dark .swal2-html-container {
+  color: #cbd5e1 !important;
+}
+.dark .swal2-timer-progress-bar {
+  background: #a855f7 !important;
+}
+
 /* docx-preview Page Styling */
 .docx-viewer-container .docx-wrapper {
   background: transparent !important;
@@ -56,6 +94,7 @@ body {
 
 .docx-viewer-container .docx-wrapper > section.docx {
   background: white !important;
+  color: #111827 !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
   margin-bottom: 24px !important;
   border: 1px solid #e2e8f0 !important;

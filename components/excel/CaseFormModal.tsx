@@ -202,8 +202,8 @@ export function CaseFormModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-purple-100 overflow-hidden my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-purple-100 dark:border-slate-800 overflow-hidden my-8 transition-colors">
         {/* Modal Header */}
         <div className="px-6 py-4 bg-gradient-to-r from-purple-800 to-indigo-800 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -226,17 +226,17 @@ export function CaseFormModal({
         {/* Modal Body */}
         <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
           {/* Template Selector */}
-          <div className="bg-purple-50/70 p-4 rounded-2xl border border-purple-100">
-            <label className="block text-xs font-bold text-purple-900 mb-1.5">
+          <div className="bg-purple-50/70 dark:bg-slate-800/60 p-4 rounded-2xl border border-purple-100 dark:border-slate-700">
+            <label className="block text-xs font-bold text-purple-900 dark:text-purple-300 mb-1.5">
               เลือกไฟล์ Word Template ที่ต้องการใช้:
             </label>
             <select
               value={selectedTemplate}
               onChange={(e) => setSelectedTemplate(e.target.value)}
-              className="w-full bg-white border border-purple-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+              className="w-full bg-white dark:bg-slate-800 border border-purple-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-slate-100 font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
             >
               {templates.map((t) => (
-                <option key={t} value={t}>
+                <option key={t} value={t} className="dark:bg-slate-800">
                   📄 {t}
                 </option>
               ))}
@@ -246,7 +246,7 @@ export function CaseFormModal({
           {/* Form Fields Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 เลขคดีดำ (case_black_no)
               </label>
               <input
@@ -254,12 +254,12 @@ export function CaseFormModal({
                 value={formData.case_black_no}
                 onChange={(e) => handleChange('case_black_no', e.target.value)}
                 placeholder="เช่น ผบ121/2569"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 เลขคดีแดง (case_red_no)
               </label>
               <input
@@ -267,12 +267,12 @@ export function CaseFormModal({
                 value={formData.case_red_no}
                 onChange={(e) => handleChange('case_red_no', e.target.value)}
                 placeholder="เช่น ผบ193/2569 หรือ /2569"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 ศาล (court_name)
               </label>
               <input
@@ -280,12 +280,12 @@ export function CaseFormModal({
                 value={formData.court_name}
                 onChange={(e) => handleChange('court_name', e.target.value)}
                 placeholder="เช่น ศาลจังหวัดระยอง"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 ประเภทคดี (case_type)
               </label>
               <input
@@ -293,49 +293,49 @@ export function CaseFormModal({
                 value={formData.case_type}
                 onChange={(e) => handleChange('case_type', e.target.value)}
                 placeholder="เช่น แพ่ง"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             {/* Date Details */}
-            <div className="md:col-span-2 grid grid-cols-4 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <div className="md:col-span-2 grid grid-cols-4 gap-2 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
                   วัน (date)
                 </label>
                 <input
                   type="text"
                   value={formData.date}
                   onChange={(e) => handleChange('date', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-center"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-center text-slate-900 dark:text-slate-100"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
                   เดือน (month)
                 </label>
                 <input
                   type="text"
                   value={formData.month}
                   onChange={(e) => handleChange('month', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-center"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-center text-slate-900 dark:text-slate-100"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1">
                   ปี (year)
                 </label>
                 <input
                   type="text"
                   value={formData.year}
                   onChange={(e) => handleChange('year', e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-center"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-center text-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 เวลา (hearing_time)
               </label>
               <input
@@ -343,7 +343,7 @@ export function CaseFormModal({
                 value={formData.hearing_time}
                 onChange={(e) => handleChange('hearing_time', e.target.value)}
                 placeholder="เช่น 09.00"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
@@ -421,7 +421,7 @@ export function CaseFormModal({
                         className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
                           isSelected
                             ? 'bg-purple-700 text-white shadow-sm ring-2 ring-purple-400'
-                            : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50'
+                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-700 hover:bg-purple-50/50 dark:hover:bg-slate-700'
                         }`}
                       >
                         {isSelected ? <Check className="w-3 h-3 text-purple-200" /> : <Plus className="w-3 h-3 text-slate-400" />}
@@ -445,7 +445,7 @@ export function CaseFormModal({
                     }
                   }}
                   placeholder="พิมพ์ตำแหน่งเพิ่มเติม เช่น ผู้รับมอบฉันทะ หรือพิมพ์หลายตำแหน่งคั่นด้วยเครื่องหมายจุลภาค"
-                  className="flex-1 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="flex-1 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
                 <button
                   type="button"
@@ -459,14 +459,14 @@ export function CaseFormModal({
 
               {/* Active position chips */}
               {currentPositions.length > 0 && (
-                <div className="bg-white/90 p-2.5 rounded-xl border border-purple-100 flex flex-wrap gap-2 items-center">
-                  <span className="text-[11px] font-bold text-slate-500 mr-1">ลำดับตำแหน่ง:</span>
+                <div className="bg-white/90 dark:bg-slate-800/80 p-2.5 rounded-xl border border-purple-100 dark:border-slate-700 flex flex-wrap gap-2 items-center">
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mr-1">ลำดับตำแหน่ง:</span>
                   {currentPositions.map((pos, idx) => (
                     <span
                       key={`${pos}-${idx}`}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-purple-50 text-purple-900 border border-purple-200 rounded-lg text-xs font-semibold"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-purple-50 dark:bg-purple-950/50 text-purple-900 dark:text-purple-200 border border-purple-200 dark:border-purple-800 rounded-lg text-xs font-semibold"
                     >
-                      <span className="w-4 h-4 rounded-full bg-purple-200 text-purple-800 text-[10px] flex items-center justify-center font-bold">
+                      <span className="w-4 h-4 rounded-full bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-[10px] flex items-center justify-center font-bold">
                         {idx + 1}
                       </span>
                       <span>{pos}</span>
@@ -486,10 +486,10 @@ export function CaseFormModal({
               {/* Dual preview outputs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                 {/* 1. attendees_summary output */}
-                <div className="bg-white p-3 rounded-xl border border-purple-200 shadow-sm">
+                <div className="bg-white dark:bg-slate-800/90 p-3 rounded-xl border border-purple-200 dark:border-slate-700 shadow-sm">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-purple-950 flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5 text-purple-600" />
+                    <span className="text-xs font-bold text-purple-950 dark:text-purple-300 flex items-center gap-1">
+                      <FileText className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                       ช่องที่ 1: ข้อความในเนื้อหา (attendees_summary)
                     </span>
                   </div>
@@ -506,34 +506,34 @@ export function CaseFormModal({
                       }));
                     }}
                     placeholder="เช่น ทนายโจทก์ โจทก์ ทนายจำเลย และจำเลย"
-                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800 focus:bg-white focus:ring-1 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-2.5 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-1 focus:ring-purple-600 focus:outline-none"
                   />
-                  <p className="text-[10px] text-slate-500 mt-1">
-                    ✨ แสดงผลอัตโนมัติ: <span className="font-semibold text-purple-700">&ldquo;{formData.attendees_summary}&rdquo;</span>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                    ✨ แสดงผลอัตโนมัติ: <span className="font-semibold text-purple-700 dark:text-purple-400">&ldquo;{formData.attendees_summary}&rdquo;</span>
                   </p>
                 </div>
 
                 {/* 2. signatories loop output */}
-                <div className="bg-white p-3 rounded-xl border border-purple-200 shadow-sm">
+                <div className="bg-white dark:bg-slate-800/90 p-3 rounded-xl border border-purple-200 dark:border-slate-700 shadow-sm">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-purple-950 flex items-center gap-1">
-                      <PenTool className="w-3.5 h-3.5 text-purple-600" />
+                    <span className="text-xs font-bold text-purple-950 dark:text-purple-300 flex items-center gap-1">
+                      <PenTool className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                       ช่องที่ 2: ช่องลงชื่อท้ายเอกสาร (position loop)
                     </span>
-                    <span className="text-[10px] text-purple-600 font-mono font-semibold">1 ตำแหน่ง 1 ช่อง</span>
+                    <span className="text-[10px] text-purple-600 dark:text-purple-400 font-mono font-semibold">1 ตำแหน่ง 1 ช่อง</span>
                   </div>
-                  <div className="bg-slate-50 rounded-lg p-2.5 max-h-28 overflow-y-auto space-y-0.5 font-mono text-[11px] text-slate-600 border border-slate-100">
+                  <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-2.5 max-h-28 overflow-y-auto space-y-0.5 font-mono text-[11px] text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
                     {Array.isArray(formData.signatories) && formData.signatories.length > 0 ? (
                       formData.signatories.map((sig, i) => (
                         <div key={i} className="flex items-center justify-start leading-tight py-0.5">
-                          <span className="text-slate-400">........................................</span>
-                          <span className="font-semibold text-purple-900 bg-purple-100/80 px-2 py-0.2 rounded border border-purple-200 ml-2">
+                          <span className="text-slate-400 dark:text-slate-600">........................................</span>
+                          <span className="font-semibold text-purple-900 dark:text-purple-200 bg-purple-100/80 dark:bg-purple-950/60 px-2 py-0.2 rounded border border-purple-200 dark:border-purple-800 ml-2">
                             {sig.position}
                           </span>
                         </div>
                       ))
                     ) : (
-                      <span className="text-slate-400 text-xs italic">ยังไม่มีตำแหน่งลงชื่อ</span>
+                      <span className="text-slate-400 dark:text-slate-500 text-xs italic">ยังไม่มีตำแหน่งลงชื่อ</span>
                     )}
                   </div>
                 </div>
@@ -541,7 +541,7 @@ export function CaseFormModal({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 ผู้พิพากษาคนที่ 1 (judge_1_name / judge_๑_name)
               </label>
               <input
@@ -552,12 +552,12 @@ export function CaseFormModal({
                   handleChange('judge_๑_name', e.target.value);
                 }}
                 placeholder="เช่น นาย สมศักดิ์ ยุติธรรม"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 ผู้พิพากษาคนที่ 2 (judge_2_name / judge_๒_name)
               </label>
               <input
@@ -568,16 +568,16 @@ export function CaseFormModal({
                   handleChange('judge_๒_name', e.target.value);
                 }}
                 placeholder="เช่น นางสาว ดวงใจ ซื่อตรง"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div className="md:col-span-2">
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold text-slate-700">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                   เนื้อหาคำวินิจฉัย / ย่อหน้าเพิ่มเติม (paragraphs)
                 </label>
-                <span className="text-[11px] text-purple-700 font-semibold bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">
+                <span className="text-[11px] text-purple-700 dark:text-purple-300 font-semibold bg-purple-50 dark:bg-purple-950/50 px-2.5 py-0.5 rounded-full border border-purple-200 dark:border-purple-800">
                   ✨ ระบบจะใส่ย่อหน้าจริง (72pt / 1 นิ้ว) ให้เท่ากับย่อหน้าด้านบนอัตโนมัติ
                 </span>
               </div>
@@ -589,16 +589,16 @@ export function CaseFormModal({
                   setFormData((prev) => ({ ...prev, paragraphs: lines }));
                 }}
                 placeholder="พิมพ์ข้อความคำวินิจฉัยหรือกระบวนพิจารณา (แยกบรรทัดละ 1 ย่อหน้า ไม่ต้องเคาะ Spacebar เว้นวรรคข้างหน้า ระบบจะย่อหน้า 72pt ให้เท่ากับย่อหน้าด้านบนให้อัตโนมัติ)"
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none font-sans leading-relaxed text-slate-800"
+                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none font-sans leading-relaxed"
               />
-              <p className="text-[11px] text-slate-500 mt-1">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                 💡 ข้อความแต่ละบรรทัดจะถูกนำไปสร้างเป็น 1 ย่อหน้าจริงใน Word โดยมีระยะย่อหน้าบรรทัดแรก (First Line Indent 72pt) และกระจายข้อความแบบไทย (Thai Distribute) เท่ากับย่อหน้าด้านบนทุกประการ
               </p>
             </div>
           </div>
 
           {/* JSON Live Preview */}
-          <div className="bg-slate-900 rounded-2xl p-4 text-slate-300 font-mono text-xs">
+          <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-4 text-slate-300 border border-slate-800 font-mono text-xs">
             <p className="text-purple-400 font-semibold mb-1">📦 ข้อมูล JSON ที่จะถูกนำไปกรอกลงใน Word (.docx):</p>
             <pre className="overflow-x-auto text-[11px] leading-relaxed">
               {JSON.stringify(formData, null, 2)}
@@ -607,11 +607,11 @@ export function CaseFormModal({
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-5 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div className="p-5 bg-slate-50 dark:bg-slate-850 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors"
+            className="px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white transition-colors"
           >
             ปิดหน้าต่าง
           </button>

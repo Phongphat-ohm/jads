@@ -783,7 +783,7 @@ function GeneratorContent() {
       {activeTab === 'upload' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Main Upload Dropzone Area */}
-          <div className="bg-white rounded-3xl p-8 border-2 border-dashed border-purple-200 hover:border-purple-500 transition-all text-center relative group shadow-sm bg-gradient-to-b from-purple-50/20 to-white">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-dashed border-purple-200 dark:border-purple-800/60 hover:border-purple-500 dark:hover:border-purple-400 transition-all text-center relative group shadow-sm bg-gradient-to-b from-purple-50/20 dark:from-purple-950/20 to-white dark:to-slate-900">
             <input
               type="file"
               accept=".xlsx, .xls, .csv"
@@ -795,14 +795,14 @@ function GeneratorContent() {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
             />
             <div className="max-w-md mx-auto space-y-4">
-              <div className="w-16 h-16 rounded-3xl bg-purple-100 text-purple-700 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-md shadow-purple-100">
+              <div className="w-16 h-16 rounded-3xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-md shadow-purple-100 dark:shadow-purple-950">
                 <UploadCloud className="w-8 h-8" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
                   ลากและวางไฟล์ตารางนัดพิจารณา หรือคลิกเพื่อเลือกไฟล์
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   รองรับไฟล์ Excel (.xlsx, .xls) และไฟล์ CSV ทุกเวอร์ชัน
                 </p>
               </div>
@@ -821,26 +821,26 @@ function GeneratorContent() {
           {/* Quick Access Grid: Cloud Storage & Recent Files */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Cloud Files (S3) */}
-            <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm flex flex-col justify-between">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-colors">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center">
                       <Cloud className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-800">Cloud Storage (S3)</h4>
-                      <p className="text-[11px] text-slate-400">ไฟล์ที่ซิงค์บนคลาวด์ ดึงได้จากทุกอุปกรณ์</p>
+                      <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Cloud Storage (S3)</h4>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">ไฟล์ที่ซิงค์บนคลาวด์ ดึงได้จากทุกอุปกรณ์</p>
                     </div>
                   </div>
-                  <span className="text-[11px] bg-purple-50 text-purple-700 font-bold px-2 py-0.5 rounded-md">
+                  <span className="text-[11px] bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold px-2 py-0.5 rounded-md border border-purple-200/50 dark:border-purple-800">
                     {cloudFiles.length} ไฟล์
                   </span>
                 </div>
 
                 <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                   {cloudFiles.length === 0 ? (
-                    <div className="py-8 text-center text-slate-400 text-xs">
+                    <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
                       ยังไม่มีไฟล์บน Cloud Storage
                     </div>
                   ) : (
@@ -848,20 +848,20 @@ function GeneratorContent() {
                       <div
                         key={cf.id}
                         onClick={() => handleOpenCloudFile(cf)}
-                        className="group p-3 rounded-2xl border border-slate-100 hover:border-purple-300 hover:bg-purple-50/50 cursor-pointer transition-all flex items-center justify-between"
+                        className="group p-3 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-700 hover:bg-purple-50/50 dark:hover:bg-slate-800/60 cursor-pointer transition-all flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <FileSpreadsheet className="w-4 h-4 text-purple-600 shrink-0" />
+                          <FileSpreadsheet className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
                           <div className="min-w-0">
-                            <span className="text-xs font-bold text-slate-700 group-hover:text-purple-900 block truncate">
+                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 group-hover:text-purple-900 dark:group-hover:text-purple-200 block truncate">
                               {cf.fileName}
                             </span>
-                            <span className="text-[10px] text-slate-400">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500">
                               {(cf.fileSize / 1024).toFixed(1)} KB • {new Date(cf.createdAt).toLocaleDateString('th-TH')}
                             </span>
                           </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-purple-600 dark:group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all" />
                       </div>
                     ))
                   )}
@@ -870,46 +870,46 @@ function GeneratorContent() {
             </div>
 
             {/* Recent Files (Local History) */}
-            <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm flex flex-col justify-between">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-colors">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center">
                       <Clock className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-800">ประวัติเปิดไฟล์ล่าสุด</h4>
-                      <p className="text-[11px] text-slate-400">ไฟล์ที่เปิดใช้งานเร็วๆ นี้บนเครื่องนี้</p>
+                      <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">ประวัติเปิดไฟล์ล่าสุด</h4>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">ไฟล์ที่เปิดใช้งานเร็วๆ นี้บนเครื่องนี้</p>
                     </div>
                   </div>
-                  <span className="text-[11px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">
+                  <span className="text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold px-2 py-0.5 rounded-md">
                     {recentFiles.length} ไฟล์
                   </span>
                 </div>
 
                 <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                   {recentFiles.length === 0 ? (
-                    <div className="py-8 text-center text-slate-400 text-xs">
+                    <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
                       ยังไม่มีประวัติการเปิดไฟล์
                     </div>
                   ) : (
                     recentFiles.map((rf) => (
                       <div
                         key={rf.id}
-                        className="p-3 rounded-2xl border border-slate-100 bg-slate-50/50 flex items-center justify-between"
+                        className="p-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <Laptop className="w-4 h-4 text-slate-500 shrink-0" />
+                          <Laptop className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0" />
                           <div className="min-w-0">
-                            <span className="text-xs font-bold text-slate-700 block truncate">
+                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block truncate">
                               {rf.fileName}
                             </span>
-                            <span className="text-[10px] text-slate-400 font-mono block truncate">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono block truncate">
                               {rf.localPath}
                             </span>
                           </div>
                         </div>
-                        <span className="text-[10px] text-slate-400 shrink-0 ml-2">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0 ml-2">
                           {new Date(rf.lastOpenedAt).toLocaleDateString('th-TH')}
                         </span>
                       </div>
@@ -922,15 +922,15 @@ function GeneratorContent() {
 
           {/* Column Mapping Section if file loaded */}
           {headers.length > 0 && (
-            <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4 transition-colors">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center">
                     <Layers className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900">ตรวจสอบการจับคู่หัวคอลัมน์</h4>
-                    <p className="text-xs text-slate-500">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">ตรวจสอบการจับคู่หัวคอลัมน์</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       ระบบตรวจจับคอลัมน์ที่สอดคล้องให้อัตโนมัติ สามารถปรับเปลี่ยนได้ตามต้องการ
                     </p>
                   </div>
@@ -943,7 +943,7 @@ function GeneratorContent() {
                   className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all ${
                     isStep1Done
                       ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-purple-700/20 hover:scale-105 cursor-pointer'
-                      : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                      : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
                   }`}
                 >
                   <span>ถัดไป: เลือกข้อมูลในตาราง</span>
@@ -967,10 +967,10 @@ function GeneratorContent() {
       {activeTab === 'table' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {rows.length === 0 ? (
-            <div className="bg-white rounded-3xl p-12 text-center border border-purple-100 shadow-sm space-y-4">
-              <FileSpreadsheet className="w-12 h-12 text-purple-300 mx-auto" />
-              <h3 className="text-base font-bold text-slate-800">ยังไม่มีข้อมูลตารางคดี</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-purple-100 dark:border-slate-800 shadow-sm space-y-4 transition-colors">
+              <FileSpreadsheet className="w-12 h-12 text-purple-300 dark:text-purple-600 mx-auto" />
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">ยังไม่มีข้อมูลตารางคดี</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
                 กรุณาอัปโหลดหรือเลือกไฟล์ Excel ในแท็บที่ 1 ก่อนเข้าสู่การเลือกข้อมูล
               </p>
               <button
@@ -997,7 +997,7 @@ function GeneratorContent() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('upload')}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold shadow-2xs"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 text-xs font-bold shadow-2xs transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>ย้อนกลับ: ตัวเลือกไฟล์</span>
@@ -1005,7 +1005,7 @@ function GeneratorContent() {
 
                 <div className="flex items-center gap-3">
                   {!isStep2Done && (
-                    <span className="text-xs text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 font-medium">
+                    <span className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800 font-medium">
                       ⚠️ กรุณาคลิกปุ่ม &quot;เลือกข้อมูลคดีนี้&quot; ในตารางก่อนเพื่อดำเนินการต่อ
                     </span>
                   )}
@@ -1016,7 +1016,7 @@ function GeneratorContent() {
                     className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                       isStep2Done
                         ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
-                        : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
                     }`}
                   >
                     <span>ถัดไป: ตรวจสอบและแก้ไขข้อมูลคดี</span>
@@ -1035,23 +1035,23 @@ function GeneratorContent() {
       {activeTab === 'review' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Top Bar with Case Identity */}
-          <div className="bg-white rounded-3xl p-5 border border-purple-100 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-700 text-white flex items-center justify-center shadow-md">
                 <Scale className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-slate-900">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                     ข้อมูลคดี: หมายเลขดำที่ {formData.case_black_no || '-'}
                   </h3>
                   {formData.case_red_no && (
-                    <span className="text-xs bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-md border border-red-200">
+                    <span className="text-xs bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-md border border-red-200 dark:border-red-900/50">
                       แดงที่ {formData.case_red_no}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 dark:text-slate-500">
                   {formData.court_name || 'ศาลยุติธรรม'} • {formData.case_type}
                 </p>
               </div>
@@ -1061,7 +1061,7 @@ function GeneratorContent() {
               <button
                 type="button"
                 onClick={() => setActiveTab('table')}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>เปลี่ยนคดีจากตาราง</span>
@@ -1073,7 +1073,7 @@ function GeneratorContent() {
                 className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold transition-all ${
                   isStep3Done
                     ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
                 }`}
                 title={!isStep3Done ? 'กรุณาระบุเลขคดีดำให้ถูกต้องก่อนดำเนินการต่อ' : ''}
               >
@@ -1084,17 +1084,17 @@ function GeneratorContent() {
           </div>
 
           {/* Section 1: General Case Fields */}
-          <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm space-y-4">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
                 <FileText className="w-4 h-4" />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">1. ข้อมูลทั่วไปของคดี</h4>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">1. ข้อมูลทั่วไปของคดี</h4>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ศาล (court_name)
                 </label>
                 <input
@@ -1102,12 +1102,12 @@ function GeneratorContent() {
                   value={formData.court_name}
                   onChange={(e) => handleFieldChange('court_name', e.target.value)}
                   placeholder="เช่น ศาลจังหวัดระยอง, ศาลแขวงดอนเมือง"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   หมายเลขคดีดำ (case_black_no)
                 </label>
                 <input
@@ -1115,12 +1115,12 @@ function GeneratorContent() {
                   value={formData.case_black_no}
                   onChange={(e) => handleFieldChange('case_black_no', e.target.value)}
                   placeholder="เช่น ผบ121/2569"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-bold text-purple-900 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   หมายเลขคดีแดง (case_red_no)
                 </label>
                 <input
@@ -1128,13 +1128,13 @@ function GeneratorContent() {
                   value={formData.case_red_no}
                   onChange={(e) => handleFieldChange('case_red_no', e.target.value)}
                   placeholder="เช่น ผบ193/2569 หรือ /2569"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-bold text-red-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-red-800 dark:text-red-400 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               {/* Case Type & Presets */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ความ / ประเภทคดี (case_type)
                 </label>
                 <div className="flex flex-wrap gap-1 mb-1.5">
@@ -1146,7 +1146,7 @@ function GeneratorContent() {
                       className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold transition-all ${
                         formData.case_type === type
                           ? 'bg-purple-700 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-purple-50'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-950/40'
                       }`}
                     >
                       {type}
@@ -1158,46 +1158,46 @@ function GeneratorContent() {
                   value={formData.case_type}
                   onChange={(e) => handleFieldChange('case_type', e.target.value)}
                   placeholder="เช่น แพ่ง, อาญา, ผู้บริโภค"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               {/* Date Split */}
-              <div className="md:col-span-2 grid grid-cols-3 gap-3 bg-purple-50/40 p-3 rounded-2xl border border-purple-100">
+              <div className="md:col-span-2 grid grid-cols-3 gap-3 bg-purple-50/40 dark:bg-slate-800/40 p-3 rounded-2xl border border-purple-100 dark:border-slate-800">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">วันที่</label>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 text-center">วันที่</label>
                   <input
                     type="text"
                     value={formData.date}
                     onChange={(e) => handleFieldChange('date', e.target.value)}
                     placeholder="เช่น 5"
-                    className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-center font-bold text-purple-900 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">เดือน</label>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 text-center">เดือน</label>
                   <input
                     type="text"
                     value={formData.month}
                     onChange={(e) => handleFieldChange('month', e.target.value)}
                     placeholder="เช่น ตุลาคม"
-                    className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-center font-bold text-purple-900 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">พ.ศ.</label>
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 text-center">พ.ศ.</label>
                   <input
                     type="text"
                     value={formData.year}
                     onChange={(e) => handleFieldChange('year', e.target.value)}
                     placeholder="เช่น 2569"
-                    className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-center font-bold text-purple-900 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   เวลาที่นัด (hearing_time)
                 </label>
                 <input
@@ -1205,12 +1205,12 @@ function GeneratorContent() {
                   value={formData.hearing_time}
                   onChange={(e) => handleFieldChange('hearing_time', e.target.value)}
                   placeholder="เช่น 09.00"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   นัดมาทำไม (hearing_purpose)
                 </label>
                 <input
@@ -1218,12 +1218,12 @@ function GeneratorContent() {
                   value={formData.hearing_purpose}
                   onChange={(e) => handleFieldChange('hearing_purpose', e.target.value)}
                   placeholder="เช่น นัดฟังคำวินิจฉัยประธานศาลอุทธรณ์"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   โจทก์ / ผู้ร้อง (plaintiff_name)
                 </label>
                 <input
@@ -1231,12 +1231,12 @@ function GeneratorContent() {
                   value={formData.plaintiff_name}
                   onChange={(e) => handleFieldChange('plaintiff_name', e.target.value)}
                   placeholder="เช่น นาย สมชาย หรือ ธนาคาร..."
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   จำเลย (defendant_name)
                 </label>
                 <input
@@ -1244,32 +1244,32 @@ function GeneratorContent() {
                   value={formData.defendant_name}
                   onChange={(e) => handleFieldChange('defendant_name', e.target.value)}
                   placeholder="เช่น นาย สมศักดิ์ หรือ บริษัท..."
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 2: Attendees with Visual DnD Slots */}
-          <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm space-y-4">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
                 <Users className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">
+                <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                   2. ผู้มาศาล และ ผู้ลงชื่อท้ายเอกสาร (ลากสลับช่อง หรือคลิกลูกศรขึ้น/ลง)
                 </h4>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   จัดลำดับช่องลงชื่อท้ายเอกสารได้ทันที ระบบจะอัปเดตข้อความสรุปผู้มาศาลให้อัตโนมัติ
                 </p>
               </div>
             </div>
 
-            <div className="bg-purple-50/50 p-4 rounded-2xl border border-purple-100 space-y-4">
+            <div className="bg-purple-50/50 dark:bg-slate-800/40 p-4 rounded-2xl border border-purple-100 dark:border-slate-800 space-y-4">
               {/* Presets and Custom Input */}
               <div className="space-y-2">
-                <span className="text-xs font-bold text-slate-700">เลือกตำแหน่งด่วน:</span>
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">เลือกตำแหน่งด่วน:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {PRESET_ROLES.map((role) => {
                     const isSelected = currentPositions.includes(role);
@@ -1281,7 +1281,7 @@ function GeneratorContent() {
                         className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                           isSelected
                             ? 'bg-purple-700 text-white shadow-xs'
-                            : 'bg-white text-slate-700 border border-slate-200 hover:border-purple-300'
+                            : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-purple-300'
                         }`}
                       >
                         {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5 text-slate-400" />}
@@ -1305,7 +1305,7 @@ function GeneratorContent() {
                     }
                   }}
                   placeholder="พิมพ์ตำแหน่งเพิ่มเติม เช่น ผู้รับมอบฉันทะ หรือคั่นด้วยเครื่องหมายจุลภาค ,"
-                  className="flex-1 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="flex-1 px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
                 <button
                   type="button"
@@ -1319,16 +1319,16 @@ function GeneratorContent() {
               {/* Visual Numbered Slots Grid with DnD and Arrow Controls */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-800">
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                     ลำดับช่องลงชื่อท้ายเอกสาร ({currentPositions.length} ช่อง):
                   </span>
-                  <span className="text-[11px] text-purple-700 font-semibold">
+                  <span className="text-[11px] text-purple-700 dark:text-purple-400 font-semibold">
                     * ลากการ์ดไปยังช่องที่ต้องการ หรือคลิกปุ่มลูกศร ↑ ↓ เพื่อสลับลำดับ
                   </span>
                 </div>
 
                 {currentPositions.length === 0 ? (
-                  <div className="py-8 bg-white rounded-2xl border border-dashed border-slate-200 text-center text-xs text-slate-400">
+                  <div className="py-8 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 text-center text-xs text-slate-400 dark:text-slate-500">
                     ยังไม่มีตำแหน่งผู้มาศาล กรุณาคลิกเลือกตำแหน่งด่วนหรือพิมพ์เพิ่มด้านบน
                   </div>
                 ) : (
@@ -1347,10 +1347,10 @@ function GeneratorContent() {
                           onDragEnd={handleDragEnd}
                           className={`relative p-3 rounded-2xl border transition-all cursor-grab active:cursor-grabbing select-none ${
                             isOver
-                              ? 'bg-purple-100/90 border-purple-600 ring-2 ring-purple-600 ring-offset-2 scale-102 shadow-md'
+                              ? 'bg-purple-100/90 dark:bg-purple-950/80 border-purple-600 ring-2 ring-purple-600 ring-offset-2 scale-102 shadow-md'
                               : isDragged
-                              ? 'opacity-30 bg-purple-50 border-purple-300 border-dashed scale-95'
-                              : 'bg-white border-slate-200 hover:border-purple-300 hover:shadow-xs'
+                              ? 'opacity-30 bg-purple-50 dark:bg-slate-800 border-purple-300 border-dashed scale-95'
+                              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-purple-300 hover:shadow-xs'
                           }`}
                         >
                           {/* Drop Indicator Label when dragging over */}
@@ -1361,7 +1361,7 @@ function GeneratorContent() {
                           )}
 
                           <div className="flex items-center justify-between gap-2 mb-2">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 text-[10px] font-bold">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 text-[10px] font-bold">
                               <span>ช่องที่ {idx + 1}</span>
                             </span>
 
@@ -1374,7 +1374,7 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleMovePosition(idx, idx - 1);
                                 }}
-                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 dark:hover:bg-slate-800 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
                                 title="เลื่อนไปช่องก่อนหน้า"
                               >
                                 <ArrowLeft className="w-3.5 h-3.5 md:hidden" />
@@ -1387,7 +1387,7 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleMovePosition(idx, idx + 1);
                                 }}
-                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-500 hover:text-purple-700 hover:bg-purple-100 dark:hover:bg-slate-800 rounded-lg disabled:opacity-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
                                 title="เลื่อนไปช่องถัดไป"
                               >
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -1398,7 +1398,7 @@ function GeneratorContent() {
                                   e.stopPropagation();
                                   handleRemovePosition(idx);
                                 }}
-                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors ml-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
+                                className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors ml-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                                 title="ลบออก"
                               >
                                 <X className="w-3.5 h-3.5" />
@@ -1408,7 +1408,7 @@ function GeneratorContent() {
 
                           <div className="flex items-center gap-2 pt-0.5">
                             <GripVertical className="w-4 h-4 text-purple-400 shrink-0" />
-                            <span className="text-xs font-bold text-slate-800 truncate">
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
                               {pos}
                             </span>
                           </div>
@@ -1421,7 +1421,7 @@ function GeneratorContent() {
 
               {/* attendees_summary synchronized text input */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ข้อความสรุปผู้มาศาล (attendees_summary):
                 </label>
                 <input
@@ -1436,33 +1436,33 @@ function GeneratorContent() {
                       signatories: positionsToSignatories(parsed),
                     }));
                   }}
-                  className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 3: Judges Quorum */}
-          <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm space-y-4">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
                 <Building2 className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">3. องค์คณะผู้พิพากษา</h4>
-                <p className="text-xs text-slate-500">เลือกคู่ผู้พิพากษาจากระบบเพื่อเติมชื่อทั้ง 2 ท่านอัตโนมัติ</p>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">3. องค์คณะผู้พิพากษา</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">เลือกคู่ผู้พิพากษาจากระบบเพื่อเติมชื่อทั้ง 2 ท่านอัตโนมัติ</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-purple-900 mb-1">
+                <label className="block text-xs font-bold text-purple-900 dark:text-purple-300 mb-1">
                   เลือกคู่ผู้พิพากษา (ดึงชื่ออัตโนมัติ)
                 </label>
                 <select
                   value={selectedPairId}
                   onChange={(e) => handleSelectJudgePair(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-purple-50 border border-purple-200 rounded-xl text-xs font-bold text-purple-900 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-purple-50 dark:bg-slate-800 border border-purple-200 dark:border-slate-700 rounded-xl text-xs font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 >
                   <option value="">-- เลือกคู่ผู้พิพากษา --</option>
                   {judgePairs.map((p) => (
@@ -1474,7 +1474,7 @@ function GeneratorContent() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ผู้พิพากษาคนที่ 1 (judge_1_name)
                 </label>
                 <input
@@ -1485,12 +1485,12 @@ function GeneratorContent() {
                     handleFieldChange('judge_๑_name', e.target.value);
                   }}
                   placeholder="เช่น นาย สมศักดิ์ ยุติธรรม"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   ผู้พิพากษาคนที่ 2 (judge_2_name)
                 </label>
                 <input
@@ -1501,24 +1501,24 @@ function GeneratorContent() {
                     handleFieldChange('judge_๒_name', e.target.value);
                   }}
                   placeholder="เช่น นางสาว ดวงใจ ซื่อตรง"
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 4: Paragraphs & Paragraph Template Modal Picker */}
-          <div className="bg-white rounded-3xl p-6 border border-purple-100 shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 gap-3">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 dark:border-slate-800 gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
                   <FileCheck2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                     4. เนื้อหาคำวินิจฉัย (1 ย่อหน้า / 1 ช่องข้อความ)
                   </h4>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     ระบบจะขึ้นย่อหน้าจริง 72pt ในไฟล์ Word อัตโนมัติทุกช่อง
                   </p>
                 </div>
@@ -1529,7 +1529,7 @@ function GeneratorContent() {
                 <button
                   type="button"
                   onClick={() => setIsTemplatePickerOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-bold transition-all shadow-2xs hover:scale-102"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/50 dark:hover:bg-purple-900/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-xl text-xs font-bold transition-all shadow-2xs hover:scale-102"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>เลือกจากเทมเพลต</span>
@@ -1550,11 +1550,11 @@ function GeneratorContent() {
               {paragraphsList.map((para, index) => (
                 <div
                   key={index}
-                  className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 space-y-2.5 transition-all hover:border-purple-300"
+                  className="bg-slate-50/80 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2.5 transition-all hover:border-purple-300 dark:hover:border-purple-700"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-purple-900 flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-lg bg-purple-200 text-purple-900 text-[11px] flex items-center justify-center font-bold">
+                    <span className="text-xs font-bold text-purple-900 dark:text-purple-300 flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded-lg bg-purple-200 dark:bg-purple-950/70 text-purple-900 dark:text-purple-300 text-[11px] flex items-center justify-center font-bold">
                         {index + 1}
                       </span>
                       <span>ย่อหน้าที่ {index + 1}</span>
@@ -1565,7 +1565,7 @@ function GeneratorContent() {
                         type="button"
                         disabled={index === 0}
                         onClick={() => handleMoveParagraph(index, index - 1)}
-                        className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-white rounded-lg transition-colors disabled:opacity-30"
+                        className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30"
                         title="เลื่อนขึ้น"
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
@@ -1574,7 +1574,7 @@ function GeneratorContent() {
                         type="button"
                         disabled={index === paragraphsList.length - 1}
                         onClick={() => handleMoveParagraph(index, index + 1)}
-                        className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-white rounded-lg transition-colors disabled:opacity-30"
+                        className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30"
                         title="เลื่อนลง"
                       >
                         <ArrowDown className="w-3.5 h-3.5" />
@@ -1582,7 +1582,7 @@ function GeneratorContent() {
                       <button
                         type="button"
                         onClick={() => handleSaveParagraphAsTemplate(para)}
-                        className="p-1.5 text-purple-700 hover:text-purple-900 hover:bg-purple-100 rounded-lg transition-colors"
+                        className="p-1.5 text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-950/50 rounded-lg transition-colors"
                         title="บันทึกข้อความนี้เป็นเทมเพลตส่วนตัว"
                       >
                         <BookmarkPlus className="w-3.5 h-3.5" />
@@ -1590,7 +1590,7 @@ function GeneratorContent() {
                       <button
                         type="button"
                         onClick={() => handleRemoveParagraph(index)}
-                        className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors"
                         title="ลบย่อหน้านี้"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -1603,7 +1603,7 @@ function GeneratorContent() {
                     value={para}
                     onChange={(e) => handleParagraphChange(index, e.target.value)}
                     placeholder={`กรอกเนื้อหาย่อหน้าที่ ${index + 1}...`}
-                    className="w-full p-3.5 bg-white border border-slate-200 rounded-xl text-xs leading-relaxed font-sans text-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none transition-all shadow-2xs"
+                    className="w-full p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs leading-relaxed font-sans text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none transition-all shadow-2xs"
                   />
                 </div>
               ))}
@@ -1615,7 +1615,7 @@ function GeneratorContent() {
             <button
               type="button"
               onClick={() => setActiveTab('table')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 text-xs font-bold shadow-2xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>ย้อนกลับ: ตารางข้อมูลคดี</span>
@@ -1623,7 +1623,7 @@ function GeneratorContent() {
 
             <div className="flex items-center gap-3">
               {!isStep3Done && (
-                <span className="text-xs text-red-600 bg-red-50 px-3 py-1.5 rounded-xl border border-red-200 font-medium">
+                <span className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/50 font-medium">
                   ⚠️ กรุณากรอกหมายเลขคดีดำก่อนดาวน์โหลด
                 </span>
               )}
@@ -1634,7 +1634,7 @@ function GeneratorContent() {
                 className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   isStep3Done
                     ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
                 }`}
               >
                 <span>ถัดไป: สรุปและดาวน์โหลดเอกสาร</span>
@@ -1651,15 +1651,15 @@ function GeneratorContent() {
       {activeTab === 'download' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Summary Overview Card */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-purple-100 shadow-sm space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-purple-100 dark:border-slate-800 shadow-sm space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-700 text-white flex items-center justify-center shadow-md">
                   <Download className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">สรุปข้อมูลและดาวน์โหลดเอกสารคดี</h3>
-                  <p className="text-xs text-slate-500">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">สรุปข้อมูลและดาวน์โหลดเอกสารคดี</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     เลือกรูปแบบไฟล์เอกสารที่ต้องการ (.docx สำหรับ Word หรือ .pdf สำหรับพิมพ์และเผยแพร่)
                   </p>
                 </div>
@@ -1667,12 +1667,12 @@ function GeneratorContent() {
 
               {/* Template Selector */}
               {templates.length > 0 && (
-                <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-                  <span className="text-xs font-bold text-slate-600">แบบฟอร์ม:</span>
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">แบบฟอร์ม:</span>
                   <select
                     value={selectedTemplate}
                     onChange={(e) => setSelectedTemplate(e.target.value)}
-                    className="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs font-bold text-purple-900 focus:outline-none"
+                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs font-bold text-purple-900 dark:text-purple-300 focus:outline-none"
                   >
                     {templates.map((tpl) => (
                       <option key={tpl} value={tpl}>
@@ -1685,53 +1685,53 @@ function GeneratorContent() {
             </div>
 
             {/* Case Details Highlights Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-gradient-to-br from-purple-50/50 to-indigo-50/30 border border-purple-100">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-gradient-to-br from-purple-50/50 to-indigo-50/30 dark:from-slate-850 dark:to-slate-800/50 border border-purple-100 dark:border-slate-800">
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">หมายเลขคดีดำ</span>
-                <span className="text-sm font-extrabold text-purple-900 block truncate">
+                <span className="text-sm font-extrabold text-purple-900 dark:text-purple-300 block truncate">
                   {formData.case_black_no || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">หมายเลขคดีแดง</span>
-                <span className="text-sm font-extrabold text-red-800 block truncate">
+                <span className="text-sm font-extrabold text-red-800 dark:text-red-400 block truncate">
                   {formData.case_red_no || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">ศาลที่สังกัด</span>
-                <span className="text-sm font-extrabold text-slate-800 block truncate">
+                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block truncate">
                   {formData.court_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">วันที่นัดพิจารณา</span>
-                <span className="text-sm font-extrabold text-slate-800 block truncate">
+                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block truncate">
                   {formData.date} {formData.month} {formData.year}
                 </span>
               </div>
 
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">โจทก์</span>
-                <span className="text-xs font-bold text-slate-700 block truncate">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block truncate">
                   {formData.plaintiff_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">จำเลย</span>
-                <span className="text-xs font-bold text-slate-700 block truncate">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block truncate">
                   {formData.defendant_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">ผู้ลงชื่อท้ายเอกสาร</span>
-                <span className="text-xs font-bold text-purple-700 block truncate">
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block truncate">
                   {currentPositions.length} ตำแหน่ง
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">จำนวนย่อหน้า</span>
-                <span className="text-xs font-bold text-purple-700 block truncate">
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block truncate">
                   {paragraphsList.length} ย่อหน้า
                 </span>
               </div>
@@ -1740,13 +1740,13 @@ function GeneratorContent() {
             {/* Big Action Download Buttons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               {/* Option 1: DOCX Word */}
-              <div className="p-6 rounded-3xl border-2 border-purple-200 bg-white hover:border-purple-600 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
+              <div className="p-6 rounded-3xl border-2 border-purple-200 dark:border-purple-900/50 bg-white dark:bg-slate-900 hover:border-purple-600 dark:hover:border-purple-500 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
                 <div className="space-y-2">
-                  <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <FileText className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold text-slate-900">เอกสาร Microsoft Word (.docx)</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-slate-100">เอกสาร Microsoft Word (.docx)</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     สร้างไฟล์รายงานกระบวนพิจารณา (.docx) สำหรับนำไปเปิดแก้ไขเพิ่มเติมใน Microsoft Word ได้อย่างอิสระ
                   </p>
                 </div>
@@ -1767,13 +1767,13 @@ function GeneratorContent() {
               </div>
 
               {/* Option 2: PDF Adobe */}
-              <div className="p-6 rounded-3xl border-2 border-indigo-200 bg-white hover:border-indigo-600 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
+              <div className="p-6 rounded-3xl border-2 border-indigo-200 dark:border-indigo-900/50 bg-white dark:bg-slate-900 hover:border-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
                 <div className="space-y-2">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <FileCode className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold text-slate-900">เอกสารแบบพร้อมพิมพ์ PDF (.pdf)</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-slate-100">เอกสารแบบพร้อมพิมพ์ PDF (.pdf)</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     แปลงเป็นไฟล์ PDF โดยตรงผ่าน Microsoft Word Engine ตราครุฑ ฟอนต์ และการจัดหน้ากระดาษตรงตามแบบศาล 100%
                   </p>
                 </div>
@@ -1795,11 +1795,11 @@ function GeneratorContent() {
             </div>
 
             {/* Quick Actions Footer */}
-            <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
               <button
                 type="button"
                 onClick={() => setActiveTab('review')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>ย้อนกลับไปแก้ไขข้อมูลคดี</span>
@@ -1809,7 +1809,7 @@ function GeneratorContent() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('table')}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 font-bold"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 font-bold"
                 >
                   <FileSpreadsheet className="w-3.5 h-3.5" />
                   <span>สร้างเอกสารคดีอื่นต่อจากตาราง</span>
@@ -1829,17 +1829,17 @@ function GeneratorContent() {
           onClick={handleCancelUploadChoice}
         >
           <div
-            className="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 border border-purple-100 shadow-2xl space-y-6"
+            className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 md:p-8 border border-purple-100 dark:border-slate-800 shadow-2xl space-y-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
                   <UploadCloud className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">เลือกพื้นที่จัดเก็บไฟล์</h3>
-                  <p className="text-xs text-slate-500 font-mono truncate max-w-[240px]">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">เลือกพื้นที่จัดเก็บไฟล์</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono truncate max-w-[240px]">
                     {pendingFile.name}
                   </p>
                 </div>
@@ -1847,14 +1847,14 @@ function GeneratorContent() {
               <button
                 type="button"
                 onClick={handleCancelUploadChoice}
-                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
+                className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
                 aria-label="ปิดและยกเลิก"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               ท่านต้องการอัปโหลดไฟล์นี้ขึ้นระบบ Cloud เพื่อให้สามารถเปิดใช้งานได้จากทุกที่ หรือต้องการบันทึกเป็นประวัติเฉพาะบนเครื่องนี้?
             </p>
 
@@ -1863,13 +1863,13 @@ function GeneratorContent() {
                 type="button"
                 disabled={isProcessingUpload}
                 onClick={handleConfirmCloudUpload}
-                className="p-5 rounded-2xl border-2 border-purple-500 bg-purple-50/50 hover:bg-purple-100/60 text-left transition-all space-y-2 group"
+                className="p-5 rounded-2xl border-2 border-purple-500 bg-purple-50/50 dark:bg-purple-950/30 hover:bg-purple-100/60 dark:hover:bg-purple-950/50 text-left transition-all space-y-2 group"
               >
                 <div className="w-8 h-8 rounded-xl bg-purple-700 text-white flex items-center justify-center group-hover:scale-105 transition-transform">
                   <Cloud className="w-4 h-4" />
                 </div>
-                <h4 className="text-xs font-bold text-purple-950">อัปโหลดเข้า Cloud (S3)</h4>
-                <p className="text-[11px] text-purple-800/80 leading-relaxed">
+                <h4 className="text-xs font-bold text-purple-950 dark:text-purple-200">อัปโหลดเข้า Cloud (S3)</h4>
+                <p className="text-[11px] text-purple-800/80 dark:text-purple-300/80 leading-relaxed">
                   ปลอดภัย แยกข้อมูลเฉพาะคุณ เข้าถึงได้จากทุกอุปกรณ์
                 </p>
               </button>
@@ -1878,13 +1878,13 @@ function GeneratorContent() {
                 type="button"
                 disabled={isProcessingUpload}
                 onClick={handleConfirmLocalSave}
-                className="p-5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-left transition-all space-y-2 group"
+                className="p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-left transition-all space-y-2 group"
               >
-                <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center group-hover:scale-105 transition-transform">
                   <Laptop className="w-4 h-4" />
                 </div>
-                <h4 className="text-xs font-bold text-slate-800">บันทึกเฉพาะเครื่องนี้</h4>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">บันทึกเฉพาะเครื่องนี้</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                   บันทึกลงรายการเปิดล่าสุด ทำงานรวดเร็วในเครื่องปัจจุบัน
                 </p>
               </button>

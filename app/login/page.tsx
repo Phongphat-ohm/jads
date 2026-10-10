@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { Scale, Lock, User, FileText, CheckCircle2, ArrowRight, Sparkles, Landmark } from 'lucide-react';
+import { ThemeToggle } from '../../components/layout/ThemeToggle';
 
 export default function LoginPage() {
   const { user, isLoading, login, register } = useAuth();
@@ -105,16 +106,21 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side: Sign-in / Sign-up Card */}
-        <div className="lg:col-span-5 bg-white p-8 md:p-10 flex flex-col justify-center relative">
+        <div className="lg:col-span-5 bg-white dark:bg-slate-900 p-8 md:p-10 flex flex-col justify-center relative transition-colors">
+          {/* Theme Toggle Button */}
+          <div className="absolute top-4 right-4 z-20">
+            <ThemeToggle />
+          </div>
+
           <div className="w-full max-w-sm mx-auto">
             {/* Tab Switcher */}
-            <div className="flex rounded-xl bg-purple-50 p-1 mb-8 border border-purple-100">
+            <div className="flex rounded-xl bg-purple-50 dark:bg-slate-800 p-1 mb-8 border border-purple-100 dark:border-slate-700">
               <button
                 type="button"
                 onClick={() => setIsLoginTab(true)}
                 className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${isLoginTab
                     ? 'bg-purple-700 text-white shadow-md shadow-purple-600/20'
-                    : 'text-purple-900/60 hover:text-purple-900'
+                    : 'text-purple-900/60 dark:text-purple-300/70 hover:text-purple-900 dark:hover:text-purple-200'
                   }`}
               >
                 เข้าสู่ระบบ
@@ -124,7 +130,7 @@ export default function LoginPage() {
                 onClick={() => setIsLoginTab(false)}
                 className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${!isLoginTab
                     ? 'bg-purple-700 text-white shadow-md shadow-purple-600/20'
-                    : 'text-purple-900/60 hover:text-purple-900'
+                    : 'text-purple-900/60 dark:text-purple-300/70 hover:text-purple-900 dark:hover:text-purple-200'
                   }`}
               >
                 สมัครสมาชิก
@@ -133,10 +139,10 @@ export default function LoginPage() {
 
             {/* Header Text */}
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                 {isLoginTab ? 'ยินดีต้อนรับกลับเข้าสู่ระบบ' : 'สร้างบัญชีผู้ใช้งานใหม่'}
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 {isLoginTab
                   ? 'กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าถึงระบบ'
                   : 'ลงทะเบียนเพื่อเริ่มต้นใช้งานระบบสร้างเอกสารคดี'}
@@ -148,8 +154,8 @@ export default function LoginPage() {
               {!isLoginTab && (
                 <>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                      ชื่อศาลที่ปฏิบัติงาน / สังกัด <span className="text-purple-600 font-bold">*</span>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      ชื่อศาลที่ปฏิบัติงาน / สังกัด <span className="text-purple-600 dark:text-purple-400 font-bold">*</span>
                     </label>
                     <div className="relative">
                       <Landmark className="w-4 h-4 text-purple-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -159,13 +165,13 @@ export default function LoginPage() {
                         value={courtName}
                         onChange={(e) => setCourtName(e.target.value)}
                         placeholder="เช่น ศาลแขวงดอนเมือง, ศาลจังหวัดนนทบุรี"
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                       ชื่อ - นามสกุล
                     </label>
                     <div className="relative">
@@ -176,7 +182,7 @@ export default function LoginPage() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="เช่น นาย สมชาย รักชาติ"
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
                       />
                     </div>
                   </div>
@@ -184,7 +190,7 @@ export default function LoginPage() {
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   ชื่อผู้ใช้งาน (Username)
                 </label>
                 <div className="relative">
@@ -195,13 +201,13 @@ export default function LoginPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="ความยาวอย่างน้อย 3 ตัวอักษร"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   รหัสผ่าน (Password)
                 </label>
                 <div className="relative">
@@ -212,11 +218,11 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={isLoginTab ? 'กรอกรหัสผ่าน' : 'ความยาวอย่างน้อย 8 ตัวอักษร'}
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
                   />
                 </div>
                 {!isLoginTab && (
-                  <p className="text-[11px] text-slate-400 mt-1">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                     * รหัสผ่านต้องมีความยาวตั้งแต่ 8 ตัวอักษรขึ้นไป
                   </p>
                 )}
@@ -238,7 +244,7 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="mt-6 text-center text-xs text-slate-400">
+            <div className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
               ระบบบริหารจัดการเอกสารคดีความศาลยุติธรรม
             </div>
           </div>

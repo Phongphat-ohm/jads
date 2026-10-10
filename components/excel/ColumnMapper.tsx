@@ -32,18 +32,18 @@ export function ColumnMapper({ headers, mapping, onMappingChange }: ColumnMapper
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-purple-100 shadow-sm">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-purple-100 dark:border-slate-800 shadow-sm transition-colors">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center">
             <SlidersHorizontal className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-800">การตั้งค่าจับคู่คอลัมน์ (Custom Column Mapping)</h3>
-            <p className="text-xs text-slate-500">เลือกจับคู่หัวตารางจากไฟล์ Excel ของท่านเข้ากับตัวแปรสร้างเอกสาร</p>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">การตั้งค่าจับคู่คอลัมน์ (Custom Column Mapping)</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">เลือกจับคู่หัวตารางจากไฟล์ Excel ของท่านเข้ากับตัวแปรสร้างเอกสาร</p>
           </div>
         </div>
-        <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full flex items-center gap-1">
+        <span className="text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-full flex items-center gap-1">
           <CheckCircle2 className="w-3.5 h-3.5" />
           <span>ตรวจจับคอลัมน์อัตโนมัติ</span>
         </span>
@@ -51,19 +51,19 @@ export function ColumnMapper({ headers, mapping, onMappingChange }: ColumnMapper
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {FIELD_DEFINITIONS.map((field) => (
-          <div key={field.key} className="bg-slate-50 p-3 rounded-xl border border-slate-200/80">
-            <label className="block text-xs font-bold text-slate-700 truncate" title={field.label}>
+          <div key={field.key} className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 truncate" title={field.label}>
               {field.label}
             </label>
-            <p className="text-[10px] text-slate-400 mb-2 truncate">เช่น {field.sample}</p>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-2 truncate">เช่น {field.sample}</p>
             <select
               value={mapping[field.key] || ''}
               onChange={(e) => handleSelect(field.key, e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
+              className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none"
             >
-              <option value="">-- ไม่ได้เลือก (ใช้ค่าว่าง) --</option>
+              <option value="" className="dark:bg-slate-800">-- ไม่ได้เลือก (ใช้ค่าว่าง) --</option>
               {headers.map((h) => (
-                <option key={h} value={h}>
+                <option key={h} value={h} className="dark:bg-slate-800">
                   {h}
                 </option>
               ))}

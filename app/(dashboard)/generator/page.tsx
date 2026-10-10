@@ -712,7 +712,7 @@ function GeneratorContent() {
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-2.5 border border-purple-100 dark:border-slate-800 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2.5 transition-colors">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-2 sm:p-2.5 border border-purple-100 dark:border-slate-800 shadow-sm grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5 transition-colors">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -723,7 +723,7 @@ function GeneratorContent() {
               type="button"
               disabled={tab.disabled}
               onClick={() => handleTabClick(tab.id)}
-              className={`flex items-center gap-3 p-3.5 rounded-2xl text-left transition-all relative ${
+              className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3.5 rounded-2xl text-left transition-all relative cursor-pointer ${
                 isActive
                   ? 'bg-purple-700 text-white shadow-lg shadow-purple-700/25 ring-2 ring-purple-600'
                   : tab.disabled
@@ -732,7 +732,7 @@ function GeneratorContent() {
               }`}
             >
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                   isActive
                     ? 'bg-white/20 text-white'
                     : tab.disabled
@@ -743,29 +743,29 @@ function GeneratorContent() {
                 }`}
               >
                 {tab.completed && !isActive ? (
-                  <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 dark:text-emerald-400" />
                 ) : tab.disabled ? (
-                  <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+                  <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 dark:text-slate-500" />
                 ) : (
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold block truncate">{tab.title}</span>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="text-[11px] sm:text-xs font-bold block truncate">{tab.title}</span>
                   {tab.completed && !isActive && (
-                    <span className="shrink-0 text-[10px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.2 rounded-full font-bold">
+                    <span className="hidden sm:inline-block shrink-0 text-[10px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.2 rounded-full font-bold">
                       เสร็จแล้ว
                     </span>
                   )}
                   {tab.disabled && (
-                    <span className="shrink-0 text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-1.5 py-0.2 rounded-full font-medium">
+                    <span className="hidden sm:inline-block shrink-0 text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-1.5 py-0.2 rounded-full font-medium">
                       ล็อก
                     </span>
                   )}
                 </div>
                 <span
-                  className={`text-[10px] block truncate mt-0.5 ${
+                  className={`hidden sm:block text-[10px] truncate mt-0.5 ${
                     isActive ? 'text-purple-200' : 'text-slate-400 dark:text-slate-500'
                   }`}
                 >
@@ -1034,52 +1034,83 @@ function GeneratorContent() {
       {/* ========================================================================= */}
       {activeTab === 'review' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          {/* Top Bar with Case Identity */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-700 text-white flex items-center justify-center shadow-md">
-                <Scale className="w-5 h-5" />
+          {/* Top Case Identity & Action Header */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 md:p-6 border border-purple-100 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-700 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-purple-900/20 shrink-0">
+                <Scale className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                    ข้อมูลคดี: หมายเลขดำที่ {formData.case_black_no || '-'}
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 font-mono tracking-tight">
+                    หมายเลขคดีดำที่ {formData.case_black_no || '-'}
                   </h3>
-                  {formData.case_red_no && (
-                    <span className="text-xs bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-md border border-red-200 dark:border-red-900/50">
+                  {formData.case_red_no ? (
+                    <span className="text-xs bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300 font-bold px-2.5 py-0.5 rounded-lg border border-red-200 dark:border-red-800 font-mono">
                       แดงที่ {formData.case_red_no}
                     </span>
+                  ) : (
+                    <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold px-2.5 py-0.5 rounded-lg">
+                      (ไม่มีเลขคดีแดง)
+                    </span>
                   )}
+                  <span className="text-xs bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 font-bold px-2.5 py-0.5 rounded-lg border border-purple-100 dark:border-purple-800">
+                    ความ{formData.case_type || 'แพ่ง'}
+                  </span>
                 </div>
-                <p className="text-xs text-slate-400 dark:text-slate-500">
-                  {formData.court_name || 'ศาลยุติธรรม'} • {formData.case_type}
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex flex-wrap items-center gap-2">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">{formData.court_name || 'ศาลยุติธรรม'}</span>
+                  <span>•</span>
+                  <span>เวลานัด: {formData.hearing_time || '-'} น.</span>
+                  <span>•</span>
+                  <span>วันที่ {formData.date || '-'} {formData.month || '-'} {formData.year || '-'}</span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5 self-end md:self-auto w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-800">
               <button
                 type="button"
                 onClick={() => setActiveTab('table')}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>เปลี่ยนคดีจากตาราง</span>
+                <span>เปลี่ยนคดี</span>
               </button>
               <button
                 type="button"
                 disabled={!isStep3Done}
                 onClick={() => setActiveTab('download')}
-                className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   isStep3Done
-                    ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-105 cursor-pointer'
+                    ? 'bg-purple-700 hover:bg-purple-800 text-white shadow-md shadow-purple-700/20 hover:scale-102 cursor-pointer'
                     : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
                 }`}
                 title={!isStep3Done ? 'กรุณาระบุเลขคดีดำให้ถูกต้องก่อนดำเนินการต่อ' : ''}
               >
-                <span>ถัดไป: ดาวน์โหลดเอกสาร</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>ถัดไป: ดาวน์โหลด</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
+            </div>
+          </div>
+
+          {/* Quick Litigants Banner (คู่ความ) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-purple-50/50 dark:bg-slate-900/60 p-4 rounded-2xl border border-purple-100 dark:border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-lg bg-purple-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                โจทก์
+              </span>
+              <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
+                {formData.plaintiff_name || '(ยังไม่ได้ระบุชื่อโจทก์)'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-lg bg-indigo-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                จำเลย
+              </span>
+              <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
+                {formData.defendant_name || '(ยังไม่ได้ระบุชื่อจำเลย)'}
+              </span>
             </div>
           </div>
 

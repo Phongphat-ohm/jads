@@ -3,6 +3,7 @@ import { Kanit } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '../lib/authContext';
 import { ThemeProvider } from '../lib/themeContext';
+import { NextAuthProvider } from '../components/NextAuthProvider';
 
 const kanit = Kanit({
   variable: '--font-kanit',
@@ -47,9 +48,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200">
-        <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
+        <NextAuthProvider>
+          <ThemeProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

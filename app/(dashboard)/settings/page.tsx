@@ -4,16 +4,40 @@ import React, { useState } from 'react';
 import { useAuth } from '../../../lib/authContext';
 import { useTheme, ThemeMode } from '../../../lib/themeContext';
 import { showToast, showError } from '../../../lib/sweetalert';
-import { Settings, User, Lock, ShieldCheck, CheckCircle2, ArrowRight, Landmark, Monitor, Sun, Moon } from 'lucide-react';
+import {
+  Settings,
+  User,
+  Lock,
+  ShieldCheck,
+  CheckCircle2,
+  ArrowRight,
+  Landmark,
+  Monitor,
+  Sun,
+  Moon,
+  Mail,
+  ShieldAlert,
+  RotateCw,
+  KeyRound,
+} from 'lucide-react';
 
 export default function SettingsPage() {
-  const { user, updateProfile, changePassword } = useAuth();
+  const { user, updateProfile, changePassword, requestBindEmail, confirmBindEmail } = useAuth();
   const { theme, setTheme } = useTheme();
 
   // Profile state
   const [fullName, setFullName] = useState(user?.fullName || '');
   const [courtName, setCourtName] = useState(user?.courtName || '');
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+
+  // Email Binding / Change state
+  const [newEmail, setNewEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [emailStep, setEmailStep] = useState<1 | 2>(1); // 1 = input email, 2 = input otp
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   // Sync state when user object loads or updates
   React.useEffect(() => {
@@ -23,6 +47,14 @@ export default function SettingsPage() {
       setCourtName(user.courtName || '');
     }
   }, [user]);
+
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   // Password state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -61,6 +93,50 @@ export default function SettingsPage() {
     }
   };
 
+  const handleStartEmailBinding = () => {
+    setNewEmail('');
+    setOtpCode('');
+    setEmailStep(1);
+    setIsEmailModalOpen(true);
+  };
+
+  const handleRequestEmailOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEmail.trim()) {
+      showError('กรุณาระบุอีเมล', 'โปรดป้อนที่อยู่อีเมลใหม่');
+      return;
+    }
+
+    setIsSendingOtp(true);
+    try {
+      const ok = await requestBindEmail(newEmail);
+      if (ok) {
+        setEmailStep(2);
+        setCountdown(60);
+      }
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleConfirmEmailOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otpCode.trim().length !== 6) {
+      showError('รหัส OTP ไม่ถูกต้อง', 'รหัส OTP ต้องมีตัวเลขครบ 6 หลัก');
+      return;
+    }
+
+    setIsVerifyingOtp(true);
+    try {
+      const ok = await confirmBindEmail(newEmail, otpCode);
+      if (ok) {
+        setIsEmailModalOpen(false);
+      }
+    } finally {
+      setIsVerifyingOtp(false);
+    }
+  };
+
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword.length < 8) {
@@ -94,7 +170,7 @@ export default function SettingsPage() {
           <span>การตั้งค่าบัญชีและรหัสผ่าน</span>
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          จัดการข้อมูลโปรไฟล์ผู้ใช้งาน รูปลักษณ์ธีม และเปลี่ยนรหัสผ่านเพื่อความปลอดภัยของระบบ
+          จัดการข้อมูลโปรไฟล์ผู้ใช้งาน อีเมลยืนยันตัวตน รูปลักษณ์ธีม และเปลี่ยนรหัสผ่านเพื่อความปลอดภัยของระบบ
         </p>
       </div>
 
@@ -165,6 +241,54 @@ export default function SettingsPage() {
               </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* Email & Account Security Card */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm transition-colors">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+              <Mail className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                อีเมลและการยืนยันตัวตน (Email Verification & Security)
+              </h3>
+              <p className="text-xs text-slate-400 dark:text-slate-400">
+                ใช้สำหรับรับรหัส OTP ในการรีเซ็ตรหัสผ่านและการแจ้งเตือนความปลอดภัย
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleStartEmailBinding}
+            className="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/60 dark:hover:bg-purple-900/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 transition-all cursor-pointer"
+          >
+            {user?.email ? 'เปลี่ยนอีเมล' : 'ผูกอีเมลใหม่'}
+          </button>
+        </div>
+
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span className="text-xs text-slate-400 block mb-1">ที่อยู่อีเมลที่ผูกกับระบบ:</span>
+            {user?.email ? (
+              <div className="flex items-center gap-2.5">
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
+                  {user.email}
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>Verified</span>
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-xs font-medium">
+                <ShieldAlert className="w-4 h-4" />
+                <span>ยังไม่ได้ระบุอีเมลในระบบ (โปรดผูกอีเมลเพื่อความปลอดภัยในการกู้คืนบัญชี)</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -322,6 +446,97 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Modal สำหรับขอและยืนยัน OTP เปลี่ยนอีเมล */}
+      {isEmailModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 max-w-md w-full border border-purple-100 dark:border-slate-800 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+                  <KeyRound className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                  {emailStep === 1 ? 'ระบุอีเมลใหม่' : 'ยืนยันรหัส OTP 6 หลัก'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsEmailModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold"
+              >
+                ✕ ปิด
+              </button>
+            </div>
+
+            {emailStep === 1 ? (
+              <form onSubmit={handleRequestEmailOtp} className="space-y-4">
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  ระบบจะส่งรหัสผ่านใช้ครั้งเดียว (OTP) ผ่านบริการ Resend ไปยังอีเมลใหม่ เพื่อตรวจสอบว่าท่านเป็นเจ้าของอีเมลจริง
+                </p>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    ที่อยู่อีเมลใหม่
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="name@court.go.th"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-600 focus:outline-none transition-all"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSendingOtp}
+                  className="w-full py-2.5 px-4 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow-md shadow-purple-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-60 cursor-pointer"
+                >
+                  {isSendingOtp ? <span>กำลังส่ง OTP...</span> : <span>ส่งรหัส OTP ไปที่อีเมลใหม่</span>}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleConfirmEmailOtp} className="space-y-4">
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  กรุณากรอกรหัส OTP 6 หลักที่ได้รับทางอีเมล <strong className="text-purple-700 dark:text-purple-400">{newEmail}</strong>
+                </p>
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      รหัส OTP (6 หลัก)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleRequestEmailOtp}
+                      disabled={countdown > 0 || isSendingOtp}
+                      className="text-[11px] text-purple-600 dark:text-purple-400 hover:underline disabled:opacity-50 flex items-center gap-1 cursor-pointer"
+                    >
+                      <RotateCw className="w-3 h-3" />
+                      <span>{countdown > 0 ? `ขอใหม่ใน ${countdown}s` : 'ส่งอีกครั้ง'}</span>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    maxLength={6}
+                    value={otpCode}
+                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                    placeholder="000000"
+                    className="w-full px-3.5 py-2.5 bg-purple-50/50 dark:bg-purple-950/30 border border-purple-300 dark:border-purple-700 rounded-xl text-center font-mono text-xl tracking-[0.4em] font-bold text-purple-950 dark:text-purple-200 focus:ring-2 focus:ring-purple-600 focus:outline-none transition-all"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isVerifyingOtp}
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold text-xs rounded-xl shadow-md shadow-purple-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-60 cursor-pointer"
+                >
+                  {isVerifyingOtp ? <span>กำลังตรวจสอบ...</span> : <span>ยืนยันและบันทึกอีเมล</span>}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

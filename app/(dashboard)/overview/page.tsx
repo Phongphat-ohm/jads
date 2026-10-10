@@ -74,23 +74,23 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 p-8 text-white shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 p-6 md:p-8 text-white shadow-xl">
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-purple-200 text-xs font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5 text-purple-300" />
             <span>JUSTICE AUTOMATION PLATFORM</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
             สวัสดี, {user?.fullName || user?.username} 👋
           </h1>
-          <p className="mt-2 text-slate-300 text-sm leading-relaxed">
+          <p className="mt-2 text-slate-300 text-xs md:text-sm leading-relaxed">
             ระบบสร้างเอกสารคดีความและรายงานทางการศาลอัตโนมัติจากไฟล์ Excel ตรวจสอบข้อมูลก่อนสร้าง และจัดการไฟล์อย่างเป็นระบบ
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
             <Link
               href="/generator"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-purple-900/50 transition-all active:scale-95"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold text-xs rounded-xl shadow-lg shadow-purple-900/50 transition-all active:scale-95"
             >
               <FileSpreadsheet className="w-4 h-4" />
               <span>เริ่มอัปโหลดไฟล์ Excel / สร้างเอกสาร</span>
@@ -99,14 +99,14 @@ export default function DashboardPage() {
 
             <Link
               href="/judges"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl transition-all"
             >
               <span>จัดการคู่ผู้พิพากษา</span>
             </Link>
 
             <Link
               href="/paragraph-templates"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl transition-all"
             >
               <span>เทมเพลตย่อหน้า</span>
             </Link>

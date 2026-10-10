@@ -135,7 +135,7 @@ export default function ParagraphTemplatesPage() {
         <button
           type="button"
           onClick={handleOpenAddModal}
-          className="px-5 py-2.5 bg-white text-purple-900 hover:bg-purple-50 font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md active:scale-95"
+          className="w-full sm:w-auto justify-center px-5 py-2.5 bg-white text-purple-900 hover:bg-purple-50 font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
         >
           <Plus className="w-4 h-4 text-purple-700" />
           <span>เพิ่มเทมเพลตใหม่</span>

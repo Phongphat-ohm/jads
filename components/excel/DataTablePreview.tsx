@@ -147,7 +147,7 @@ export function DataTablePreview({
           {/* Quick instructions badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-            <span>คลิกปุ่ม &quot;เลือกข้อมูลคดีนี้&quot; ที่แถวเพื่อเริ่มทำงาน</span>
+            <span>คลิกปุ่ม &quot;เลือกคดี&quot; ที่แถวเพื่อเริ่มทำงาน</span>
           </div>
         </div>
 
@@ -221,7 +221,7 @@ export function DataTablePreview({
           <thead>
             <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 font-bold uppercase tracking-wider select-none">
               <th className="py-3 px-3 w-12 text-center">#</th>
-              <th className="py-3 px-4 w-36 text-center sticky left-0 bg-slate-100 dark:bg-slate-800 z-10">การกระทำ</th>
+              <th className="py-3 px-3 w-28 min-w-[110px] text-center sticky left-0 bg-slate-100 dark:bg-slate-800 z-10 border-r border-slate-200 dark:border-slate-700">การกระทำ</th>
               {headers.map((h) => {
                 const isMapped = Object.values(mapping).includes(h);
                 const isSorted = sortField === h;
@@ -291,18 +291,18 @@ export function DataTablePreview({
                     <td className="py-3 px-3 text-center text-slate-400 dark:text-slate-500 font-mono text-[11px]">
                       {rowIndex}
                     </td>
-                    <td className="py-3 px-4 text-center sticky left-0 bg-inherit z-10">
+                    <td className="py-3 px-3 text-center sticky left-0 bg-inherit z-10 border-r border-slate-100 dark:border-slate-800">
                       <button
                         type="button"
                         onClick={() => onSelectRow(row)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs ${
+                        className={`inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer ${
                           isSelected
-                            ? 'bg-purple-900 text-white'
-                            : 'bg-purple-700 hover:bg-purple-800 text-white hover:scale-105'
+                            ? 'bg-purple-900 dark:bg-purple-950 text-white ring-2 ring-purple-600'
+                            : 'bg-purple-700 hover:bg-purple-800 text-white hover:shadow-xs active:scale-95'
                         }`}
                       >
-                        <Check className="w-3.5 h-3.5" />
-                        <span>เลือกข้อมูลคดีนี้</span>
+                        <Check className="w-3.5 h-3.5 shrink-0" />
+                        <span>{isSelected ? 'เลือกแล้ว' : 'เลือกคดี'}</span>
                       </button>
                     </td>
                     {headers.map((h) => {

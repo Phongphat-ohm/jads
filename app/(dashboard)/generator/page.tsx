@@ -24,6 +24,7 @@ import { apiClient } from '../../../lib/api';
 import { useAuth } from '../../../lib/authContext';
 import { APP_CONFIG } from '../../../lib/config';
 import { showToast, showError, showSuccess, showConfirm } from '../../../lib/sweetalert';
+import { executeFileDownload } from '../../../lib/downloadManager';
 import {
   UploadCloud,
   FileSpreadsheet,
@@ -580,7 +581,6 @@ function GeneratorContent() {
           ? 'application/pdf'
           : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
       const blob = new Blob([res.data], { type: mimeType });
-      const url = window.URL.createObjectURL(blob);
 
       let filename = `รายงาน_${formData.case_black_no.replace(/[\/\\]/g, '_')}.${format}`;
       const disposition = res.headers['content-disposition'];
@@ -593,17 +593,24 @@ function GeneratorContent() {
         }
       }
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+      const dlResult = await executeFileDownload({
+        blob,
+        fileName: filename,
+        format,
+        caseBlackNo: formData.case_black_no,
+        courtName: formData.court_name,
+      });
+
+      if (dlResult.cancelled) {
+        showToast('ยกเลิกการบันทึกไฟล์');
+        return;
+      }
 
       showSuccess(
         'ดาวน์โหลดสำเร็จ!',
-        `เอกสาร ${format.toUpperCase()} "${filename}" พร้อมใช้งานเรียบร้อยแล้ว`
+        dlResult.filePath
+          ? `บันทึกเอกสาร ${format.toUpperCase()} เรียบร้อยที่:\n${dlResult.filePath}`
+          : `เอกสาร ${format.toUpperCase()} "${filename}" พร้อมใช้งานเรียบร้อยแล้ว`
       );
     } catch (err: any) {
       let errorMsg = err.message || 'ไม่สามารถสร้างเอกสารได้';

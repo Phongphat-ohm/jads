@@ -49,7 +49,7 @@ const navItems = [
     badge: 'ใหม่',
   },
   {
-    name: 'ประวัติไฟล์ล่าสุด',
+    name: 'ประวัติไฟล์/ดาวน์โหลด',
     href: '/recent-files',
     icon: Clock,
   },

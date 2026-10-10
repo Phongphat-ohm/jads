@@ -249,7 +249,7 @@ export default function LoginPage() {
 
                 <div className="relative flex py-2 items-center">
                   <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-                  <span className="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-medium">หรือเข้าสู่ระบบด้วยชื่อผู้ใช้</span>
+                  <span className="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-medium">หรือเข้าสู่ระบบด้วยชื่อผู้ใช้หรืออีเมล</span>
                   <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
                 </div>
               </div>
@@ -262,7 +262,7 @@ export default function LoginPage() {
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 {isLoginTab
-                  ? 'กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าถึงระบบ'
+                  ? 'กรุณากรอกชื่อผู้ใช้หรืออีเมลและรหัสผ่านเพื่อเข้าถึงระบบ'
                   : 'ลงทะเบียนเพื่อเริ่มต้นใช้งานระบบสร้างเอกสารคดี (เข้าใช้งานได้ทันที)'}
               </p>
             </div>
@@ -328,7 +328,7 @@ export default function LoginPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  ชื่อผู้ใช้งาน (Username)
+                  {isLoginTab ? 'ชื่อผู้ใช้หรืออีเมล' : 'ชื่อผู้ใช้งาน (Username)'}
                 </label>
                 <div className="relative">
                   <User className="w-4 h-4 text-purple-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -337,7 +337,7 @@ export default function LoginPage() {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="ความยาวอย่างน้อย 3 ตัวอักษร"
+                    placeholder={isLoginTab ? 'กรอกชื่อผู้ใช้หรือที่อยู่อีเมล' : 'ความยาวอย่างน้อย 3 ตัวอักษร'}
                     className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
                   />
                 </div>

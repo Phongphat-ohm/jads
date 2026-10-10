@@ -38,7 +38,7 @@ interface AuthContextType {
   confirmBindEmail: (newEmail: string, otp: string) => Promise<boolean>;
   requestForgotPassword: (email: string) => Promise<boolean>;
   resetPasswordWithOtp: (email: string, otp: string, newPassword: string) => Promise<boolean>;
-  updateProfile: (fullName?: string, courtName?: string) => Promise<boolean>;
+  updateProfile: (fullName?: string, courtName?: string, username?: string) => Promise<boolean>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -316,11 +316,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const updateProfile = async (fullName?: string, courtName?: string): Promise<boolean> => {
+  const updateProfile = async (fullName?: string, courtName?: string, username?: string): Promise<boolean> => {
     try {
       const res = await fetchApi('/auth/profile', {
         method: 'PUT',
-        body: JSON.stringify({ fullName, courtName }),
+        body: JSON.stringify({ fullName, courtName, username }),
       });
 
       const data = await res.json();
@@ -332,6 +332,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser((prev) => (prev ? {
         ...prev,
+        ...(data.data?.username && { username: data.data.username }),
         ...(fullName !== undefined && { fullName }),
         ...(courtName !== undefined && { courtName }),
       } : null));

@@ -26,6 +26,7 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
 
   // Profile state
+  const [username, setUsername] = useState(user?.username || '');
   const [fullName, setFullName] = useState(user?.fullName || '');
   const [courtName, setCourtName] = useState(user?.courtName || '');
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
@@ -43,6 +44,7 @@ export default function SettingsPage() {
   React.useEffect(() => {
     document.title = 'การตั้งค่าบัญชีและรหัสผ่าน | JADS Court';
     if (user) {
+      setUsername(user.username || '');
       setFullName(user.fullName || '');
       setCourtName(user.courtName || '');
     }
@@ -87,7 +89,7 @@ export default function SettingsPage() {
     e.preventDefault();
     setIsUpdatingProfile(true);
     try {
-      await updateProfile(fullName, courtName);
+      await updateProfile(fullName, courtName, username);
     } finally {
       setIsUpdatingProfile(false);
     }
@@ -308,16 +310,23 @@ export default function SettingsPage() {
 
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   ชื่อผู้ใช้งาน (Username)
                 </label>
-                <input
-                  type="text"
-                  disabled
-                  value={user?.username || ''}
-                  className="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-500 dark:text-slate-400 cursor-not-allowed font-mono"
-                />
-                <p className="text-[10px] text-slate-400 mt-1">* ชื่อผู้ใช้งานไม่สามารถเปลี่ยนแปลงได้</p>
+                <div className="relative">
+                  <User className="w-4 h-4 text-purple-600 dark:text-purple-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="เช่น username123"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all font-mono"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  * ตัวอักษรภาษาอังกฤษ, ตัวเลข, จุด (.), ขีดล่าง (_) หรือขีดกลาง (-) ความยาว 3 - 50 ตัวอักษร
+                </p>
               </div>
 
               <div>

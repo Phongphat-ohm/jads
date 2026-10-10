@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
-import { Landmark, User, Lock, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import { showError } from '../../lib/sweetalert';
+import { Landmark, User, Lock, ArrowRight, ShieldCheck, CheckCircle2, Trash2 } from 'lucide-react';
+import { showError, showConfirm } from '../../lib/sweetalert';
 import { ThemeToggle } from '../../components/layout/ThemeToggle';
 
 export default function OnboardingPage() {
-  const { user, isLoading, completeProfile } = useAuth();
+  const { user, isLoading, completeProfile, cancelOnboarding } = useAuth();
   const router = useRouter();
 
   const [fullName, setFullName] = useState('');
@@ -16,6 +16,7 @@ export default function OnboardingPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
     document.title = 'กรอกข้อมูลเริ่มต้นเพื่อเปิดใช้งาน | JADS Court';
@@ -56,6 +57,23 @@ export default function OnboardingPage() {
       await completeProfile(fullName, courtName, password);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    const result = await showConfirm(
+      'ยืนยันการยกเลิกการลงทะเบียน?',
+      'ระบบจะลบข้อมูลบัญชีของท่านออกจากฐานข้อมูล และยกเลิกการเชื่อมต่อบัญชี ท่านสามารถกลับมาเข้าสู่ระบบเพื่อลงทะเบียนใหม่ได้ในภายหลัง',
+      'ใช่, ยกเลิกและลบข้อมูล'
+    );
+
+    if (result.isConfirmed) {
+      setIsCancelling(true);
+      try {
+        await cancelOnboarding();
+      } finally {
+        setIsCancelling(false);
+      }
     }
   };
 
@@ -178,7 +196,7 @@ export default function OnboardingPage() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isCancelling}
             className="w-full mt-4 py-3 px-4 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-semibold rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed text-sm cursor-pointer"
           >
             {isSubmitting ? (
@@ -190,6 +208,24 @@ export default function OnboardingPage() {
               </>
             )}
           </button>
+
+          <div className="pt-2 text-center">
+            <button
+              type="button"
+              disabled={isSubmitting || isCancelling}
+              onClick={handleCancel}
+              className="text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 font-medium py-2 px-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              {isCancelling ? (
+                <span>กำลังยกเลิกและลบข้อมูล...</span>
+              ) : (
+                <>
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>ยกเลิกการลงทะเบียนและออกจากระบบ</span>
+                </>
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>

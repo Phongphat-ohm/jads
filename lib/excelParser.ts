@@ -387,9 +387,9 @@ export function convertRowToFormData(
     attendees_summary: formatAttendeesSummary(defaultPositions),
     paragraphs: [''],
     judge_1_name: String(rawJudge).trim(),
-    judge_2_name: 'นางสาว ดวงใจ ซื่อตรง',
+    judge_2_name: '',
     judge_๑_name: String(rawJudge).trim(),
-    judge_๒_name: 'นางสาว ดวงใจ ซื่อตรง',
+    judge_๒_name: '',
     signatories: positionsToSignatories(defaultPositions)
   };
 }

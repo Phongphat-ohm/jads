@@ -34,6 +34,7 @@ interface AuthContextType {
     accessToken?: string;
   }) => Promise<{ success: boolean; isProfileComplete: boolean }>;
   completeProfile: (fullName: string, courtName: string, password: string) => Promise<boolean>;
+  cancelOnboarding: () => Promise<boolean>;
   requestBindEmail: (newEmail: string) => Promise<boolean>;
   confirmBindEmail: (newEmail: string, otp: string) => Promise<boolean>;
   requestForgotPassword: (email: string) => Promise<boolean>;
@@ -217,6 +218,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       showSuccess('บันทึกข้อมูลเรียบร้อย', 'ยินดีต้อนรับสู่ JADS Court');
       router.push('/overview');
+      return true;
+    } catch (error: any) {
+      showError('เกิดข้อผิดพลาด', error.message);
+      return false;
+    }
+  };
+
+  const cancelOnboarding = async (): Promise<boolean> => {
+    try {
+      const res = await fetchApi('/auth/onboarding/cancel', {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        showError('ยกเลิกไม่สำเร็จ', data.message || 'ไม่สามารถยกเลิกการลงทะเบียนได้');
+        return false;
+      }
+
+      localStorage.removeItem('jads_token');
+      setToken(null);
+      setUser(null);
+
+      // Sign out from NextAuth session if present
+      try {
+        await signOut({ redirect: false });
+      } catch (e) {
+        console.warn('NextAuth sign out:', e);
+      }
+
+      showSuccess('ยกเลิกการลงทะเบียนสำเร็จ', 'ข้อมูลบัญชีของท่านถูกลบออกจากระบบเรียบร้อยแล้ว');
+      router.push('/login');
       return true;
     } catch (error: any) {
       showError('เกิดข้อผิดพลาด', error.message);
@@ -411,6 +444,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register,
         syncOAuth,
         completeProfile,
+        cancelOnboarding,
         requestBindEmail,
         confirmBindEmail,
         requestForgotPassword,

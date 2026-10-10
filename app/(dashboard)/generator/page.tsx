@@ -19,6 +19,7 @@ import {
   ParagraphTemplatePickerModal,
   ParagraphTemplateItem,
 } from '../../../components/generator/ParagraphTemplatePickerModal';
+import { StorageUploadModal } from '../../../components/generator/StorageUploadModal';
 import { apiClient } from '../../../lib/api';
 import { useAuth } from '../../../lib/authContext';
 import { APP_CONFIG } from '../../../lib/config';
@@ -84,9 +85,9 @@ const DEFAULT_CASE_DATA: CaseFormData = {
   attendees_summary: 'ทนายโจทก์ โจทก์ ทนายจำเลย และจำเลย',
   paragraphs: [''],
   judge_1_name: 'นาย สมศักดิ์ ยุติธรรม',
-  judge_2_name: 'นางสาว ดวงใจ ซื่อตรง',
+  judge_2_name: '',
   judge_๑_name: 'นาย สมศักดิ์ ยุติธรรม',
-  judge_๒_name: 'นางสาว ดวงใจ ซื่อตรง',
+  judge_๒_name: '',
   signatories: [
     { position: 'ทนายโจทก์' },
     { position: 'โจทก์' },
@@ -165,7 +166,6 @@ function GeneratorContent() {
   // Upload Prompt Modal state
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [isUploadChoiceOpen, setIsUploadChoiceOpen] = useState(false);
-  const [isProcessingUpload, setIsProcessingUpload] = useState(false);
 
   // Paragraph Template Picker Modal state
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
@@ -178,6 +178,7 @@ function GeneratorContent() {
   // Document Generating states
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingFormat, setGeneratingFormat] = useState<'docx' | 'pdf' | null>(null);
+  const [canExportPdf, setCanExportPdf] = useState(false);
 
   useEffect(() => {
     document.title = 'สร้างเอกสารคดีความ | JADS Court';
@@ -209,10 +210,11 @@ function GeneratorContent() {
 
   const fetchInitialData = async () => {
     try {
-      const [resTpl, resJudges, resParas] = await Promise.all([
+      const [resTpl, resJudges, resParas, resCap] = await Promise.all([
         apiClient.get('/templates').catch(() => ({ data: { templates: ['รายงาน2356.docx'] } })),
         apiClient.get('/judge-pairs').catch(() => ({ data: { judgePairs: [] } })),
         apiClient.get('/paragraph-templates').catch(() => ({ data: { paragraphTemplates: [] } })),
+        apiClient.get('/capabilities').catch(() => ({ data: { canExportPdf: false } })),
       ]);
 
       const tList = resTpl.data.templates || [];
@@ -221,6 +223,7 @@ function GeneratorContent() {
 
       setJudgePairs(resJudges.data.judgePairs || []);
       setParagraphTemplates(resParas.data.paragraphTemplates || []);
+      setCanExportPdf(Boolean(resCap.data?.canExportPdf));
     } catch (err) {
       console.error('Failed to load initial data:', err);
     }
@@ -248,58 +251,35 @@ function GeneratorContent() {
     setIsUploadChoiceOpen(true);
   };
 
-  // Upload to Cloud (S3)
-  const handleConfirmCloudUpload = async () => {
-    if (!pendingFile) return;
-    setIsProcessingUpload(true);
-    try {
-      const form = new FormData();
-      form.append('file', pendingFile);
-      await apiClient.post('/cloud-files/upload', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      await processAndLoadFile(pendingFile);
-      showSuccess('อัปโหลดสำเร็จ!', `บันทึก "${pendingFile.name}" เข้าสู่ Cloud Storage เรียบร้อยแล้ว`);
-      setIsUploadChoiceOpen(false);
-      setPendingFile(null);
-      fetchSavedFiles();
-      setActiveTab('table');
-    } catch (err: any) {
-      showError('อัปโหลดล้มเหลว', err.response?.data?.message || err.message);
-    } finally {
-      setIsProcessingUpload(false);
-    }
+  // Upload to Cloud (S3) completed
+  const handleSuccessCloudUpload = async (file: File) => {
+    await processAndLoadFile(file);
+    showSuccess('อัปโหลดสำเร็จ!', `บันทึก "${file.name}" เข้าสู่ Cloud Storage เรียบร้อยแล้ว`);
+    setIsUploadChoiceOpen(false);
+    setPendingFile(null);
+    fetchSavedFiles();
+    setActiveTab('table');
   };
 
   // Save as Local Recent File only
-  const handleConfirmLocalSave = async () => {
-    if (!pendingFile) return;
-    setIsProcessingUpload(true);
-    try {
-      await apiClient.post('/recent-files', {
-        fileName: pendingFile.name,
-        localPath: `C:\\Users\\User\\Documents\\${pendingFile.name}`,
-        fileType: 'xlsx',
-      });
+  const handleSuccessLocalSave = async (file: File) => {
+    await apiClient.post('/recent-files', {
+      fileName: file.name,
+      localPath: `C:\\Users\\User\\Documents\\${file.name}`,
+      fileType: 'xlsx',
+    });
 
-      await processAndLoadFile(pendingFile);
-      showToast(`บันทึกประวัติไฟล์ "${pendingFile.name}" สำหรับเครื่องนี้เรียบร้อย`);
-      setIsUploadChoiceOpen(false);
-      setPendingFile(null);
-      fetchSavedFiles();
-      setActiveTab('table');
-    } catch (err: any) {
-      showError('เกิดข้อผิดพลาด', err.response?.data?.message || err.message);
-    } finally {
-      setIsProcessingUpload(false);
-    }
+    await processAndLoadFile(file);
+    showToast(`บันทึกประวัติไฟล์ "${file.name}" สำหรับเครื่องนี้เรียบร้อย`);
+    setIsUploadChoiceOpen(false);
+    setPendingFile(null);
+    fetchSavedFiles();
+    setActiveTab('table');
   };
 
   const handleCancelUploadChoice = () => {
     setIsUploadChoiceOpen(false);
     setPendingFile(null);
-    showToast('ยกเลิกการโหลดไฟล์');
   };
 
   // Parse Excel and load into state
@@ -337,6 +317,26 @@ function GeneratorContent() {
     setSelectedRow(row);
     const userCourt = user?.courtName || APP_CONFIG.DEFAULT_COURT;
     const converted = convertRowToFormData(row, mapping, userCourt);
+
+    // If judge_1_name is known, check if we have a saved pairing for judge 1
+    if (converted.judge_1_name) {
+      const j1 = converted.judge_1_name.trim();
+      const matchedPair = judgePairs.find(
+        (p) => p.judge1Name?.trim() === j1 || p.judge2Name?.trim() === j1
+      );
+      if (matchedPair) {
+        const partner = matchedPair.judge1Name?.trim() === j1 ? matchedPair.judge2Name : matchedPair.judge1Name;
+        converted.judge_2_name = partner || '';
+        converted.judge_๒_name = partner || '';
+      } else {
+        converted.judge_2_name = '';
+        converted.judge_๒_name = '';
+      }
+    } else {
+      converted.judge_2_name = '';
+      converted.judge_๒_name = '';
+    }
+
     setFormData(converted);
 
     try {
@@ -433,6 +433,42 @@ function GeneratorContent() {
   // ----------------------------------------------------
   // Judges Quorum Selection
   // ----------------------------------------------------
+  // Distinct judge 1 names from saved pairs
+  const distinctJudge1Options = useMemo(() => {
+    const names = new Set<string>();
+    judgePairs.forEach((p) => {
+      if (p.judge1Name?.trim()) names.add(p.judge1Name.trim());
+    });
+    return Array.from(names);
+  }, [judgePairs]);
+
+  // Handler when Judge 1 changes (either via typing or dropdown selection)
+  const handleJudge1Change = (newJudge1: string) => {
+    const trimmed = newJudge1.trim();
+    // Look up saved partner in judgePairs
+    const matchedPair = judgePairs.find(
+      (p) => p.judge1Name?.trim() === trimmed || p.judge2Name?.trim() === trimmed
+    );
+
+    let partner = '';
+    if (matchedPair) {
+      partner = matchedPair.judge1Name?.trim() === trimmed ? matchedPair.judge2Name : matchedPair.judge1Name;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      judge_1_name: newJudge1,
+      judge_๑_name: newJudge1,
+      judge_2_name: partner || '',
+      judge_๒_name: partner || '',
+      ...(matchedPair?.courtName ? { court_name: matchedPair.courtName } : {}),
+    }));
+
+    if (partner) {
+      showToast(`ดึงชื่อคนที่ 2 อัตโนมัติ: ${partner}`);
+    }
+  };
+
   const handleSelectJudgePair = (pairId: string) => {
     setSelectedPairId(pairId);
     if (!pairId) return;
@@ -1481,49 +1517,73 @@ function GeneratorContent() {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">3. องค์คณะผู้พิพากษา</h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400">เลือกคู่ผู้พิพากษาจากระบบเพื่อเติมชื่อทั้ง 2 ท่านอัตโนมัติ</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  เลือกหรือระบุชื่อผู้พิพากษาคนที่ 1 ระบบจะดึงชื่อคนที่ 2 ที่เคยบันทึกไว้มาแสดงอัตโนมัติ (หากไม่มีจะปล่อยว่าง)
+                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-purple-900 dark:text-purple-300 mb-1">
-                  เลือกคู่ผู้พิพากษา (ดึงชื่ออัตโนมัติ)
-                </label>
-                <select
-                  value={selectedPairId}
-                  onChange={(e) => handleSelectJudgePair(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-purple-50 dark:bg-slate-800 border border-purple-200 dark:border-slate-700 rounded-xl text-xs font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
-                >
-                  <option value="">-- เลือกคู่ผู้พิพากษา --</option>
-                  {judgePairs.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.judge1Name} / {p.judge2Name} {p.courtName ? `(${p.courtName})` : ''}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-purple-900 dark:text-purple-300">
+                    ผู้พิพากษาคนที่ 1 (judge_1_name)
+                  </label>
+                  {distinctJudge1Options.length > 0 && (
+                    <span className="text-[10px] text-purple-600 dark:text-purple-400">
+                      มีรายชื่อที่บันทึกไว้ {distinctJudge1Options.length} ท่าน
+                    </span>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    list="judge1-preset-list"
+                    value={formData.judge_1_name}
+                    onChange={(e) => handleJudge1Change(e.target.value)}
+                    placeholder="พิมพ์หรือเลือกชื่อผู้พิพากษาคนที่ 1..."
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border-2 border-purple-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100 focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 focus:outline-none transition-all"
+                  />
+                  <datalist id="judge1-preset-list">
+                    {distinctJudge1Options.map((name) => (
+                      <option key={name} value={name} />
+                    ))}
+                  </datalist>
+                </div>
+
+                {/* Quick Select Buttons from Saved Judges */}
+                {distinctJudge1Options.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                    <span className="text-[11px] text-slate-400">เลือกเร็ว:</span>
+                    {distinctJudge1Options.slice(0, 5).map((name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => handleJudge1Change(name)}
+                        className={`text-[11px] px-2 py-0.5 rounded-lg border transition-all ${
+                          formData.judge_1_name === name
+                            ? 'bg-purple-700 text-white border-purple-700 font-bold shadow-sm'
+                            : 'bg-purple-50 dark:bg-slate-800 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-slate-700 hover:bg-purple-100'
+                        }`}
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  ผู้พิพากษาคนที่ 1 (judge_1_name)
-                </label>
-                <input
-                  type="text"
-                  value={formData.judge_1_name}
-                  onChange={(e) => {
-                    handleFieldChange('judge_1_name', e.target.value);
-                    handleFieldChange('judge_๑_name', e.target.value);
-                  }}
-                  placeholder="เช่น นาย สมศักดิ์ ยุติธรรม"
-                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
-                />
-              </div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    ผู้พิพากษาคนที่ 2 (judge_2_name)
+                  </label>
+                  <span className="text-[10px] text-slate-400">
+                    {formData.judge_2_name ? 'ดึงจากคู่ที่เคยบันทึกไว้' : 'ไม่มีคู่ที่บันทึกไว้ (เว้นว่าง)'}
+                  </span>
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  ผู้พิพากษาคนที่ 2 (judge_2_name)
-                </label>
                 <input
                   type="text"
                   value={formData.judge_2_name}
@@ -1531,9 +1591,12 @@ function GeneratorContent() {
                     handleFieldChange('judge_2_name', e.target.value);
                     handleFieldChange('judge_๒_name', e.target.value);
                   }}
-                  placeholder="เช่น นางสาว ดวงใจ ซื่อตรง"
-                  className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                  placeholder="จะแสดงอัตโนมัติหากมีคู่บันทึกไว้ หรือเว้นว่างได้..."
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-600 focus:outline-none transition-all"
                 />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  * หากมีคู่บันทึกไว้ในระบบจะดึงมาเติมให้อัตโนมัติทันทีที่เลือกคนแรก หากไม่มีจะเว้นว่างไว้ให้
+                </p>
               </div>
             </div>
           </div>
@@ -1691,7 +1754,9 @@ function GeneratorContent() {
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">สรุปข้อมูลและดาวน์โหลดเอกสารคดี</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    เลือกรูปแบบไฟล์เอกสารที่ต้องการ (.docx สำหรับ Word หรือ .pdf สำหรับพิมพ์และเผยแพร่)
+                    {canExportPdf
+                      ? 'เลือกรูปแบบไฟล์เอกสารที่ต้องการ (.docx สำหรับ Word หรือ .pdf สำหรับพิมพ์และเผยแพร่)'
+                      : 'ดาวน์โหลดไฟล์เอกสารรายงานกระบวนพิจารณาในรูปแบบ Microsoft Word (.docx)'}
                   </p>
                 </div>
               </div>
@@ -1769,7 +1834,7 @@ function GeneratorContent() {
             </div>
 
             {/* Big Action Download Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            <div className={`grid gap-6 pt-2 ${canExportPdf ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto w-full'}`}>
               {/* Option 1: DOCX Word */}
               <div className="p-6 rounded-3xl border-2 border-purple-200 dark:border-purple-900/50 bg-white dark:bg-slate-900 hover:border-purple-600 dark:hover:border-purple-500 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
                 <div className="space-y-2">
@@ -1797,32 +1862,34 @@ function GeneratorContent() {
                 </button>
               </div>
 
-              {/* Option 2: PDF Adobe */}
-              <div className="p-6 rounded-3xl border-2 border-indigo-200 dark:border-indigo-900/50 bg-white dark:bg-slate-900 hover:border-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
-                <div className="space-y-2">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <FileCode className="w-6 h-6" />
+              {/* Option 2: PDF (Only render if server can export PDF) */}
+              {canExportPdf && (
+                <div className="p-6 rounded-3xl border-2 border-indigo-200 dark:border-indigo-900/50 bg-white dark:bg-slate-900 hover:border-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm flex flex-col justify-between space-y-4 group">
+                  <div className="space-y-2">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <FileCode className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-base font-bold text-slate-900 dark:text-slate-100">เอกสารแบบพร้อมพิมพ์ PDF (.pdf)</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                      แปลงเป็นไฟล์ PDF โดยตรงผ่าน Microsoft Word Engine ตราครุฑ ฟอนต์ และการจัดหน้ากระดาษตรงตามแบบศาล 100%
+                    </p>
                   </div>
-                  <h4 className="text-base font-bold text-slate-900 dark:text-slate-100">เอกสารแบบพร้อมพิมพ์ PDF (.pdf)</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                    แปลงเป็นไฟล์ PDF โดยตรงผ่าน Microsoft Word Engine ตราครุฑ ฟอนต์ และการจัดหน้ากระดาษตรงตามแบบศาล 100%
-                  </p>
-                </div>
 
-                <button
-                  type="button"
-                  disabled={isGenerating}
-                  onClick={() => handleDownload('pdf')}
-                  className="w-full py-3.5 px-6 bg-indigo-700 hover:bg-indigo-800 disabled:opacity-50 text-white rounded-2xl text-xs font-bold shadow-md shadow-indigo-700/20 flex items-center justify-center gap-2 transition-all group-hover:scale-102"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>
-                    {isGenerating && generatingFormat === 'pdf'
-                      ? 'กำลังแปลงและสร้าง PDF...'
-                      : 'ดาวน์โหลดไฟล์ PDF (.pdf)'}
-                  </span>
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    disabled={isGenerating}
+                    onClick={() => handleDownload('pdf')}
+                    className="w-full py-3.5 px-6 bg-indigo-700 hover:bg-indigo-800 disabled:opacity-50 text-white rounded-2xl text-xs font-bold shadow-md shadow-indigo-700/20 flex items-center justify-center gap-2 transition-all group-hover:scale-102"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>
+                      {isGenerating && generatingFormat === 'pdf'
+                        ? 'กำลังแปลงและสร้าง PDF...'
+                        : 'ดาวน์โหลดไฟล์ PDF (.pdf)'}
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Quick Actions Footer */}
@@ -1852,77 +1919,15 @@ function GeneratorContent() {
       )}
 
       {/* ========================================================================= */}
-      {/* Upload Choice Modal (Cloud S3 vs Local Save) */}
+      {/* Upload Choice & Progress Modal (Cloud S3 vs Local Save) */}
       {/* ========================================================================= */}
-      {isUploadChoiceOpen && pendingFile && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
-          onClick={handleCancelUploadChoice}
-        >
-          <div
-            className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 md:p-8 border border-purple-100 dark:border-slate-800 shadow-2xl space-y-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
-                  <UploadCloud className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">เลือกพื้นที่จัดเก็บไฟล์</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono truncate max-w-[240px]">
-                    {pendingFile.name}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleCancelUploadChoice}
-                className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600"
-                aria-label="ปิดและยกเลิก"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              ท่านต้องการอัปโหลดไฟล์นี้ขึ้นระบบ Cloud เพื่อให้สามารถเปิดใช้งานได้จากทุกที่ หรือต้องการบันทึกเป็นประวัติเฉพาะบนเครื่องนี้?
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button
-                type="button"
-                disabled={isProcessingUpload}
-                onClick={handleConfirmCloudUpload}
-                className="p-5 rounded-2xl border-2 border-purple-500 bg-purple-50/50 dark:bg-purple-950/30 hover:bg-purple-100/60 dark:hover:bg-purple-950/50 text-left transition-all space-y-2 group"
-              >
-                <div className="w-8 h-8 rounded-xl bg-purple-700 text-white flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <Cloud className="w-4 h-4" />
-                </div>
-                <h4 className="text-xs font-bold text-purple-950 dark:text-purple-200">อัปโหลดเข้า Cloud (S3)</h4>
-                <p className="text-[11px] text-purple-800/80 dark:text-purple-300/80 leading-relaxed">
-                  ปลอดภัย แยกข้อมูลเฉพาะคุณ เข้าถึงได้จากทุกอุปกรณ์
-                </p>
-              </button>
-
-              <button
-                type="button"
-                disabled={isProcessingUpload}
-                onClick={handleConfirmLocalSave}
-                className="p-5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-left transition-all space-y-2 group"
-              >
-                <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <Laptop className="w-4 h-4" />
-                </div>
-                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">บันทึกเฉพาะเครื่องนี้</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                  บันทึกลงรายการเปิดล่าสุด ทำงานรวดเร็วในเครื่องปัจจุบัน
-                </p>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <StorageUploadModal
+        isOpen={isUploadChoiceOpen}
+        file={pendingFile}
+        onClose={handleCancelUploadChoice}
+        onSuccessCloud={handleSuccessCloudUpload}
+        onSuccessLocal={handleSuccessLocalSave}
+      />
 
       {/* ========================================================================= */}
       {/* Paragraph Template Picker Modal */}

@@ -316,9 +316,13 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <p className="text-xs text-slate-500 text-center sm:text-right">
-            &copy; 2026 JADS Court. All rights reserved. • พัฒนาเพื่อการอำนวยความยุติธรรม
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-xs text-slate-400 text-center sm:text-right">
+            <span>&copy; 2026 JADS Court. All rights reserved.</span>
+            <span className="hidden sm:inline">•</span>
+            <span>
+              สร้างโดย <strong className="text-purple-400 font-bold">พงษ์ภัทร เภสัชชะ</strong>
+            </span>
+          </div>
         </div>
       </footer>
     </div>

@@ -24,7 +24,6 @@ import { apiClient } from '../../../lib/api';
 import { useAuth } from '../../../lib/authContext';
 import { APP_CONFIG } from '../../../lib/config';
 import { showToast, showError, showSuccess, showConfirm } from '../../../lib/sweetalert';
-import { executeFileDownload } from '../../../lib/downloadManager';
 import {
   UploadCloud,
   FileSpreadsheet,
@@ -593,25 +592,16 @@ function GeneratorContent() {
         }
       }
 
-      const dlResult = await executeFileDownload({
-        blob,
-        fileName: filename,
-        format,
-        caseBlackNo: formData.case_black_no,
-        courtName: formData.court_name,
-      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
-      if (dlResult.cancelled) {
-        showToast('ยกเลิกการบันทึกไฟล์');
-        return;
-      }
-
-      showToast(
-        dlResult.filePath
-          ? `ดาวน์โหลดสำเร็จ: ${filename}`
-          : `ดาวน์โหลดสำเร็จ: ${filename}`,
-        'success'
-      );
+      showToast(`ดาวน์โหลดสำเร็จ: ${filename}`, 'success');
     } catch (err: any) {
       let errorMsg = err.message || 'ไม่สามารถสร้างเอกสารได้';
       if (err.response?.data) {

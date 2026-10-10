@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Navbar } from '../../components/layout/Navbar';
+import { DesktopMenuBar } from '../../components/layout/DesktopMenuBar';
 
 export default function DashboardLayout({
   children,
@@ -22,13 +23,17 @@ export default function DashboardLayout({
   }, [user, isLoading, router]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
-      <Sidebar
-        isOpen={isMobileSidebarOpen}
-        onClose={() => setIsMobileSidebarOpen(false)}
-      />
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <Navbar onToggleSidebar={() => setIsMobileSidebarOpen((prev) => !prev)} />
+    <div className="flex flex-col h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
+      {/* Top MenuBar - Exclusively rendered when running in Tauri Windows App */}
+      <DesktopMenuBar />
+
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        <Sidebar
+          isOpen={isMobileSidebarOpen}
+          onClose={() => setIsMobileSidebarOpen(false)}
+        />
+        <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+          <Navbar onToggleSidebar={() => setIsMobileSidebarOpen((prev) => !prev)} />
         <main className="flex-1 overflow-y-auto w-full text-slate-800 dark:text-slate-100 relative flex flex-col">
           {isLoading && (
             <div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-900/90 backdrop-blur-sm text-purple-200">
@@ -61,5 +66,6 @@ export default function DashboardLayout({
         </main>
       </div>
     </div>
-  );
+  </div>
+);
 }

@@ -606,11 +606,11 @@ function GeneratorContent() {
         return;
       }
 
-      showSuccess(
-        'ดาวน์โหลดสำเร็จ!',
+      showToast(
         dlResult.filePath
-          ? `บันทึกเอกสาร ${format.toUpperCase()} เรียบร้อยที่:\n${dlResult.filePath}`
-          : `เอกสาร ${format.toUpperCase()} "${filename}" พร้อมใช้งานเรียบร้อยแล้ว`
+          ? `ดาวน์โหลดสำเร็จ: ${filename}`
+          : `ดาวน์โหลดสำเร็จ: ${filename}`,
+        'success'
       );
     } catch (err: any) {
       let errorMsg = err.message || 'ไม่สามารถสร้างเอกสารได้';

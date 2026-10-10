@@ -87,20 +87,14 @@ export default function RecentFilesPage() {
     }
   };
 
-  const handleDeleteDownloadItem = async (id: string, name: string) => {
-    const confirm = await showConfirm('ยืนยันการลบ', `ลบ "${name}" ออกจากประวัติการดาวน์โหลด?`);
-    if (!confirm.isConfirmed) return;
-
+  const handleDeleteDownloadItem = (id: string, name: string) => {
     removeDownloadHistoryItem(id);
     loadDownloadHistory();
-    showToast('ลบประวัติการดาวน์โหลดสำเร็จ');
+    showToast(`ลบ "${name}" ออกจากประวัติเรียบร้อย`);
   };
 
-  const handleClearAllDownloads = async () => {
+  const handleClearAllDownloads = () => {
     if (downloadHistory.length === 0) return;
-    const confirm = await showConfirm('ยืนยันล้างประวัติทั้งหมด', 'ท่านต้องการล้างรายการประวัติการดาวน์โหลดทั้งหมดใช่หรือไม่? (ไฟล์ในเครื่องจะไม่ถูกลบ)');
-    if (!confirm.isConfirmed) return;
-
     clearDownloadHistory();
     loadDownloadHistory();
     showToast('ล้างประวัติการดาวน์โหลดเรียบร้อย');

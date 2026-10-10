@@ -19,18 +19,7 @@ import {
   ShieldAlert,
   RotateCw,
   KeyRound,
-  FolderDown,
-  FolderOpen,
-  Download,
-  FolderCheck,
 } from 'lucide-react';
-import {
-  getDownloadSettings,
-  saveDownloadSettings,
-  pickDownloadFolder,
-  isTauriEnvironment,
-  DownloadSettings,
-} from '../../../lib/downloadManager';
 
 export default function SettingsPage() {
   const { user, updateProfile, changePassword, requestBindEmail, confirmBindEmail } = useAuth();
@@ -51,44 +40,15 @@ export default function SettingsPage() {
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  // Download Directory Settings State
-  const [downloadSettings, setDownloadSettings] = useState<DownloadSettings>({
-    defaultDir: '',
-    alwaysAskLocation: true,
-  });
-  const [isTauri, setIsTauri] = useState(false);
-
   // Sync state when user object loads or updates
   React.useEffect(() => {
     document.title = 'การตั้งค่าบัญชีและรหัสผ่าน | JADS Court';
-    setDownloadSettings(getDownloadSettings());
-    setIsTauri(isTauriEnvironment());
     if (user) {
       setUsername(user.username || '');
       setFullName(user.fullName || '');
       setCourtName(user.courtName || '');
     }
   }, [user]);
-
-  const handleUpdateDownloadSettings = (newSettings: Partial<DownloadSettings>) => {
-    setDownloadSettings((prev) => {
-      const updated = { ...prev, ...newSettings };
-      saveDownloadSettings(updated);
-      showToast('บันทึกการตั้งค่าการดาวน์โหลดเรียบร้อย');
-      return updated;
-    });
-  };
-
-  const handlePickFolder = async () => {
-    try {
-      const folder = await pickDownloadFolder();
-      if (folder) {
-        handleUpdateDownloadSettings({ defaultDir: folder });
-      }
-    } catch (e: any) {
-      showError('ไม่สามารถเลือกโฟลเดอร์ได้', e.message);
-    }
-  };
 
   React.useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -283,93 +243,6 @@ export default function SettingsPage() {
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* Download Settings Card */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm transition-colors">
-        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800 mb-5">
-          <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
-            <FolderDown className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-              <span>ตำแหน่งจัดเก็บไฟล์ดาวน์โหลด (Download Location)</span>
-              {isTauri && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                  Tauri Desktop App
-                </span>
-              )}
-            </h3>
-            <p className="text-xs text-slate-400 dark:text-slate-400">
-              กำหนดโฟลเดอร์สำหรับบันทึกไฟล์รายงาน Word (.docx) และ PDF (.pdf) ที่สร้างจากระบบ
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-              โฟลเดอร์ดาวน์โหลดเริ่มต้น (Default Directory):
-            </label>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-              <input
-                type="text"
-                value={downloadSettings.defaultDir}
-                onChange={(e) => handleUpdateDownloadSettings({ defaultDir: e.target.value })}
-                placeholder={isTauri ? 'ยังไม่ได้ระบุ (จะใช้โฟลเดอร์ Downloads ของเครื่อง)' : 'ใช้โฟลเดอร์ Downloads ของเบราว์เซอร์'}
-                className="flex-1 px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-600 focus:outline-none"
-              />
-              {isTauri ? (
-                <button
-                  type="button"
-                  onClick={handlePickFolder}
-                  className="px-4 py-2.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm shadow-purple-700/20"
-                >
-                  <FolderOpen className="w-4 h-4" />
-                  <span>เลือกโฟลเดอร์</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const custom = prompt('ระบุโฟลเดอร์ที่ต้องการตั้งค่า เช่น C:\\Users\\...\\Downloads', downloadSettings.defaultDir);
-                    if (custom !== null) {
-                      handleUpdateDownloadSettings({ defaultDir: custom.trim() });
-                    }
-                  }}
-                  className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <FolderCheck className="w-4 h-4" />
-                  <span>ระบุตำแหน่ง</span>
-                </button>
-              )}
-            </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              {isTauri
-                ? 'กดปุ่ม "เลือกโฟลเดอร์" เพื่อเลือกไดเรกทอรีบนเครื่องคอมพิวเตอร์ของคุณได้อย่างอิสระ'
-                : 'บนเว็บเบราว์เซอร์ ไฟล์จะถูกส่งไปยังตำแหน่งที่เบราว์เซอร์ตั้งค่าไว้'}
-            </p>
-          </div>
-
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80">
-            <label className="flex items-start gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={downloadSettings.alwaysAskLocation}
-                onChange={(e) => handleUpdateDownloadSettings({ alwaysAskLocation: e.target.checked })}
-                className="mt-0.5 w-4 h-4 text-purple-700 rounded border-slate-300 dark:border-slate-700 focus:ring-purple-600"
-              />
-              <div>
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">
-                  ถามตำแหน่งบันทึกไฟล์ทุกครั้งก่อนดาวน์โหลด (Always ask where to save each file)
-                </span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">
-                  เมื่อเปิดใช้งาน ระบบจะแสดงหน้าต่าง Save As ให้เลือกโฟลเดอร์และเปลี่ยนชื่อไฟล์ก่อนเซฟทุกครั้ง หากปิดจะเซฟลงโฟลเดอร์เริ่มต้นทันที
-                </span>
-              </div>
-            </label>
-          </div>
         </div>
       </div>
 

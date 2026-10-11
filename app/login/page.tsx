@@ -1036,8 +1036,18 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              <div className="mt-5 text-center text-xs text-slate-500 dark:text-slate-400">
-                ระบบบริหารจัดการเอกสารคดีความศาลยุติธรรม
+              <div className="mt-5 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1.5">
+                <div>ระบบบริหารจัดการเอกสารคดีความศาลยุติธรรม</div>
+                <div className="text-[11px] text-slate-400 dark:text-slate-500">
+                  {isLoginTab ? 'การเข้าใช้งานถือว่าท่านยอมรับ' : 'การสมัครสมาชิกถือว่าท่านยอมรับ'}{' '}
+                  <Link href="/terms" className="text-purple-600 dark:text-purple-400 hover:underline">
+                    ข้อกำหนดการใช้งาน
+                  </Link>{' '}
+                  และ{' '}
+                  <Link href="/privacy" className="text-purple-600 dark:text-purple-400 hover:underline">
+                    นโยบายความเป็นส่วนตัว (PDPA)
+                  </Link>
+                </div>
               </div>
             </div>
           )}

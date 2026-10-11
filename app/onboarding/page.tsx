@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { Landmark, User, Lock, ArrowRight, ShieldCheck, CheckCircle2, Trash2 } from 'lucide-react';
@@ -267,7 +268,7 @@ export default function OnboardingPage() {
             )}
           </button>
 
-          <div className="pt-2 text-center">
+          <div className="pt-2 text-center space-y-2">
             <button
               type="button"
               disabled={isSubmitting || isCancelling}
@@ -283,6 +284,17 @@ export default function OnboardingPage() {
                 </>
               )}
             </button>
+
+            <div className="text-[11px] text-slate-400 dark:text-slate-500 pt-1">
+              การกดบันทึกข้อมูลถือว่าท่านยอมรับ{' '}
+              <Link href="/terms" target="_blank" className="text-purple-600 dark:text-purple-400 hover:underline">
+                ข้อกำหนดการใช้งาน
+              </Link>{' '}
+              และ{' '}
+              <Link href="/privacy" target="_blank" className="text-purple-600 dark:text-purple-400 hover:underline">
+                นโยบายความเป็นส่วนตัว (PDPA)
+              </Link>
+            </div>
           </div>
         </form>
       </div>

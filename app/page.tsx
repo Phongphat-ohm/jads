@@ -316,7 +316,17 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-xs text-slate-400 text-center sm:text-right">
+          <div className="flex flex-col sm:flex-row items-center gap-3 text-xs text-slate-400 text-center sm:text-right">
+            <div className="flex items-center gap-3 text-slate-400">
+              <Link href="/terms" className="hover:text-purple-400 transition-colors underline-offset-4 hover:underline">
+                ข้อกำหนดการใช้งาน
+              </Link>
+              <span>•</span>
+              <Link href="/privacy" className="hover:text-purple-400 transition-colors underline-offset-4 hover:underline">
+                นโยบายความเป็นส่วนตัว (PDPA)
+              </Link>
+            </div>
+            <span className="hidden sm:inline text-slate-600">|</span>
             <span>&copy; 2026 JADS Court. All rights reserved.</span>
             <span className="hidden sm:inline">•</span>
             <span>

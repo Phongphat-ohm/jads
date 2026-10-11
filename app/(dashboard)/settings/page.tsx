@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '../../../lib/authContext';
 import { useTheme, ThemeMode } from '../../../lib/themeContext';
 import { showToast, showError } from '../../../lib/sweetalert';
@@ -19,6 +20,8 @@ import {
   ShieldAlert,
   RotateCw,
   KeyRound,
+  FileText,
+  ExternalLink,
 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -452,6 +455,69 @@ export default function SettingsPage() {
                 </button>
               </div>
             </form>
+          </div>
+
+          {/* Legal & Compliance / PDPA Section */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  ข้อกำหนดและนโยบายความเป็นส่วนตัว (PDPA)
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  การปฏิบัติตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 และระเบียบการใช้งานระบบศาล
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <Link
+                href="/terms"
+                target="_blank"
+                className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-700 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-purple-50/40 dark:hover:bg-purple-950/20 transition-all group flex flex-col justify-between gap-3"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      ข้อกำหนดการใช้งาน
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    สิทธิ หน้าที่ และเงื่อนไขความรับผิดชอบในการใช้งานระบบร่างเอกสารคดีความ
+                  </p>
+                </div>
+                <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">
+                  อ่านข้อกำหนด &rarr;
+                </span>
+              </Link>
+
+              <Link
+                href="/privacy"
+                target="_blank"
+                className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-700 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-purple-50/40 dark:hover:bg-purple-950/20 transition-all group flex flex-col justify-between gap-3"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      นโยบายความเป็นส่วนตัว (PDPA)
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    การเก็บรวบรวม ใช้ เปิดเผย และสิทธิของเจ้าของข้อมูลตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
+                  </p>
+                </div>
+                <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">
+                  อ่านนโยบายความเป็นส่วนตัว &rarr;
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

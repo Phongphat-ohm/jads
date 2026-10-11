@@ -41,7 +41,7 @@ export default function RecentFilesPage() {
 
   const handleDelete = async (id: string, name: string) => {
     const confirm = await showConfirm('ยืนยันการลบ', `ท่านต้องการลบ "${name}" ออกจากประวัติใช่หรือไม่?`);
-    if (!confirm.isConfirmed) return;
+    if (!confirm) return;
 
     try {
       const res = await fetchApi(`/recent-files/${id}`, { method: 'DELETE' });

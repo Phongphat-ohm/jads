@@ -10,6 +10,7 @@ import {
   FileSpreadsheet,
   Clock,
   ShieldAlert,
+  ShieldCheck,
   Settings,
   LogOut,
   Users,
@@ -17,7 +18,9 @@ import {
   FileCheck,
   User as UserIcon,
   X,
+  MessageSquareHeart,
 } from 'lucide-react';
+import { FeedbackModal } from '../feedback/FeedbackModal';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -68,6 +71,7 @@ const navItems = [
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [isFeedbackOpen, setIsFeedbackOpen] = React.useState(false);
 
   return (
     <>
@@ -140,6 +144,50 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
               </Link>
             );
           })}
+
+          {/* Feedback Button in Sidebar */}
+          <button
+            type="button"
+            onClick={() => {
+              if (onClose) onClose();
+              setIsFeedbackOpen(true);
+            }}
+            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-amber-300 hover:bg-amber-950/20 border border-transparent hover:border-amber-900/30 transition-all text-left cursor-pointer"
+          >
+            <div className="flex items-center gap-3">
+              <MessageSquareHeart className="w-4 h-4 text-amber-400" />
+              <span>ส่งข้อเสนอแนะ</span>
+            </div>
+            <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-semibold">
+              ช่วยเราปรับปรุง
+            </span>
+          </button>
+
+          {/* Admin Mode Link if user has ADMIN role */}
+          {user?.role === 'ADMIN' && (
+            <div className="pt-4 mt-4 border-t border-slate-800/80">
+              <div className="px-3 pb-2 text-[10px] font-semibold tracking-wider text-rose-400 uppercase flex items-center justify-between">
+                <span>การจัดการระบบ</span>
+                <span className="bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded text-[9px] border border-rose-500/30 font-bold">
+                  ADMIN
+                </span>
+              </div>
+              <Link
+                href="/admin"
+                onClick={onClose}
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  pathname.startsWith('/admin')
+                    ? 'bg-rose-700 text-white shadow-lg shadow-rose-900/50'
+                    : 'text-rose-300 hover:text-white hover:bg-rose-950/40 border border-rose-900/30'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-4 h-4 text-rose-400" />
+                  <span>ระบบผู้ดูแล (Admin)</span>
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -167,6 +215,9 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         </button>
       </div>
     </aside>
+
+    {/* Feedback Modal Triggered from Sidebar */}
+    <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
     </>
   );
 }

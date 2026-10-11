@@ -52,7 +52,7 @@ export default function AuditLogsPage() {
 
   // Pagination state
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(15);
+  const [limit, setLimit] = useState(10);
 
   // Filter state
   const [search, setSearch] = useState('');
@@ -546,10 +546,28 @@ export default function AuditLogsPage() {
 
         {/* Enhanced Pagination Footer */}
         <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
-          <div>
-            แสดง <span className="font-semibold text-slate-700 dark:text-slate-200">{startIndex}</span> ถึง{' '}
-            <span className="font-semibold text-slate-700 dark:text-slate-200">{endIndex}</span> จากทั้งหมด{' '}
-            <span className="font-semibold text-purple-700 dark:text-purple-400">{total.toLocaleString()}</span> รายการ
+          <div className="flex flex-wrap items-center gap-3">
+            <div>
+              แสดง <span className="font-semibold text-slate-700 dark:text-slate-200">{startIndex}</span> ถึง{' '}
+              <span className="font-semibold text-slate-700 dark:text-slate-200">{endIndex}</span> จากทั้งหมด{' '}
+              <span className="font-semibold text-purple-700 dark:text-purple-400">{total.toLocaleString()}</span> รายการ
+            </div>
+            <div className="flex items-center gap-1.5 pl-3 border-l border-slate-200 dark:border-slate-700">
+              <span>แสดง:</span>
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                  setPage(1);
+                }}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-600 cursor-pointer"
+              >
+                <option value={10}>10 รายการ</option>
+                <option value={25}>25 รายการ</option>
+                <option value={50}>50 รายการ</option>
+                <option value={100}>100 รายการ</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex items-center gap-1 self-center sm:self-auto">

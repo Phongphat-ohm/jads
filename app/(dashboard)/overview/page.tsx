@@ -56,7 +56,7 @@ export default function DashboardPage() {
       'ยืนยันการลบประวัติไฟล์',
       `ท่านต้องการลบ "${fileName}" ออกจากประวัติไฟล์ล่าสุดหรือไม่?`
     );
-    if (!confirm.isConfirmed) return;
+    if (!confirm) return;
 
     try {
       const res = await fetchApi(`/recent-files/${id}`, { method: 'DELETE' });

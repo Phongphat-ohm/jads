@@ -45,8 +45,12 @@ export function showError(title: string, text?: string) {
   });
 }
 
-export function showConfirm(title: string, text: string, confirmButtonText = 'ยืนยัน') {
-  return justiceSwal.fire({
+export async function showConfirm(
+  title: string,
+  text: string,
+  confirmButtonText = 'ยืนยัน'
+): Promise<boolean> {
+  const result = await justiceSwal.fire({
     icon: 'warning',
     title,
     text,
@@ -54,4 +58,5 @@ export function showConfirm(title: string, text: string, confirmButtonText = '�
     confirmButtonText,
     cancelButtonText: 'ยกเลิก',
   });
+  return result.isConfirmed === true;
 }

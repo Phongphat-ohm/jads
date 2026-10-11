@@ -76,7 +76,7 @@ export default function OnboardingPage() {
       'ใช่, ยกเลิกและลบข้อมูล'
     );
 
-    if (result.isConfirmed) {
+    if (result) {
       setIsCancelling(true);
       try {
         await cancelOnboarding();

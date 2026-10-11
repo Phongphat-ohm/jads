@@ -74,12 +74,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const savedToken = localStorage.getItem('jads_token');
     if (savedToken) {
+      syncAuthCookie(savedToken);
       setToken(savedToken);
       fetchProfile(savedToken);
     } else {
       setIsLoading(false);
     }
   }, []);
+
+  const syncAuthCookie = (authToken: string | null) => {
+    if (typeof document === 'undefined') return;
+    if (authToken) {
+      // 7 days expiration
+      document.cookie = `jads_token=${authToken}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+    } else {
+      document.cookie = 'jads_token=; path=/; max-age=0; SameSite=Lax';
+    }
+  };
 
   async function fetchProfile(authToken: string) {
     try {
@@ -88,9 +99,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       if (res.ok) {
         const data = await res.json();
-        setUser(data.data);
+        const profile = data.data;
+        setUser(profile);
+        // If server refreshed token with latest role, sync it!
+        if (profile?.token) {
+          localStorage.setItem('jads_token', profile.token);
+          syncAuthCookie(profile.token);
+          setToken(profile.token);
+        } else {
+          syncAuthCookie(authToken);
+        }
       } else {
         localStorage.removeItem('jads_token');
+        syncAuthCookie(null);
         setToken(null);
         setUser(null);
       }
@@ -119,6 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const receivedUser = data.data.user;
 
       localStorage.setItem('jads_token', receivedToken);
+      syncAuthCookie(receivedToken);
       setToken(receivedToken);
       setUser(receivedUser);
 
@@ -204,6 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const receivedUser = data.data.user;
 
       localStorage.setItem('jads_token', receivedToken);
+      syncAuthCookie(receivedToken);
       setToken(receivedToken);
       setUser(receivedUser);
 
@@ -241,6 +264,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const receivedUser = data.data.user;
 
       localStorage.setItem('jads_token', receivedToken);
+      syncAuthCookie(receivedToken);
       setToken(receivedToken);
       setUser(receivedUser);
 
@@ -439,6 +463,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem(APP_CONFIG.USER_KEY);
       sessionStorage.removeItem(APP_CONFIG.TOKEN_KEY);
       sessionStorage.removeItem(APP_CONFIG.USER_KEY);
+      syncAuthCookie(null);
       setToken(null);
       setUser(null);
 
@@ -464,6 +489,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const setDirectAuth = (newToken: string, newUser: User) => {
     localStorage.setItem('jads_token', newToken);
+    syncAuthCookie(newToken);
     setToken(newToken);
     setUser(newUser);
   };

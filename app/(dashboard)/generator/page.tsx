@@ -588,14 +588,25 @@ function GeneratorContent() {
           : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
       const blob = new Blob([res.data], { type: mimeType });
 
-      let filename = `รายงาน_${formData.case_black_no.replace(/[\/\\]/g, '_')}.${format}`;
+      let filename = `รายงาน_${formData.case_black_no.replace(/[/\\?%*:|"<>]/g, '_')}.${format}`;
       const disposition = res.headers['content-disposition'];
       if (disposition) {
-        const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+        // First try filename*=UTF-8''... (RFC 5987 / RFC 6266)
+        const utf8Match = disposition.match(/filename\*=(?:UTF-8''|utf-8'')([^;]+)/i);
         if (utf8Match && utf8Match[1]) {
           try {
-            filename = decodeURIComponent(utf8Match[1]);
+            filename = decodeURIComponent(utf8Match[1].trim().replace(/^['"]|['"]$/g, ''));
           } catch {}
+        } else {
+          // Then try standard filename="..."
+          const standardMatch = disposition.match(/filename="?([^";]+)"?/i);
+          if (standardMatch && standardMatch[1]) {
+            try {
+              filename = decodeURIComponent(standardMatch[1].trim());
+            } catch {
+              filename = standardMatch[1].trim();
+            }
+          }
         }
       }
 

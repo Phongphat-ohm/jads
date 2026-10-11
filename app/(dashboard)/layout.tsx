@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Navbar } from '../../components/layout/Navbar';
+import { FeedbackFloatingButton } from '../../components/feedback/FeedbackFloatingButton';
 
 export default function DashboardLayout({
   children,
@@ -60,6 +61,9 @@ export default function DashboardLayout({
           </footer>
         </main>
       </div>
+
+      {/* Floating User Feedback Widget */}
+      <FeedbackFloatingButton />
     </div>
   );
 }

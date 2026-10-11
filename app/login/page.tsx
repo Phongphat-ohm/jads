@@ -203,36 +203,56 @@ export default function LoginPage() {
   };
 
   const openUrlInDefaultBrowser = async (urlToOpen: string) => {
-    try {
-      // 1. Try launching through backend local server (100% reliable on machine, bypasses WebView permission blocks)
-      const res = await fetchApi('/open-browser', {
-        method: 'POST',
-        body: JSON.stringify({ url: urlToOpen }),
-      });
+    let opened = false;
 
-      if (res.ok) {
-        showToast('เปิดเบราว์เซอร์ของเครื่องเรียบร้อยแล้ว');
-        return;
-      }
-    } catch {
-      // If server unreachable, proceed to Tauri invoke / window.open
-    }
-
+    // 1. Try Tauri IPC first if running inside desktop app (Direct Native Windows Launch via cmd 'start' & Opener Plugin)
     try {
-      // 2. Try Tauri IPC if available
       const tauri = (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
       if (tauri && typeof tauri.invoke === 'function') {
         await tauri.invoke('open_in_browser', { url: urlToOpen });
-        showToast('เปิดเบราว์เซอร์ของเครื่องเรียบร้อยแล้ว');
-        return;
+        opened = true;
       }
+    } catch (e) {
+      console.warn('Tauri invoke open_in_browser failed, trying next methods:', e);
+    }
 
-      // 3. Fallback to window.open
-      window.open(urlToOpen, '_blank');
+    // 2. If not opened, try local backend server if reachable (useful in local dev / hybrid setup)
+    if (!opened) {
+      try {
+        const res = await fetch('http://localhost:3000/api/open-browser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlToOpen }),
+        });
+        if (res.ok) {
+          opened = true;
+        }
+      } catch {}
+    }
+
+    // 3. Fallback to hidden anchor tag / window.open
+    if (!opened) {
+      try {
+        const a = document.createElement('a');
+        a.href = urlToOpen;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        opened = true;
+      } catch {
+        try {
+          window.open(urlToOpen, '_blank');
+          opened = true;
+        } catch {}
+      }
+    }
+
+    if (opened) {
       showToast('เปิดเบราว์เซอร์ของเครื่องเรียบร้อยแล้ว');
-    } catch (err: any) {
-      console.error('Failed to open external browser:', err);
-      window.open(urlToOpen, '_blank');
+    } else {
+      showError('ไม่สามารถเปิดเบราว์เซอร์ได้อัตโนมัติ', 'กรุณากดปุ่ม "คัดลอกลิงก์" เพื่อนำไปเปิดในเบราว์เซอร์ด้วยตนเอง');
     }
   };
 

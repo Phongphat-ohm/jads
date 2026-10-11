@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ColumnMapping } from '../../lib/excelParser';
 import {
   Search,
@@ -43,6 +43,7 @@ export function DataTablePreview({
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [focusedRowIndex, setFocusedRowIndex] = useState<number>(-1);
 
   // Determine available case types from rows if case_type is mapped
   const caseTypes = useMemo(() => {
@@ -119,6 +120,40 @@ export function DataTablePreview({
   const endIndex = Math.min(startIndex + pageSize, totalRows);
   const currentRows = sortedRows.slice(startIndex, endIndex);
 
+  // Keyboard navigation on current table page
+  useEffect(() => {
+    const handleTableKeyDown = (e: KeyboardEvent) => {
+      // Do not navigate table if user is typing in search input or any other input/textarea/select
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
+        return;
+      }
+
+      if (currentRows.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setFocusedRowIndex((prev) => (prev < currentRows.length - 1 ? prev + 1 : 0));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setFocusedRowIndex((prev) => (prev > 0 ? prev - 1 : currentRows.length - 1));
+      } else if (e.key === 'Enter') {
+        if (focusedRowIndex >= 0 && focusedRowIndex < currentRows.length) {
+          e.preventDefault();
+          onSelectRow(currentRows[focusedRowIndex]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleTableKeyDown);
+    return () => window.removeEventListener('keydown', handleTableKeyDown);
+  }, [currentRows, focusedRowIndex, onSelectRow]);
+
+  // Reset focus when rows or page changes
+  useEffect(() => {
+    setFocusedRowIndex(-1);
+  }, [page, pageSize, searchTerm, caseTypeFilter]);
+
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-purple-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col space-y-0 transition-colors">
       {/* Table Toolbar & Filters */}
@@ -147,7 +182,7 @@ export function DataTablePreview({
           {/* Quick instructions badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-            <span>คลิกปุ่ม &quot;เลือกคดี&quot; ที่แถวเพื่อเริ่มทำงาน</span>
+            <span>คลิกแถว หรือใช้ปุ่ม ↑ / ↓ และกด Enter เพื่อเลือกคดี</span>
           </div>
         </div>
 
@@ -276,16 +311,23 @@ export function DataTablePreview({
               currentRows.map((row, idx) => {
                 const rowIndex = startIndex + idx + 1;
                 const isSelected = selectedRow && selectedRow === row;
+                const isFocused = focusedRowIndex === idx;
 
                 return (
                   <tr
                     key={rowIndex}
-                    className={`transition-colors hover:bg-purple-50/60 dark:hover:bg-purple-950/30 ${
-                      isSelected
+                    onClick={() => {
+                      setFocusedRowIndex(idx);
+                      onSelectRow(row);
+                    }}
+                    className={`transition-colors cursor-pointer ${
+                      isFocused
+                        ? 'bg-purple-100/90 dark:bg-purple-900/50 ring-2 ring-inset ring-purple-600'
+                        : isSelected
                         ? 'bg-purple-100/70 dark:bg-purple-950/60 font-semibold'
                         : idx % 2 === 1
-                        ? 'bg-slate-50/40 dark:bg-slate-800/30'
-                        : 'bg-white dark:bg-slate-900'
+                        ? 'bg-slate-50/40 dark:bg-slate-800/30 hover:bg-purple-50/60 dark:hover:bg-purple-950/30'
+                        : 'bg-white dark:bg-slate-900 hover:bg-purple-50/60 dark:hover:bg-purple-950/30'
                     }`}
                   >
                     <td className="py-3 px-3 text-center text-slate-400 dark:text-slate-500 font-mono text-[11px]">
@@ -294,10 +336,16 @@ export function DataTablePreview({
                     <td className="py-3 px-3 text-center sticky left-0 bg-inherit z-10 border-r border-slate-100 dark:border-slate-800">
                       <button
                         type="button"
-                        onClick={() => onSelectRow(row)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFocusedRowIndex(idx);
+                          onSelectRow(row);
+                        }}
                         className={`inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer ${
                           isSelected
                             ? 'bg-purple-900 dark:bg-purple-950 text-white ring-2 ring-purple-600'
+                            : isFocused
+                            ? 'bg-purple-800 text-white shadow-sm'
                             : 'bg-purple-700 hover:bg-purple-800 text-white hover:shadow-xs active:scale-95'
                         }`}
                       >

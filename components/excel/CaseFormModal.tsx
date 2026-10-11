@@ -9,6 +9,7 @@ import {
 } from '../../lib/excelParser';
 import { fetchApi } from '../../lib/api';
 import { showSuccess, showError, showToast } from '../../lib/sweetalert';
+import { APP_CONFIG } from '../../lib/config';
 import {
   X,
   FileText,
@@ -50,7 +51,7 @@ export function CaseFormModal({
   const [formData, setFormData] = useState<CaseFormData>({
     case_black_no: '',
     case_red_no: '',
-    court_name: 'ศาลจังหวัดระยอง',
+    court_name: APP_CONFIG.DEFAULT_COURT,
     date: '5',
     month: 'ตุลาคม',
     year: '2569',
@@ -91,6 +92,17 @@ export function CaseFormModal({
       setSelectedTemplate(templates[0] || 'รายงาน2356.docx');
     }
   }, [templates, selectedTemplate]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   // Extract active positions from signatories or summary
   const currentPositions =
@@ -203,7 +215,12 @@ export function CaseFormModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-purple-100 dark:border-slate-800 overflow-hidden my-8 transition-colors">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="case-modal-title"
+        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-purple-100 dark:border-slate-800 overflow-hidden my-8 transition-colors"
+      >
         {/* Modal Header */}
         <div className="px-6 py-4 bg-gradient-to-r from-purple-800 to-indigo-800 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -211,7 +228,7 @@ export function CaseFormModal({
               <Scale className="w-5 h-5 text-purple-200" />
             </div>
             <div>
-              <h3 className="text-base font-bold">ตรวจสอบและสร้างเอกสารคดี</h3>
+              <h3 id="case-modal-title" className="text-base font-bold">ตรวจสอบและสร้างเอกสารคดี</h3>
               <p className="text-xs text-purple-200">ตรวจสอบข้อมูล JSON ก่อนส่งไปเติมในไฟล์ Word Template</p>
             </div>
           </div>

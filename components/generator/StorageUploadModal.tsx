@@ -64,6 +64,20 @@ export function StorageUploadModal({
     }
   }, [isOpen, file]);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && step !== 'uploading') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, step, onClose]);
+
   if (!isOpen || !file) return null;
 
   const handleConfirm = async () => {
@@ -147,6 +161,9 @@ export function StorageUploadModal({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="เลือกพื้นที่จัดเก็บไฟล์"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={() => {
         if (step !== 'uploading') onClose();

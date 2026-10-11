@@ -187,7 +187,7 @@ export default function SettingsPage() {
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
               การตั้งค่าธีมและการแสดงผล (Theme & Appearance)
             </h3>
-            <p className="text-xs text-slate-400 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               เลือกธีมการแสดงผลที่ต้องการ โดยค่าเริ่มต้นจะเป็นไปตามการตั้งค่าของเครื่องคุณ
             </p>
           </div>
@@ -257,7 +257,7 @@ export default function SettingsPage() {
               <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                 อีเมลและการยืนยันตัวตน (Email Verification & Security)
               </h3>
-              <p className="text-xs text-slate-400 dark:text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 ใช้สำหรับรับรหัส OTP ในการรีเซ็ตรหัสผ่านและการแจ้งเตือนความปลอดภัย
               </p>
             </div>
@@ -273,7 +273,7 @@ export default function SettingsPage() {
 
         <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <span className="text-xs text-slate-400 block mb-1">ที่อยู่อีเมลที่ผูกกับระบบ:</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 block mb-1">ที่อยู่อีเมลที่ผูกกับระบบ:</span>
             {user?.email ? (
               <div className="flex items-center gap-2.5">
                 <span className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono">
@@ -304,7 +304,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">ข้อมูลส่วนตัว</h3>
-                <p className="text-xs text-slate-400 dark:text-slate-400">แก้ไขชื่อ-นามสกุลที่แสดงผล</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">แก้ไขชื่อ-นามสกุลที่แสดงผล</p>
               </div>
             </div>
 
@@ -324,7 +324,7 @@ export default function SettingsPage() {
                     className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all font-mono"
                   />
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                   * ตัวอักษรภาษาอังกฤษ, ตัวเลข, จุด (.), ขีดล่าง (_) หรือขีดกลาง (-) ความยาว 3 - 50 ตัวอักษร
                 </p>
               </div>
@@ -354,7 +354,7 @@ export default function SettingsPage() {
                     className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all"
                   />
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                   * สามารถแก้ไขชื่อศาลได้ตลอดเวลา ระบบจะใช้ชื่อศาลนี้เป็นค่าเริ่มต้นอัตโนมัติในการสร้างเอกสารคดี
                 </p>
               </div>
@@ -395,7 +395,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">เปลี่ยนรหัสผ่าน</h3>
-                <p className="text-xs text-slate-400 dark:text-slate-400">อัปเดตรหัสผ่านใหม่เพื่อความปลอดภัย</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">อัปเดตรหัสผ่านใหม่เพื่อความปลอดภัย</p>
               </div>
             </div>
 

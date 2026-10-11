@@ -19,12 +19,29 @@ export interface User {
   createdAt?: string;
 }
 
+export interface AuthOptions {
+  skipRedirect?: boolean;
+}
+
+export interface AuthResult {
+  success: boolean;
+  token?: string;
+  user?: User;
+}
+
+export interface OAuthResult {
+  success: boolean;
+  isProfileComplete: boolean;
+  token?: string;
+  user?: User;
+}
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
-  register: (username: string, password: string, email?: string, fullName?: string, courtName?: string) => Promise<boolean>;
+  login: (username: string, password: string, options?: AuthOptions) => Promise<AuthResult>;
+  register: (username: string, password: string, email?: string, fullName?: string, courtName?: string, options?: AuthOptions) => Promise<AuthResult>;
   syncOAuth: (oauthData: {
     provider: string;
     providerAccountId: string;
@@ -32,7 +49,7 @@ interface AuthContextType {
     fullName?: string;
     avatarUrl?: string;
     accessToken?: string;
-  }) => Promise<{ success: boolean; isProfileComplete: boolean }>;
+  }, options?: AuthOptions) => Promise<OAuthResult>;
   completeProfile: (fullName: string, courtName: string, password: string) => Promise<boolean>;
   cancelOnboarding: () => Promise<boolean>;
   requestBindEmail: (newEmail: string) => Promise<boolean>;
@@ -43,6 +60,7 @@ interface AuthContextType {
   changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  setDirectAuth: (token: string, user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -83,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string, options?: AuthOptions): Promise<AuthResult> => {
     try {
       const res = await fetchApi('/auth/login', {
         method: 'POST',
@@ -94,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (!res.ok || !data.success) {
         showError('เข้าสู่ระบบไม่สำเร็จ', data.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-        return false;
+        return { success: false };
       }
 
       const receivedToken = data.data.token;
@@ -106,15 +124,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       showToast(`ยินดีต้อนรับ ${receivedUser.fullName || receivedUser.username}`);
       
-      if (receivedUser.isProfileComplete === false) {
-        router.push('/onboarding');
-      } else {
-        router.push('/overview');
+      if (!options?.skipRedirect) {
+        if (receivedUser.isProfileComplete === false) {
+          router.push('/onboarding');
+        } else {
+          router.push('/overview');
+        }
       }
-      return true;
+      return { success: true, token: receivedToken, user: receivedUser };
     } catch (error: any) {
       showError('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', error.message);
-      return false;
+      return { success: false };
     }
   };
 
@@ -123,8 +143,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     email?: string,
     fullName?: string,
-    courtName?: string
-  ): Promise<boolean> => {
+    courtName?: string,
+    options?: AuthOptions
+  ): Promise<AuthResult> => {
     try {
       const res = await fetchApi('/auth/register', {
         method: 'POST',
@@ -135,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (!res.ok || !data.success) {
         showError('ลงทะเบียนไม่สำเร็จ', data.message || 'ข้อมูลไม่ถูกต้องหรือชื่อผู้ใช้ซ้ำ');
-        return false;
+        return { success: false };
       }
 
       const receivedToken = data.data.token;
@@ -146,22 +167,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(receivedUser);
 
       showSuccess('สมัครสมาชิกสำเร็จ', 'เข้าสู่ระบบให้ท่านเรียบร้อยแล้ว');
-      router.push('/overview');
-      return true;
+      if (!options?.skipRedirect) {
+        router.push('/overview');
+      }
+      return { success: true, token: receivedToken, user: receivedUser };
     } catch (error: any) {
       showError('เกิดข้อผิดพลาดในการเชื่อมต่อ', error.message);
-      return false;
+      return { success: false };
     }
   };
 
-  const syncOAuth = async (oauthData: {
-    provider: string;
-    providerAccountId: string;
-    email?: string;
-    fullName?: string;
-    avatarUrl?: string;
-    accessToken?: string;
-  }) => {
+  const syncOAuth = async (
+    oauthData: {
+      provider: string;
+      providerAccountId: string;
+      email?: string;
+      fullName?: string;
+      avatarUrl?: string;
+      accessToken?: string;
+    },
+    options?: AuthOptions
+  ): Promise<OAuthResult> => {
     try {
       const res = await fetchApi('/auth/oauth/sync', {
         method: 'POST',
@@ -182,14 +208,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(receivedUser);
 
       const isComplete = receivedUser.isProfileComplete !== false;
-      if (!isComplete) {
-        router.push('/onboarding');
-      } else {
-        showToast(`ยินดีต้อนรับ ${receivedUser.fullName || receivedUser.username}`);
-        router.push('/overview');
+      if (!options?.skipRedirect) {
+        if (!isComplete) {
+          router.push('/onboarding');
+        } else {
+          showToast(`ยินดีต้อนรับ ${receivedUser.fullName || receivedUser.username}`);
+          router.push('/overview');
+        }
       }
 
-      return { success: true, isProfileComplete: isComplete };
+      return { success: true, isProfileComplete: isComplete, token: receivedToken, user: receivedUser };
     } catch (error: any) {
       showError('เชื่อมต่อระบบ Provider ล้มเหลว', error.message);
       return { success: false, isProfileComplete: true };
@@ -434,6 +462,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const setDirectAuth = (newToken: string, newUser: User) => {
+    localStorage.setItem('jads_token', newToken);
+    setToken(newToken);
+    setUser(newUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -453,6 +487,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         changePassword,
         logout,
         refreshUser,
+        setDirectAuth,
       }}
     >
       {children}

@@ -4,7 +4,7 @@
  */
 export const APP_CONFIG = {
   API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
-  DEFAULT_COURT: process.env.NEXT_PUBLIC_DEFAULT_COURT || 'ศาลจังหวัดระยอง',
+  DEFAULT_COURT: process.env.NEXT_PUBLIC_DEFAULT_COURT || 'ศาลยุติธรรม',
   APP_NAME: 'JADS COURT',
   TOKEN_KEY: 'jads_token',
   USER_KEY: 'jads_user',

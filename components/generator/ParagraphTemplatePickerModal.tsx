@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X, Plus, FileText, Tag, ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
@@ -26,6 +26,17 @@ export function ParagraphTemplatePickerModal({
 }: ParagraphTemplatePickerModalProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   // Extract unique categories
   const categories = useMemo(() => {
@@ -57,7 +68,12 @@ export function ParagraphTemplatePickerModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full border border-purple-100 dark:border-slate-800 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden transition-colors">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="template-modal-title"
+        className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full border border-purple-100 dark:border-slate-800 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden transition-colors"
+      >
         {/* Header */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-purple-50/50 dark:from-slate-900 to-indigo-50/30 dark:to-slate-900">
           <div className="flex items-center gap-3">
@@ -65,7 +81,7 @@ export function ParagraphTemplatePickerModal({
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">เลือกเทมเพลตย่อหน้าส่วนตัว</h3>
+              <h3 id="template-modal-title" className="text-base font-bold text-slate-900 dark:text-slate-100">เลือกเทมเพลตย่อหน้าส่วนตัว</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 เลือกข้อความย่อหน้าที่บันทึกไว้เพื่อนำไปแทรกในเอกสารคดี
               </p>

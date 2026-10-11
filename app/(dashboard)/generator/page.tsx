@@ -56,6 +56,8 @@ import {
   RotateCcw,
   Tag,
   Lock,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 // Preset Attendee Roles
@@ -179,6 +181,9 @@ function GeneratorContent() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingFormat, setGeneratingFormat] = useState<'docx' | 'pdf' | null>(null);
   const [canExportPdf, setCanExportPdf] = useState(false);
+
+  // Collapsible section state for Review tab
+  const [isGeneralInfoCollapsed, setIsGeneralInfoCollapsed] = useState(false);
 
   useEffect(() => {
     document.title = 'สร้างเอกสารคดีความ | JADS Court';
@@ -1149,18 +1154,38 @@ function GeneratorContent() {
 
           {/* Section 1: General Case Fields */}
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-purple-100 dark:border-slate-800 shadow-sm space-y-4">
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
-                <FileText className="w-4 h-4" />
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 flex items-center justify-center">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">1. ข้อมูลทั่วไปของคดี</h4>
+                  {isGeneralInfoCollapsed && (
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      {formData.court_name} • ดำ: {formData.case_black_no || '-'} • แดง: {formData.case_red_no || '-'}
+                    </p>
+                  )}
+                </div>
               </div>
-              <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">1. ข้อมูลทั่วไปของคดี</h4>
+              <button
+                type="button"
+                onClick={() => setIsGeneralInfoCollapsed((prev) => !prev)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/50 dark:hover:bg-purple-900/60 transition-colors cursor-pointer"
+                aria-expanded={!isGeneralInfoCollapsed}
+                aria-label="ย่อหรือขยายข้อมูลทั่วไปของคดี"
+              >
+                <span>{isGeneralInfoCollapsed ? 'แสดงข้อมูล' : 'ย่อเก็บ'}</span>
+                {isGeneralInfoCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  ศาล (court_name)
-                </label>
+            {!isGeneralInfoCollapsed && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    ศาล (court_name)
+                  </label>
                 <input
                   type="text"
                   value={formData.court_name}
@@ -1227,7 +1252,7 @@ function GeneratorContent() {
               </div>
 
               {/* Date Split */}
-              <div className="md:col-span-2 grid grid-cols-3 gap-3 bg-purple-50/40 dark:bg-slate-800/40 p-3 rounded-2xl border border-purple-100 dark:border-slate-800">
+              <div className="md:col-span-2 grid grid-cols-3 gap-3 bg-purple-50/40 dark:bg-slate-850/60 p-3 rounded-2xl border border-purple-100 dark:border-slate-800">
                 <div>
                   <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1 text-center">วันที่</label>
                   <input
@@ -1235,7 +1260,7 @@ function GeneratorContent() {
                     value={formData.date}
                     onChange={(e) => handleFieldChange('date', e.target.value)}
                     placeholder="เช่น 5"
-                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all"
                   />
                 </div>
                 <div>
@@ -1245,7 +1270,7 @@ function GeneratorContent() {
                     value={formData.month}
                     onChange={(e) => handleFieldChange('month', e.target.value)}
                     placeholder="เช่น ตุลาคม"
-                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all"
                   />
                 </div>
                 <div>
@@ -1255,7 +1280,7 @@ function GeneratorContent() {
                     value={formData.year}
                     onChange={(e) => handleFieldChange('year', e.target.value)}
                     placeholder="เช่น 2569"
-                    className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                    className="w-full px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-center font-bold text-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 focus:outline-none transition-all"
                   />
                 </div>
               </div>
@@ -1312,6 +1337,7 @@ function GeneratorContent() {
                 />
               </div>
             </div>
+            )}
           </div>
 
           {/* Section 2: Attendees with Visual DnD Slots */}
@@ -1656,35 +1682,39 @@ function GeneratorContent() {
                         type="button"
                         disabled={index === 0}
                         onClick={() => handleMoveParagraph(index, index - 1)}
-                        className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30"
+                        className="p-2 min-w-[34px] min-h-[34px] flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-colors disabled:opacity-30 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-purple-500"
                         title="เลื่อนขึ้น"
+                        aria-label="เลื่อนขึ้น"
                       >
-                        <ArrowUp className="w-3.5 h-3.5" />
+                        <ArrowUp className="w-4 h-4" />
                       </button>
                       <button
                         type="button"
                         disabled={index === paragraphsList.length - 1}
                         onClick={() => handleMoveParagraph(index, index + 1)}
-                        className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-30"
+                        className="p-2 min-w-[34px] min-h-[34px] flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-colors disabled:opacity-30 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-purple-500"
                         title="เลื่อนลง"
+                        aria-label="เลื่อนลง"
                       >
-                        <ArrowDown className="w-3.5 h-3.5" />
+                        <ArrowDown className="w-4 h-4" />
                       </button>
                       <button
                         type="button"
                         onClick={() => handleSaveParagraphAsTemplate(para)}
-                        className="p-1.5 text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-950/50 rounded-lg transition-colors"
+                        className="p-2 min-w-[34px] min-h-[34px] flex items-center justify-center text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-950/50 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
                         title="บันทึกข้อความนี้เป็นเทมเพลตส่วนตัว"
+                        aria-label="บันทึกข้อความนี้เป็นเทมเพลตส่วนตัว"
                       >
-                        <BookmarkPlus className="w-3.5 h-3.5" />
+                        <BookmarkPlus className="w-4 h-4" />
                       </button>
                       <button
                         type="button"
                         onClick={() => handleRemoveParagraph(index)}
-                        className="p-1.5 text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors"
+                        className="p-2 min-w-[34px] min-h-[34px] flex items-center justify-center text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-red-400"
                         title="ลบย่อหน้านี้"
+                        aria-label="ลบย่อหน้านี้"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

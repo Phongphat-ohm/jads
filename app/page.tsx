@@ -112,7 +112,7 @@ export default function LandingPage() {
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
               แปลงข้อมูลจากไฟล์ตารางเวรนัดคดีความ (Excel) สู่รายงานกระบวนพิจารณาและคำสั่งศาลในไม่กี่วินาที
               จัดรูปแบบลายมือชื่อคู่ความติดกันตามระเบียบศาล พร้อมระบบจัดการองค์คณะผู้พิพากษาและคลังเทมเพลตส่วนตัว
             </p>
@@ -153,12 +153,12 @@ export default function LandingPage() {
                 <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                   ติดตั้งโปรแกรม JADS บนคอมพิวเตอร์ของคุณ
                 </h2>
-                <p className="text-slate-400 text-sm leading-relaxed max-w-xl">
+                <p className="text-slate-300 text-sm leading-relaxed max-w-xl">
                   โปรแกรมทำงานแบบเต็มหน้าจอ (Fullscreen) ไร้แถบเมนูกวนใจ เชื่อมต่อกับระบบคลาวด์ศาล
                   ออกแบบเป็นพิเศษสำหรับการใช้งานบนคอมพิวเตอร์บัลลังก์และโต๊ะทำงานธุรการศาลโดยเฉพาะ
                 </p>
 
-                <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-400">
+                <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-300">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>รองรับ Windows 10 &amp; 11 (64-bit)</span>
@@ -191,11 +191,11 @@ export default function LandingPage() {
                 <a
                   href={`${APP_CONFIG.API_BASE_URL}/downloads/latest?type=portable`}
                   download
-                  className="text-[11px] text-purple-400 hover:text-purple-300 underline mt-2 text-center lg:text-right"
+                  className="text-[11px] text-purple-300 hover:text-purple-200 underline mt-2 text-center lg:text-right"
                 >
                   หรือดาวน์โหลดเวอร์ชันพกพาไม่ต้องติดตั้ง (JADS-Portable v{latestVersion})
                 </a>
-                <p className="text-[11px] text-slate-500 mt-1 text-center lg:text-right">
+                <p className="text-[11px] text-slate-400 mt-1 text-center lg:text-right">
                   ดาวน์โหลดโดยตรงจากเซิร์ฟเวอร์ศาล • ปลอดภัย ไร้มัลแวร์
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default function LandingPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             ฟังก์ชันการทำงานที่ครอบคลุมงานศาล
           </h2>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-300 text-sm">
             พัฒนาจากความต้องการจริงของงานธุรการศาล ลดขั้นตอนที่ซ้ำซ้อน เพิ่มความรวดเร็วและความถูกต้อง 100%
           </p>
         </div>
@@ -222,7 +222,7 @@ export default function LandingPage() {
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-white">ดึงข้อมูลจาก Excel อัตโนมัติ</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               เพียงเลือกหรือลากวางไฟล์ตารางเวรนัดคดี ระบบจะตรวจจับเลขคดีดำ แดง ฐานความผิด โจทก์ จำเลย และผู้พิพากษาให้อัตโนมัติ
             </p>
           </div>
@@ -233,7 +233,7 @@ export default function LandingPage() {
               <Users className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-white">จัดการคู่ผู้พิพากษาประจำบัลลังก์</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               บันทึกคู่ผู้พิพากษาประจำบัลลังก์ไว้ล่วงหน้า สลับเลือกใช้ได้ทันที ข้อมูลแยกตามผู้ใช้งานแบบเข้มงวด
             </p>
           </div>
@@ -244,7 +244,7 @@ export default function LandingPage() {
               <FileText className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-white">คลังเทมเพลตย่อหน้าส่วนบุคคล</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               บันทึกข้อความกระบวนพิจารณาที่ใช้บ่อย จัดหมวดหมู่ และกดแทรกเข้าสู่เอกสารได้ในคลิกเดียว
             </p>
           </div>
@@ -255,7 +255,7 @@ export default function LandingPage() {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-white">ความปลอดภัยระดับสถาบันศาล</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               เข้ารหัสข้อมูลเส้นทางไฟล์ด้วย AES-256 บันทึก Audit Log ทุกกิจกรรม ป้องกันการเข้าถึงโดยไม่ได้รับอนุญาต
             </p>
           </div>
@@ -275,7 +275,7 @@ export default function LandingPage() {
                 1
               </div>
               <h4 className="text-base font-semibold text-white">เลือกหรือวางไฟล์ Excel</h4>
-              <p className="text-xs text-slate-400 max-w-xs mx-auto">
+              <p className="text-xs text-slate-300 max-w-xs mx-auto">
                 รองรับไฟล์ตารางนัดทุกรูปแบบจากระบบของศาล ดึงข้อมูลขึ้นมาแสดงผลเป็นตารางทันที
               </p>
             </div>
@@ -285,7 +285,7 @@ export default function LandingPage() {
                 2
               </div>
               <h4 className="text-base font-semibold text-white">เลือกคดีและตรวจทานเนื้อหา</h4>
-              <p className="text-xs text-slate-400 max-w-xs mx-auto">
+              <p className="text-xs text-slate-300 max-w-xs mx-auto">
                 ปรับปรุงข้อความกระบวนพิจารณา จัดลำดับผู้มาศาล และตรวจสอบรายชื่อคู่ผู้พิพากษา
               </p>
             </div>
@@ -295,7 +295,7 @@ export default function LandingPage() {
                 3
               </div>
               <h4 className="text-base font-semibold text-white">ดาวน์โหลด Word หรือ PDF</h4>
-              <p className="text-xs text-slate-400 max-w-xs mx-auto">
+              <p className="text-xs text-slate-300 max-w-xs mx-auto">
                 สร้างเอกสารที่มีการจัดย่อหน้าและลายมือชื่ออย่างถูกต้อง พร้อมนำไปใช้งานหรือจัดพิมพ์ทันที
               </p>
             </div>

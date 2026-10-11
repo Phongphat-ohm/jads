@@ -17,6 +17,7 @@ export default function OnboardingPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     document.title = 'กรอกข้อมูลเริ่มต้นเพื่อเปิดใช้งาน | JADS Court';
@@ -34,24 +35,31 @@ export default function OnboardingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors: Record<string, string> = {};
 
     if (!courtName.trim()) {
-      showError('ข้อมูลไม่ครบถ้วน', 'กรุณาระบุชื่อศาลหรือสังกัดที่ท่านปฏิบัติงาน');
-      return;
+      errors.courtName = 'กรุณาระบุชื่อศาลหรือสังกัดที่ท่านปฏิบัติงาน';
     }
     if (!fullName.trim()) {
-      showError('ข้อมูลไม่ครบถ้วน', 'กรุณาระบุชื่อ-นามสกุลจริง');
-      return;
+      errors.fullName = 'กรุณาระบุชื่อ-นามสกุลจริง';
     }
-    if (password.length < 8) {
-      showError('รหัสผ่านสั้นเกินไป', 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร');
-      return;
+    if (!password) {
+      errors.password = 'กรุณากำหนดรหัสผ่านสำหรับระบบ';
+    } else if (password.length < 8) {
+      errors.password = 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร';
     }
-    if (password !== confirmPassword) {
-      showError('รหัสผ่านไม่ตรงกัน', 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน');
+    if (!confirmPassword) {
+      errors.confirmPassword = 'กรุณายืนยันรหัสผ่านอีกครั้ง';
+    } else if (password !== confirmPassword) {
+      errors.confirmPassword = 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
 
+    setFieldErrors({});
     setIsSubmitting(true);
     try {
       await completeProfile(fullName, courtName, password);
@@ -130,14 +138,27 @@ export default function OnboardingPage() {
                 type="text"
                 required
                 value={courtName}
-                onChange={(e) => setCourtName(e.target.value)}
+                onChange={(e) => {
+                  setCourtName(e.target.value);
+                  if (fieldErrors.courtName) setFieldErrors((prev) => ({ ...prev, courtName: '' }));
+                }}
                 placeholder="เช่น ศาลแขวงดอนเมือง, ศาลจังหวัดนนทบุรี"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
+                className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-800 transition-all ${
+                  fieldErrors.courtName
+                    ? 'border-rose-500 focus:ring-rose-500 focus:border-rose-500'
+                    : 'border-slate-200 dark:border-slate-700 focus:ring-purple-600'
+                }`}
               />
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              * ข้อมูลนี้จะถูกนำไปใช้เป็นชื่อศาลเริ่มต้นในส่วนหัวและท้ายเอกสารคดี
-            </p>
+            {fieldErrors.courtName ? (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">
+                {fieldErrors.courtName}
+              </p>
+            ) : (
+              <p className="text-[11px] text-slate-400 mt-1">
+                * ข้อมูลนี้จะถูกนำไปใช้เป็นชื่อศาลเริ่มต้นในส่วนหัวและท้ายเอกสารคดี
+              </p>
+            )}
           </div>
 
           <div>
@@ -150,11 +171,23 @@ export default function OnboardingPage() {
                 type="text"
                 required
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  if (fieldErrors.fullName) setFieldErrors((prev) => ({ ...prev, fullName: '' }));
+                }}
                 placeholder="เช่น นาย สมชาย รักชาติ"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
+                className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-800 transition-all ${
+                  fieldErrors.fullName
+                    ? 'border-rose-500 focus:ring-rose-500 focus:border-rose-500'
+                    : 'border-slate-200 dark:border-slate-700 focus:ring-purple-600'
+                }`}
               />
             </div>
+            {fieldErrors.fullName && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">
+                {fieldErrors.fullName}
+              </p>
+            )}
           </div>
 
           <div>
@@ -167,14 +200,27 @@ export default function OnboardingPage() {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: '' }));
+                }}
                 placeholder="ความยาวอย่างน้อย 8 ตัวอักษร"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
+                className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-800 transition-all ${
+                  fieldErrors.password
+                    ? 'border-rose-500 focus:ring-rose-500 focus:border-rose-500'
+                    : 'border-slate-200 dark:border-slate-700 focus:ring-purple-600'
+                }`}
               />
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              * เพื่อให้ท่านสามารถใช้ล็อกอินด้วย Username / Password แบบปกติได้เช่นกัน
-            </p>
+            {fieldErrors.password ? (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">
+                {fieldErrors.password}
+              </p>
+            ) : (
+              <p className="text-[11px] text-slate-400 mt-1">
+                * เพื่อให้ท่านสามารถใช้ล็อกอินด้วย Username / Password แบบปกติได้เช่นกัน
+              </p>
+            )}
           </div>
 
           <div>
@@ -187,11 +233,23 @@ export default function OnboardingPage() {
                 type="password"
                 required
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (fieldErrors.confirmPassword) setFieldErrors((prev) => ({ ...prev, confirmPassword: '' }));
+                }}
                 placeholder="กรอกรหัสผ่านซ้ำอีกครั้ง"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-white dark:focus:bg-slate-800 transition-all"
+                className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-800 transition-all ${
+                  fieldErrors.confirmPassword
+                    ? 'border-rose-500 focus:ring-rose-500 focus:border-rose-500'
+                    : 'border-slate-200 dark:border-slate-700 focus:ring-purple-600'
+                }`}
               />
             </div>
+            {fieldErrors.confirmPassword && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">
+                {fieldErrors.confirmPassword}
+              </p>
+            )}
           </div>
 
           <button

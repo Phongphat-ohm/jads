@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-kanit), 'Kanit', sans-serif;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #f8fafc;
   --foreground: #1e1b4b;
-  --primary-purple: #6d28d9;
+  --primary-purple: #7e22ce;
   --deep-purple: #4c1d95;
   --accent-purple: #7c3aed;
   --light-purple: #f5f3ff;
@@ -18,6 +22,11 @@
   --deep-purple: #7e22ce;
   --accent-purple: #a855f7;
   --light-purple: #1e1b4b;
+}
+
+:focus-visible {
+  outline: 2px solid #9333ea;
+  outline-offset: 2px;
 }
 
 body {

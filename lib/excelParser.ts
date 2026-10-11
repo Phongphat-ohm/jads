@@ -351,7 +351,7 @@ export function convertRowToFormData(
   const caseType = resolveCaseType(rawTypeVal, rawBlackNo);
   const rawCourt = mapping.court_name && row[mapping.court_name] ? row[mapping.court_name] : defaultCourt;
   const rawPurpose = mapping.hearing_purpose && row[mapping.hearing_purpose] ? row[mapping.hearing_purpose] : 'พิจารณา';
-  const rawJudge = mapping.judge_name && row[mapping.judge_name] ? row[mapping.judge_name] : 'นาย สมศักดิ์ ยุติธรรม';
+  const rawJudge = mapping.judge_name && row[mapping.judge_name] ? row[mapping.judge_name] : '';
 
   // Format time properly (e.g., "9" or "9.00" -> "09.00")
   let formattedTime = String(rawTime || '').trim();

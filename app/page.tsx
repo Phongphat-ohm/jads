@@ -83,7 +83,7 @@ export default function LandingPage() {
                   เข้าสู่ระบบ
                 </Link>
                 <Link
-                  href="/login"
+                  href="/login?tab=register"
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-purple-700 hover:bg-purple-600 text-white text-xs font-semibold rounded-xl shadow-md shadow-purple-900/40 transition-all hover:scale-[1.02]"
                 >
                   <span>เริ่มต้นใช้งาน</span>

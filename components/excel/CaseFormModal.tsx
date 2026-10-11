@@ -214,11 +214,15 @@ export function CaseFormModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto"
+    >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="case-modal-title"
+        onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-purple-100 dark:border-slate-800 overflow-hidden my-8 transition-colors"
       >
         {/* Modal Header */}
@@ -365,7 +369,7 @@ export function CaseFormModal({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 โจทก์ / ผู้ร้อง (plaintiff_name)
               </label>
               <input
@@ -373,12 +377,12 @@ export function CaseFormModal({
                 value={formData.plaintiff_name}
                 onChange={(e) => handleChange('plaintiff_name', e.target.value)}
                 placeholder="เช่น นาย ก"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 จำเลย (defendant_name)
               </label>
               <textarea
@@ -386,12 +390,12 @@ export function CaseFormModal({
                 value={formData.defendant_name}
                 onChange={(e) => handleChange('defendant_name', e.target.value)}
                 placeholder="เช่น บริษัท ก จำกัด ที่ 1 กับพวกรวม 3 คน"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 นัดมาทำไม (hearing_purpose)
               </label>
               <input
@@ -399,34 +403,34 @@ export function CaseFormModal({
                 value={formData.hearing_purpose || ''}
                 onChange={(e) => handleChange('hearing_purpose', e.target.value)}
                 placeholder="เช่น พิจารณา หรือ ไกล่เกลี่ย"
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none"
+                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-purple-600 focus:outline-none"
               />
             </div>
 
             {/* ผู้มาศาล และ ผู้ลงชื่อท้ายเอกสาร (กรอกทีเดียวเติมได้ 2 จุด) */}
-            <div className="md:col-span-2 bg-purple-50/60 border border-purple-200 rounded-2xl p-4.5 space-y-3.5 shadow-sm">
+            <div className="md:col-span-2 bg-purple-50/60 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 rounded-2xl p-4.5 space-y-3.5 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-purple-700 text-white flex items-center justify-center shadow-sm">
                     <Users className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-purple-950">
+                    <h4 className="text-sm font-bold text-purple-950 dark:text-purple-200">
                       ผู้มาศาล และ ผู้ลงชื่อท้ายเอกสาร (กรอกทีเดียวเติมได้ 2 ช่อง)
                     </h4>
-                    <p className="text-xs text-purple-700/80">
+                    <p className="text-xs text-purple-700/80 dark:text-purple-300/80">
                       กรอกหรือเลือกตำแหน่งด้านล่าง ระบบจะจัดรูปแบบสรุปในเนื้อหา และสร้างช่องลงชื่อท้ายเอกสารให้อัตโนมัติ
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] font-bold bg-purple-200/80 text-purple-900 px-2.5 py-0.5 rounded-full border border-purple-300">
+                <span className="text-[11px] font-bold bg-purple-200/80 dark:bg-purple-900/60 text-purple-900 dark:text-purple-200 px-2.5 py-0.5 rounded-full border border-purple-300 dark:border-purple-700">
                   {currentPositions.length} ตำแหน่ง
                 </span>
               </div>
 
               {/* Preset buttons */}
               <div>
-                <p className="text-xs font-semibold text-slate-700 mb-1.5">คลิกเพื่อเลือกตำแหน่งมาตรฐานด่วน:</p>
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">คลิกเพื่อเลือกตำแหน่งมาตรฐานด่วน:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {PRESET_ROLES.map((role) => {
                     const isSelected = currentPositions.includes(role);
@@ -613,14 +617,6 @@ export function CaseFormModal({
               </p>
             </div>
           </div>
-
-          {/* JSON Live Preview */}
-          <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-4 text-slate-300 border border-slate-800 font-mono text-xs">
-            <p className="text-purple-400 font-semibold mb-1">📦 ข้อมูล JSON ที่จะถูกนำไปกรอกลงใน Word (.docx):</p>
-            <pre className="overflow-x-auto text-[11px] leading-relaxed">
-              {JSON.stringify(formData, null, 2)}
-            </pre>
-          </div>
         </div>
 
         {/* Modal Footer Actions */}
@@ -649,7 +645,7 @@ export function CaseFormModal({
               type="button"
               disabled={isGenerating}
               onClick={handleGenerate}
-              className="px-6 py-2.5 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white text-sm font-bold rounded-xl shadow-lg shadow-purple-700/30 flex items-center gap-2 transition-all disabled:opacity-60"
+              className="px-6 py-2.5 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white text-sm font-bold rounded-xl shadow-lg shadow-purple-700/30 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isGenerating ? (
                 <>

@@ -210,10 +210,30 @@ function GeneratorContent() {
           court_name: prev.court_name && prev.court_name !== 'ศาลจังหวัดระยอง' ? prev.court_name : user.courtName || prev.court_name,
         }));
       }
+
+      // Restore selected case row from sessionStorage
+      const storedCaseRow = sessionStorage.getItem('jads_selected_case_row');
+      if (storedCaseRow) {
+        const parsedCaseRow = JSON.parse(storedCaseRow);
+        if (parsedCaseRow.selectedRow) setSelectedRow(parsedCaseRow.selectedRow);
+        if (parsedCaseRow.fileName) setFileName(parsedCaseRow.fileName);
+        if (parsedCaseRow.headers) setHeaders(parsedCaseRow.headers);
+      }
     } catch (e) {
       console.error('Failed to load session case:', e);
     }
   }, [user]);
+
+  // Keep sessionStorage in sync whenever formData has a case loaded/edited
+  useEffect(() => {
+    if (formData.case_black_no) {
+      try {
+        sessionStorage.setItem('jads_review_case', JSON.stringify(formData));
+      } catch (e) {
+        console.error('Failed to sync formData to sessionStorage:', e);
+      }
+    }
+  }, [formData]);
 
   const fetchInitialData = async () => {
     try {
@@ -348,6 +368,14 @@ function GeneratorContent() {
 
     try {
       sessionStorage.setItem('jads_review_case', JSON.stringify(converted));
+      sessionStorage.setItem(
+        'jads_selected_case_row',
+        JSON.stringify({
+          selectedRow: row,
+          fileName,
+          headers,
+        })
+      );
     } catch (e) {
       console.error('Failed to save selected case in sessionStorage:', e);
     }
@@ -652,8 +680,15 @@ function GeneratorContent() {
   // ----------------------------------------------------
   // Strict Linear Step Progression Guards
   // ----------------------------------------------------
-  const isStep1Done = rows.length > 0 && !!fileName;
-  const isStep2Done = isStep1Done && !!selectedRow;
+  // Check if session has a saved case or selected row
+  const hasSavedCase = Boolean(
+    selectedRow ||
+    (typeof window !== 'undefined' &&
+      (sessionStorage.getItem('jads_selected_case_row') || sessionStorage.getItem('jads_review_case')))
+  );
+
+  const isStep1Done = (rows.length > 0 && !!fileName) || hasSavedCase;
+  const isStep2Done = isStep1Done && (!!selectedRow || hasSavedCase);
   const isStep3Done = isStep2Done && Boolean(formData.case_black_no && formData.case_black_no.trim().length > 0);
 
   // Tab change handler strictly enforcing one step at a time
@@ -675,17 +710,55 @@ function GeneratorContent() {
 
   // Ensure activeTab never jumps ahead of completed steps
   useEffect(() => {
-    if (activeTab === 'download' && !isStep3Done) {
-      if (isStep2Done) setActiveTab('review');
-      else if (isStep1Done) setActiveTab('table');
+    let hasSaved = !!selectedRow;
+    if (!hasSaved && typeof window !== 'undefined') {
+      try {
+        const storedRow = sessionStorage.getItem('jads_selected_case_row');
+        const storedCase = sessionStorage.getItem('jads_review_case');
+        if (storedRow || storedCase) {
+          hasSaved = true;
+          if (storedRow && !selectedRow) {
+            const parsed = JSON.parse(storedRow);
+            if (parsed.selectedRow) setSelectedRow(parsed.selectedRow);
+            if (parsed.fileName && !fileName) setFileName(parsed.fileName);
+            if (parsed.headers && headers.length === 0) setHeaders(parsed.headers);
+          }
+          if (storedCase && !formData.case_black_no) {
+            const parsedCase = JSON.parse(storedCase);
+            setFormData(parsedCase);
+          }
+        }
+      } catch (e) {
+        console.error('Session storage guard check failed:', e);
+      }
+    }
+
+    const effectiveStep1Done = isStep1Done || hasSaved;
+    const effectiveStep2Done = isStep2Done || hasSaved;
+    const effectiveStep3Done = isStep3Done || (hasSaved && Boolean(formData.case_black_no && formData.case_black_no.trim().length > 0));
+
+    if (activeTab === 'download' && !effectiveStep3Done) {
+      if (effectiveStep2Done) setActiveTab('review');
+      else if (effectiveStep1Done) setActiveTab('table');
       else setActiveTab('upload');
-    } else if (activeTab === 'review' && !isStep2Done) {
-      if (isStep1Done) setActiveTab('table');
+    } else if (activeTab === 'review' && !effectiveStep2Done) {
+      if (effectiveStep1Done) setActiveTab('table');
       else setActiveTab('upload');
-    } else if (activeTab === 'table' && !isStep1Done) {
+    } else if (activeTab === 'table' && !effectiveStep1Done) {
       setActiveTab('upload');
     }
-  }, [activeTab, isStep1Done, isStep2Done, isStep3Done]);
+  }, [activeTab, isStep1Done, isStep2Done, isStep3Done, selectedRow, formData.case_black_no, fileName, headers.length]);
+
+  // Keep URL query param synced with activeTab so F5 or reload preserves the current tab
+  useEffect(() => {
+    if (typeof window !== 'undefined' && activeTab) {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('tab') !== activeTab) {
+        url.searchParams.set('tab', activeTab);
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+  }, [activeTab]);
 
   // Tabs Configuration
   const tabs = [
@@ -861,7 +934,7 @@ function GeneratorContent() {
               <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
-                  className="px-6 py-2.5 bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 group-hover:bg-purple-800 transition-colors pointer-events-none"
+                  className="px-6 py-2.5 bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-700/20 group-hover:bg-purple-800 transition-colors"
                 >
                   เลือกไฟล์จากเครื่อง
                 </button>
@@ -1054,7 +1127,7 @@ function GeneratorContent() {
                   <span>ย้อนกลับ: ตัวเลือกไฟล์</span>
                 </button>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                   {!isStep2Done && (
                     <span className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800 font-medium">
                       ⚠️ กรุณาคลิกปุ่ม &quot;เลือกข้อมูลคดีนี้&quot; ในตารางก่อนเพื่อดำเนินการต่อ
@@ -1156,7 +1229,7 @@ function GeneratorContent() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <span
-                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 truncate hover:whitespace-normal transition-all"
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 break-words hover:whitespace-normal transition-all"
                     title={formData.plaintiff_name || 'ยังไม่ได้ระบุชื่อโจทก์'}
                   >
                     {formData.plaintiff_name ? (
@@ -1180,7 +1253,7 @@ function GeneratorContent() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <span
-                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 truncate hover:whitespace-normal transition-all"
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 break-words hover:whitespace-normal transition-all"
                     title={formData.defendant_name || 'ยังไม่ได้ระบุชื่อจำเลย'}
                   >
                     {formData.defendant_name ? (
@@ -1855,50 +1928,50 @@ function GeneratorContent() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-gradient-to-br from-purple-50/50 to-indigo-50/30 dark:from-slate-850 dark:to-slate-800/50 border border-purple-100 dark:border-slate-800">
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">หมายเลขคดีดำ</span>
-                <span className="text-sm font-extrabold text-purple-900 dark:text-purple-300 block truncate">
+                <span className="text-sm font-extrabold text-purple-900 dark:text-purple-300 block break-words">
                   {formData.case_black_no || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">หมายเลขคดีแดง</span>
-                <span className="text-sm font-extrabold text-red-800 dark:text-red-400 block truncate">
+                <span className="text-sm font-extrabold text-red-800 dark:text-red-400 block break-words">
                   {formData.case_red_no || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">ศาลที่สังกัด</span>
-                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block truncate">
+                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block break-words">
                   {formData.court_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">วันที่นัดพิจารณา</span>
-                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block truncate">
+                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block break-words">
                   {formData.date} {formData.month} {formData.year}
                 </span>
               </div>
 
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">โจทก์</span>
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block truncate">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block break-words">
                   {formData.plaintiff_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">จำเลย</span>
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block truncate">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block break-words">
                   {formData.defendant_name || '-'}
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">ผู้ลงชื่อท้ายเอกสาร</span>
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block truncate">
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block break-words">
                   {currentPositions.length} ตำแหน่ง
                 </span>
               </div>
               <div>
                 <span className="text-[11px] font-bold text-slate-400 block uppercase">จำนวนย่อหน้า</span>
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block truncate">
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 block break-words">
                   {paragraphsList.length} ย่อหน้า
                 </span>
               </div>

@@ -134,6 +134,22 @@ export default function AdminFeedbacksPage() {
   };
 
   useEffect(() => {
+    document.title = 'จัดการข้อเสนอแนะและปัญหา | JADS Admin';
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedFeedback) {
+        setSelectedFeedback(null);
+      }
+    };
+    if (selectedFeedback) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [selectedFeedback]);
+
+  useEffect(() => {
     fetchFeedbacks();
   }, [page, statusFilter, typeFilter]);
 
@@ -415,8 +431,14 @@ export default function AdminFeedbacksPage() {
 
       {/* Detail & Action Modal */}
       {selectedFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setSelectedFeedback(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-start justify-between pb-3 border-b border-slate-800">
               <div>

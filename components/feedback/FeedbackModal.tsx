@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { apiClient } from '../../lib/api';
 import { showToast, showSuccess, showError } from '../../lib/sweetalert';
@@ -64,6 +64,17 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -166,8 +177,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl max-w-lg w-full border border-purple-100 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full border border-purple-100 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+      >
         {/* Header */}
         <div className="px-6 py-5 bg-gradient-to-r from-purple-800 to-indigo-800 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -191,8 +208,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto">
           {/* Star Rating */}
-          <div className="text-center pb-2 border-b border-slate-100">
-            <label className="block text-xs font-semibold text-slate-600 mb-2">
+          <div className="text-center pb-2 border-b border-slate-100 dark:border-slate-800">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">
               ความพึงพอใจในการใช้งานระบบโดยรวม
             </label>
             <div className="flex items-center justify-center gap-1.5">
@@ -205,21 +222,21 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     onClick={() => setRating(star)}
                     onMouseEnter={() => setHoverRating(star)}
                     onMouseLeave={() => setHoverRating(0)}
-                    className="p-1 transition-transform hover:scale-125 focus:outline-none"
+                    className="p-1 transition-transform hover:scale-125 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg"
                     aria-label={`ให้คะแนน ${star} ดาว`}
                   >
                     <Star
                       className={`w-7 h-7 transition-colors ${
                         isFilled
                           ? 'text-amber-400 fill-amber-400 drop-shadow-sm'
-                          : 'text-slate-300'
+                          : 'text-slate-300 dark:text-slate-600'
                       }`}
                     />
                   </button>
                 );
               })}
             </div>
-            <span className="text-[11px] text-slate-400 mt-1 block">
+            <span className="text-[11px] text-slate-400 dark:text-slate-400 mt-1 block">
               {rating === 5 && 'ยอดเยี่ยมมาก ⭐⭐⭐⭐⭐'}
               {rating === 4 && 'ดีมาก ⭐⭐⭐⭐'}
               {rating === 3 && 'พอใช้ ⭐⭐⭐'}
@@ -230,7 +247,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
           {/* Feedback Type Grid */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-2">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-2">
               หมวดหมู่ความคิดเห็น
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -244,11 +261,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     onClick={() => setType(t.id)}
                     className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-xs font-medium text-left transition-all ${
                       isSelected
-                        ? 'border-purple-600 bg-purple-50/80 text-purple-900 shadow-sm ring-1 ring-purple-600'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-purple-200 hover:bg-slate-50'
+                        ? 'border-purple-600 bg-purple-50/80 dark:bg-purple-950/40 text-purple-900 dark:text-purple-200 shadow-sm ring-1 ring-purple-600'
+                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-purple-200 dark:hover:border-purple-800 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-purple-700' : 'text-slate-400'}`} />
+                    <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-purple-700 dark:text-purple-300' : 'text-slate-400 dark:text-slate-500'}`} />
                     <span className="truncate">{t.label}</span>
                   </button>
                 );
@@ -258,7 +275,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
           {/* Title Input */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
               หัวข้อความคิดเห็น <span className="text-rose-500">*</span>
             </label>
             <input
@@ -266,7 +283,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="เช่น ตัวหนังสือในไฟล์ Word ทับกัน, อยากให้เพิ่มฟังก์ชันค้นหาคดี"
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all"
               maxLength={150}
               required
             />
@@ -274,7 +291,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
           {/* Description Textarea */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
               รายละเอียดและคำอธิบาย <span className="text-rose-500">*</span>
             </label>
             <textarea
@@ -282,10 +299,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               placeholder="อธิบายสิ่งที่คุณพบ ปัญหา หรือข้อเสนอแนะเพิ่มเติมอย่างละเอียด..."
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all resize-none"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all resize-none"
               required
             />
-            <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
+            <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-400 mt-1">
               <span>หน้าปัจจุบัน: {pathname || '/'}</span>
               <span>{description.length}/1000 ตัวอักษร</span>
             </div>
@@ -294,10 +311,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           {/* Contact Info (Optional) */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                 ข้อมูลการติดต่อกลับ
               </label>
-              <span className="text-[10px] text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-[10px] text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 px-2 py-0.5 rounded-full font-medium border border-purple-200/50 dark:border-purple-800/50">
                 ไม่บังคับ (Optional)
               </span>
             </div>
@@ -306,10 +323,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               value={contactInfo}
               onChange={(e) => setContactInfo(e.target.value)}
               placeholder="เบอร์โทรศัพท์, อีเมล หรือ Line ID เพื่อให้เจ้าหน้าที่ติดต่อกลับ..."
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all"
               maxLength={100}
             />
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[11px] text-slate-400 dark:text-slate-400 mt-1">
               ระบุหากคุณยินดีให้ทีมงานติดต่อสอบถามรายละเอียดเพิ่มเติมหรือแจ้งผลการดำเนินการ
             </p>
           </div>
@@ -317,20 +334,20 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           {/* Attachment File / Screenshot (Optional) */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-                <Paperclip className="w-3.5 h-3.5 text-purple-600" />
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                <Paperclip className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 <span>แนบภาพหน้าจอหรือไฟล์หลักฐาน (ภาพ/PDF/เอกสาร)</span>
               </label>
-              <span className="text-[10px] text-slate-400">ไม่เกิน 10MB</span>
+              <span className="text-[10px] text-slate-400 dark:text-slate-400">ไม่เกิน 10MB</span>
             </div>
 
             {!attachedFile ? (
-              <label className="border-2 border-dashed border-slate-200 hover:border-purple-400 bg-slate-50 hover:bg-purple-50/50 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all group">
-                <Upload className="w-6 h-6 text-slate-400 group-hover:text-purple-600 mb-1 transition-colors" />
-                <span className="text-xs font-medium text-slate-600 group-hover:text-purple-700">
+              <label className="border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500 bg-slate-50 dark:bg-slate-800/50 hover:bg-purple-50/50 dark:hover:bg-purple-950/20 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all group">
+                <Upload className="w-6 h-6 text-slate-400 dark:text-slate-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 mb-1 transition-colors" />
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-purple-700 dark:group-hover:text-purple-300">
                   คลิกเพื่อเลือกไฟล์แนบ หรือลากไฟล์มาวางที่นี่
                 </span>
-                <span className="text-[11px] text-slate-400 mt-0.5">
+                <span className="text-[11px] text-slate-400 dark:text-slate-400 mt-0.5">
                   รองรับ PNG, JPG, WEBP, PDF, DOCX, XLSX (สูงสุด 10MB)
                 </span>
                 <input
@@ -341,24 +358,24 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 />
               </label>
             ) : (
-              <div className="p-3 bg-purple-50/50 border border-purple-200 rounded-2xl flex items-center justify-between">
+              <div className="p-3 bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-2xl flex items-center justify-between">
                 <div className="flex items-center gap-3 overflow-hidden">
                   {filePreview ? (
                     <img
                       src={filePreview}
                       alt="Preview"
-                      className="w-12 h-12 rounded-xl object-cover border border-purple-200 flex-shrink-0"
+                      className="w-12 h-12 rounded-xl object-cover border border-purple-200 dark:border-purple-800 flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-700 flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center text-purple-700 dark:text-purple-300 flex-shrink-0">
                       <File className="w-6 h-6" />
                     </div>
                   )}
                   <div className="overflow-hidden">
-                    <p className="text-xs font-semibold text-slate-800 truncate">
+                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">
                       {attachedFile.name}
                     </p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       {(attachedFile.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -366,7 +383,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 <button
                   type="button"
                   onClick={handleRemoveFile}
-                  className="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-white transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition-colors"
                   title="ลบไฟล์แนบ"
                 >
                   <X className="w-4 h-4" />
@@ -376,19 +393,19 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-medium transition-all"
+              className="px-4 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               ยกเลิก
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-5 py-2.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-medium shadow-sm shadow-purple-600/30 transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-medium shadow-sm shadow-purple-600/30 transition-all focus:outline-none focus:ring-2 focus:ring-purple-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>

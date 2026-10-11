@@ -74,6 +74,7 @@ export default function AdminOverviewPage() {
   };
 
   useEffect(() => {
+    document.title = 'ภาพรวมระบบผู้ดูแล | JADS Admin';
     fetchStats();
   }, []);
 

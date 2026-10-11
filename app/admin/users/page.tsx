@@ -76,6 +76,22 @@ export default function AdminUsersPage() {
   };
 
   useEffect(() => {
+    document.title = 'จัดการผู้ใช้งาน | JADS Admin';
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && resetModalUser) {
+        setResetModalUser(null);
+      }
+    };
+    if (resetModalUser) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [resetModalUser]);
+
+  useEffect(() => {
     fetchUsers();
   }, [page, roleFilter]);
 
@@ -413,8 +429,14 @@ export default function AdminUsersPage() {
 
       {/* Reset Password Modal */}
       {resetModalUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setResetModalUser(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-amber-950/60 border border-amber-800/40 flex items-center justify-center text-amber-400">
@@ -460,7 +482,7 @@ export default function AdminUsersPage() {
                 <button
                   type="submit"
                   disabled={isResetting}
-                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-medium disabled:opacity-50"
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isResetting ? 'กำลังบันทึก...' : 'ยืนยันเปลี่ยนรหัสผ่าน'}
                 </button>

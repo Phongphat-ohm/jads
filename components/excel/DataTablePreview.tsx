@@ -333,7 +333,7 @@ export function DataTablePreview({
                     <td className="py-3 px-3 text-center text-slate-400 dark:text-slate-500 font-mono text-[11px]">
                       {rowIndex}
                     </td>
-                    <td className="py-3 px-3 text-center sticky left-0 bg-inherit z-10 border-r border-slate-100 dark:border-slate-800">
+                    <td className="py-3 px-3 text-center sticky left-0 bg-white dark:bg-slate-900 z-10 border-r border-slate-100 dark:border-slate-800">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -341,7 +341,7 @@ export function DataTablePreview({
                           setFocusedRowIndex(idx);
                           onSelectRow(row);
                         }}
-                        className={`inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer ${
+                        className={`inline-flex items-center justify-center gap-1.5 w-full py-2 px-3.5 min-h-[38px] rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer ${
                           isSelected
                             ? 'bg-purple-900 dark:bg-purple-950 text-white ring-2 ring-purple-600'
                             : isFocused
@@ -396,7 +396,7 @@ export function DataTablePreview({
             type="button"
             onClick={() => setPage(1)}
             disabled={safePage <= 1}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             title="หน้าแรก"
           >
             <ChevronsLeft className="w-4 h-4" />
@@ -405,13 +405,13 @@ export function DataTablePreview({
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={safePage <= 1}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             title="หน้าก่อนหน้า"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          <span className="px-3 py-1 font-bold text-purple-900 dark:text-purple-200 bg-purple-100 dark:bg-purple-950/60 rounded-lg">
+          <span className="px-3 py-1 min-h-[36px] flex items-center font-bold text-purple-900 dark:text-purple-200 bg-purple-100 dark:bg-purple-950/60 rounded-lg">
             หน้า {safePage} / {totalPages}
           </span>
 
@@ -419,7 +419,7 @@ export function DataTablePreview({
             type="button"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={safePage >= totalPages}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             title="หน้าถัดไป"
           >
             <ChevronRight className="w-4 h-4" />
@@ -428,7 +428,7 @@ export function DataTablePreview({
             type="button"
             onClick={() => setPage(totalPages)}
             disabled={safePage >= totalPages}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             title="หน้าสุดท้าย"
           >
             <ChevronsRight className="w-4 h-4" />

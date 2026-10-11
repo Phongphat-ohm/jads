@@ -71,6 +71,22 @@ export default function AdminAuditLogsPage() {
   };
 
   useEffect(() => {
+    document.title = 'บันทึกประวัติการใช้งานทั้งระบบ | JADS Admin';
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedLog) {
+        setSelectedLog(null);
+      }
+    };
+    if (selectedLog) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [selectedLog]);
+
+  useEffect(() => {
     fetchLogs();
   }, [page, limit, statusFilter, actionFilter]);
 
@@ -287,8 +303,14 @@ export default function AdminAuditLogsPage() {
 
       {/* JSON Log Inspection Modal */}
       {selectedLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setSelectedLog(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-rose-400" />

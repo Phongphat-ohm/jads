@@ -99,15 +99,25 @@ export default function AdminLayout({
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? 'ปิดเมนู' : 'เปิดเมนูนำทางผู้ดูแลระบบ'}
           className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
         >
           {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
+      {/* Backdrop Overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Admin Sidebar */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-50 w-64 bg-slate-900/95 border-r border-slate-800/80 flex flex-col justify-between shrink-0 transition-transform duration-300 ease-in-out ${
+        className={`fixed md:static inset-y-0 left-0 z-50 w-64 bg-slate-900/95 border-r border-slate-800/80 flex flex-col justify-between shrink-0 h-screen overflow-y-auto transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
@@ -131,6 +141,7 @@ export default function AdminLayout({
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="ปิดเมนู"
               className="p-1 text-slate-400 hover:text-white md:hidden"
             >
               <X className="w-5 h-5" />

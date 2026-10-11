@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchApi } from '../../../lib/api';
 import { showToast, showConfirm, showError } from '../../../lib/sweetalert';
-import { Clock, FileSpreadsheet, Trash2, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Clock, FileSpreadsheet, Trash2, ArrowLeft, RefreshCw, FolderOpen } from 'lucide-react';
 
 interface RecentFile {
   id: string;
@@ -97,7 +97,17 @@ export default function RecentFilesPage() {
           </div>
         ) : recentFiles.length === 0 ? (
           <div className="p-12 text-center text-slate-400">
-            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">ไม่มีประวัติไฟล์ในระบบ</p>
+            <FolderOpen className="w-10 h-10 mx-auto mb-2 text-slate-300 dark:text-slate-600" />
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">ยังไม่มีประวัติไฟล์ในระบบ</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+              เริ่มต้นด้วยการอัปโหลดไฟล์ Excel ในหน้าระบบสร้างเอกสาร
+            </p>
+            <Link
+              href="/generator"
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-semibold shadow-md shadow-purple-600/20"
+            >
+              <span>ไปที่หน้าระบบสร้างเอกสาร</span>
+            </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">

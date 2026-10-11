@@ -22,6 +22,7 @@ import {
   KeyRound,
   FileText,
   ExternalLink,
+  Cookie,
 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -517,6 +518,34 @@ export default function SettingsPage() {
                   อ่านนโยบายความเป็นส่วนตัว &rarr;
                 </span>
               </Link>
+            </div>
+
+            {/* Cookie Preferences Reset Button */}
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block">
+                  ความยินยอมการใช้งานคุกกี้ (Cookie Preferences)
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                  ท่านสามารถเปลี่ยนใจและเลือกตั้งค่าความยินยอมคุกกี้ใหม่ได้ตลอดเวลา
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem('jads_cookie_consent');
+                    window.dispatchEvent(new Event('jads-reset-cookie-consent'));
+                    showToast('เปิดหน้าต่างตั้งค่าคุกกี้แล้ว');
+                  } catch (e) {
+                    showError('ไม่สามารถรีเซ็ตค่าคุกกี้ได้');
+                  }
+                }}
+                className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-300 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+              >
+                <Cookie className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                <span>ตั้งค่าความยินยอมคุกกี้ใหม่</span>
+              </button>
             </div>
           </div>
         </div>

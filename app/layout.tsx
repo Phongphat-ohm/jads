@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '../lib/authContext';
 import { ThemeProvider } from '../lib/themeContext';
 import { NextAuthProvider } from '../components/NextAuthProvider';
+import { CookieConsentBanner } from '../components/common/CookieConsentBanner';
 
 const kanit = Kanit({
   variable: '--font-kanit',
@@ -50,7 +51,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200">
         <NextAuthProvider>
           <ThemeProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {children}
+              <CookieConsentBanner />
+            </AuthProvider>
           </ThemeProvider>
         </NextAuthProvider>
       </body>

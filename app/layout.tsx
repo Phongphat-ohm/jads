@@ -5,6 +5,7 @@ import { AuthProvider } from '../lib/authContext';
 import { ThemeProvider } from '../lib/themeContext';
 import { NextAuthProvider } from '../components/NextAuthProvider';
 import { CookieConsentBanner } from '../components/common/CookieConsentBanner';
+import { AppToaster } from '../components/common/AppToaster';
 
 const kanit = Kanit({
   variable: '--font-kanit',
@@ -53,6 +54,7 @@ export default function RootLayout({
           <ThemeProvider>
             <AuthProvider>
               {children}
+              <AppToaster />
               <CookieConsentBanner />
             </AuthProvider>
           </ThemeProvider>

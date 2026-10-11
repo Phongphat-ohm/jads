@@ -1,4 +1,7 @@
 import Swal from 'sweetalert2';
+import { toast } from 'sonner';
+
+export { toast };
 
 export const justiceSwal = Swal.mixin({
   confirmButtonColor: '#6d28d9', // Royal Purple
@@ -11,34 +14,34 @@ export const justiceSwal = Swal.mixin({
   },
 });
 
-export function showToast(title: string, icon: 'success' | 'error' | 'warning' | 'info' = 'success') {
-  return justiceSwal.fire({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    icon,
-    title,
-  });
+export function showToast(
+  title: string,
+  icon: 'success' | 'error' | 'warning' | 'info' = 'success',
+  description?: string
+) {
+  switch (icon) {
+    case 'success':
+      return toast.success(title, { description });
+    case 'error':
+      return toast.error(title, { description });
+    case 'warning':
+      return toast.warning(title, { description });
+    case 'info':
+      return toast.info(title, { description });
+    default:
+      return toast(title, { description });
+  }
 }
 
 export function showSuccess(title: string, text?: string) {
-  return justiceSwal.fire({
-    icon: 'success',
-    title,
-    text,
-    timer: 2500,
-    showConfirmButton: false,
+  return toast.success(title, {
+    description: text,
   });
 }
 
 export function showError(title: string, text?: string) {
-  return justiceSwal.fire({
-    icon: 'error',
-    title,
-    text,
-    confirmButtonText: 'ตกลง',
+  return toast.error(title, {
+    description: text,
   });
 }
 

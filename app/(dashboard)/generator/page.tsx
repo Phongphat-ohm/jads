@@ -58,6 +58,8 @@ import {
   Lock,
   ChevronDown,
   ChevronUp,
+  UserCheck,
+  ShieldAlert,
 } from 'lucide-react';
 
 // Preset Attendee Roles
@@ -1133,22 +1135,53 @@ function GeneratorContent() {
           </div>
 
           {/* Quick Litigants Banner (คู่ความ) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-purple-50/50 dark:bg-slate-900/60 p-4 rounded-2xl border border-purple-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-purple-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
-                โจทก์
-              </span>
-              <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
-                {formData.plaintiff_name || '(ยังไม่ได้ระบุชื่อโจทก์)'}
-              </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {/* ฝ่ายโจทก์ */}
+            <div className="relative overflow-hidden group rounded-2xl p-4 bg-gradient-to-r from-purple-500/10 via-purple-500/5 to-transparent dark:from-purple-950/40 dark:via-purple-900/20 dark:to-slate-900/40 border border-purple-200/80 dark:border-purple-800/60 shadow-sm hover:shadow-md transition-all duration-200">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-600 dark:bg-purple-600 text-white shadow-sm shadow-purple-600/30 shrink-0">
+                  <UserCheck className="w-3.5 h-3.5" />
+                  <span className="text-xs font-bold tracking-wide">โจทก์</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 truncate hover:whitespace-normal transition-all"
+                    title={formData.plaintiff_name || 'ยังไม่ได้ระบุชื่อโจทก์'}
+                  >
+                    {formData.plaintiff_name ? (
+                      formData.plaintiff_name
+                    ) : (
+                      <span className="text-xs text-slate-400 dark:text-slate-500 italic font-normal">
+                        (ยังไม่ได้ระบุชื่อโจทก์)
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-indigo-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
-                จำเลย
-              </span>
-              <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
-                {formData.defendant_name || '(ยังไม่ได้ระบุชื่อจำเลย)'}
-              </span>
+
+            {/* ฝ่ายจำเลย */}
+            <div className="relative overflow-hidden group rounded-2xl p-4 bg-gradient-to-r from-indigo-500/10 via-indigo-500/5 to-transparent dark:from-indigo-950/40 dark:via-indigo-900/20 dark:to-slate-900/40 border border-indigo-200/80 dark:border-indigo-800/60 shadow-sm hover:shadow-md transition-all duration-200">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-600 dark:bg-indigo-600 text-white shadow-sm shadow-indigo-600/30 shrink-0">
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span className="text-xs font-bold tracking-wide">จำเลย</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 truncate hover:whitespace-normal transition-all"
+                    title={formData.defendant_name || 'ยังไม่ได้ระบุชื่อจำเลย'}
+                  >
+                    {formData.defendant_name ? (
+                      formData.defendant_name
+                    ) : (
+                      <span className="text-xs text-slate-400 dark:text-slate-500 italic font-normal">
+                        (ยังไม่ได้ระบุชื่อจำเลย)
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
